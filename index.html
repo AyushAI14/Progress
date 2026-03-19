@@ -531,6 +531,10 @@
     <div class="nav-item" onclick="showPage('stats',this)">
       <span class="nav-icon">📊</span> My Stats
     </div>
+    <div class="nav-section">DANGER ZONE</div>
+    <div class="nav-item" onclick="confirmReset()" style="color:var(--danger)">
+      <span class="nav-icon">🗑</span> Reset Everything
+    </div>
   </nav>
 </aside>
 
@@ -1495,6 +1499,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const lv = getLevel(xp);
   document.querySelector('.level-text').previousElementSibling.textContent = lv.name;
 });
+  function confirmReset() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:380px">
+      <div class="modal-title" style="color:var(--danger)">⚠️ Reset Everything?</div>
+      <div class="modal-sub" style="margin-bottom:16px">
+        This will permanently delete all your progress — skills, logs, projects, streak, and XP. This cannot be undone.
+      </div>
+      <div class="flex gap-8">
+        <button class="btn btn-danger" onclick="doReset()">Yes, Reset All</button>
+        <button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+      </div>
+    </div>
+  `;
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+function doReset() {
+  localStorage.removeItem('dsq-state');
+  state = {
+    completedSkills: [],
+    inProgressSkills: [],
+    projects: [...DEFAULT_PROJECTS],
+    logs: [],
+    streak: 0,
+    lastLogDate: null,
+    activeInterviewTab: 0,
+    activeResourcesTab: 0,
+  };
+  saveState();
+  document.querySelector('.modal-overlay.open')?.remove();
+  updateXPDisplay();
+  // Re-render active page
+  const activePage = document.querySelector('.page.active')?.id?.replace('page-', '');
+  if (activePage) renderPage(activePage);
+  updateStats();
+}
 </script>
 </body>
 </html>

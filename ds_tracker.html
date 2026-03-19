@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DS Quest — Data Science Journey Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: rgba(255,255,255,0.07);
+    --accent: #7c6ef7;
+    --accent2: #e8a54b;
+    --accent3: #4bc9a0;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --danger: #f07070;
+    --gold: #f5c842;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    z-index: 100;
+    padding: 28px 0;
+  }
+  .logo {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .logo-sub { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-top: 2px; }
+
+  .sidebar-xp {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .xp-label { font-size: 9px; color: var(--muted); letter-spacing: 2px; margin-bottom: 8px; }
+  .xp-bar-bg { background: var(--surface2); border-radius: 2px; height: 6px; overflow: hidden; }
+  .xp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+  .xp-nums { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: var(--muted); }
+  .level-badge { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+  .level-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; color: var(--accent); line-height: 1; }
+  .level-text { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+  nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+  .nav-section { font-size: 9px; color: var(--muted); letter-spacing: 2px; padding: 8px 12px 4px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 12px;
+    color: var(--muted);
+    position: relative;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: rgba(124,110,247,0.15); color: var(--accent); }
+  .nav-item.active::before {
+    content: '';
+    position: absolute; left: 0; top: 20%; bottom: 20%;
+    width: 3px; background: var(--accent); border-radius: 0 2px 2px 0;
+  }
+  .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--accent);
+    color: #fff;
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 99px;
+  }
+
+  /* MAIN */
+  .main { margin-left: 240px; min-height: 100vh; padding: 32px 36px; position: relative; z-index: 1; }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HEADER */
+  .page-header { margin-bottom: 32px; }
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .page-title span { color: var(--accent); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .page-sub { color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .card-sub { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+
+  /* STAT CARDS */
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; margin-bottom: 8px; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1;
+  }
+  .stat-trend { font-size: 10px; margin-top: 4px; }
+  .stat-trend.up { color: var(--accent3); }
+  .stat-trend.down { color: var(--danger); }
+
+  /* SKILL TREE */
+  .skill-phase {
+    margin-bottom: 28px;
+  }
+  .phase-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+    cursor: pointer;
+  }
+  .phase-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 13px;
+    flex-shrink: 0;
+  }
+  .phase-dot.done { background: var(--accent3); color: #000; }
+  .phase-dot.active { background: var(--accent); color: #fff; }
+  .phase-dot.locked { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .phase-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+  .phase-prog { margin-left: auto; font-size: 11px; color: var(--muted); }
+  .phase-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .phase-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.6s ease; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-left: 44px; }
+  .skill-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .skill-chip.completed { border-color: rgba(75,201,160,0.4); background: rgba(75,201,160,0.06); }
+  .skill-chip.in-progress { border-color: rgba(124,110,247,0.4); background: rgba(124,110,247,0.06); }
+  .skill-chip.locked { opacity: 0.45; cursor: not-allowed; }
+  .skill-chip-name { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+  .skill-chip-tag { font-size: 9px; color: var(--muted); letter-spacing: 1px; }
+  .skill-status { position: absolute; top: 8px; right: 8px; font-size: 12px; }
+
+  /* PROGRESS BARS */
+  .progress-item { margin-bottom: 14px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; }
+  .progress-pct { color: var(--accent); }
+  .progress-bg { background: var(--surface2); border-radius: 2px; height: 5px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+
+  /* CHECKLIST */
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: rgba(255,255,255,0.02); padding-left: 4px; border-radius: 6px; }
+  .check-box {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+    transition: all 0.15s;
+    font-size: 11px;
+  }
+  .check-box.checked { background: var(--accent3); border-color: var(--accent3); color: #000; }
+  .check-text { font-size: 12px; line-height: 1.5; }
+  .check-text.done { text-decoration: line-through; color: var(--muted); }
+  .check-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 10px; margin-bottom: 20px; width: fit-content; }
+  .tab { padding: 7px 16px; border-radius: 7px; cursor: pointer; font-size: 11px; color: var(--muted); transition: all 0.15s; }
+  .tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+
+  /* TAGS */
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+  .tag.python { background: rgba(124,110,247,0.15); color: var(--accent); }
+  .tag.ml { background: rgba(232,165,75,0.15); color: var(--accent2); }
+  .tag.math { background: rgba(75,201,160,0.15); color: var(--accent3); }
+  .tag.tools { background: rgba(240,112,112,0.15); color: var(--danger); }
+  .tag.project { background: rgba(245,200,66,0.15); color: var(--gold); }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 20px; }
+  .timeline-dot {
+    position: absolute; left: -21px; top: 3px;
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg);
+  }
+  .timeline-dot.active { border-color: var(--accent); background: var(--accent); }
+  .timeline-dot.done { border-color: var(--accent3); background: var(--accent3); }
+  .timeline-title { font-size: 13px; font-weight: 500; }
+  .timeline-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .timeline-body { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); z-index: 999;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 500px; width: 90%;
+    animation: fadeUp 0.2s ease;
+    position: relative;
+  }
+  .modal-close { position: absolute; top: 16px; right: 16px; cursor: pointer; color: var(--muted); font-size: 18px; background: none; border: none; }
+  .modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
+  .modal-sub { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
+
+  /* FORM */
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; display: block; }
+  .form-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  select.form-input { cursor: pointer; }
+  textarea.form-input { resize: vertical; min-height: 80px; }
+
+  /* BUTTON */
+  .btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #6b5ee0; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 6px 12px; font-size: 11px; }
+  .btn-danger { background: rgba(240,112,112,0.15); color: var(--danger); border: 1px solid rgba(240,112,112,0.3); }
+
+  /* DASHBOARD SPECIFIC */
+  .welcome-banner {
+    background: linear-gradient(135deg, rgba(124,110,247,0.15), rgba(232,165,75,0.08));
+    border: 1px solid rgba(124,110,247,0.25);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .welcome-banner::after {
+    content: '⬡';
+    position: absolute; right: 24px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 80px; color: rgba(124,110,247,0.1);
+  }
+  .welcome-name { font-family: 'Instrument Serif', serif; font-size: 28px; font-style: italic; }
+  .welcome-name span { color: var(--accent2); }
+  .welcome-sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .welcome-streak { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .streak-fire { font-size: 18px; }
+
+  /* HEATMAP */
+  .heatmap { display: flex; flex-wrap: wrap; gap: 3px; }
+  .heat-cell {
+    width: 11px; height: 11px; border-radius: 2px;
+    background: var(--surface2);
+    transition: all 0.1s;
+    cursor: pointer;
+  }
+  .heat-cell:hover { transform: scale(1.3); }
+  .heat-cell.h1 { background: rgba(124,110,247,0.2); }
+  .heat-cell.h2 { background: rgba(124,110,247,0.45); }
+  .heat-cell.h3 { background: rgba(124,110,247,0.7); }
+  .heat-cell.h4 { background: var(--accent); }
+
+  /* PROJECT CARD */
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: all 0.15s;
+  }
+  .project-card:hover { border-color: rgba(124,110,247,0.3); transform: translateY(-2px); }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .project-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
+  .project-status {
+    font-size: 9px; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .project-status.building { background: rgba(232,165,75,0.15); color: var(--accent2); }
+  .project-status.done { background: rgba(75,201,160,0.15); color: var(--accent3); }
+  .project-status.idea { background: rgba(107,107,128,0.2); color: var(--muted); }
+  .project-desc { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* RESOURCES */
+  .resource-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .resource-icon { font-size: 20px; width: 36px; text-align: center; }
+  .resource-name { font-size: 13px; }
+  .resource-type { font-size: 10px; color: var(--muted); }
+  .resource-action { margin-left: auto; }
+
+  /* INTERVIEW */
+  .interview-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .interview-card:hover { border-color: var(--accent); }
+  .interview-q { font-size: 13px; margin-bottom: 6px; }
+  .interview-a {
+    font-size: 11px; color: var(--muted);
+    display: none; margin-top: 10px;
+    padding-top: 10px; border-top: 1px solid var(--border);
+    line-height: 1.7;
+  }
+  .interview-card.open .interview-a { display: block; }
+  .interview-meta { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+
+  /* GAP ANALYSIS */
+  .gap-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+  }
+  .gap-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .gap-icon { font-size: 16px; }
+  .gap-title { font-size: 13px; font-weight: 500; }
+  .gap-priority {
+    margin-left: auto; font-size: 9px; letter-spacing: 1px;
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .gap-priority.high { background: rgba(240,112,112,0.15); color: var(--danger); }
+  .gap-priority.med { background: rgba(232,165,75,0.15); color: var(--accent2); }
+  .gap-priority.low { background: rgba(75,201,160,0.15); color: var(--accent3); }
+  .gap-desc { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* FLEX UTILS */
+  .flex { display: flex; }
+  .flex-center { display: flex; align-items: center; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .justify-between { justify-content: space-between; }
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .mb-4 { margin-bottom: 4px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-16 { margin-bottom: 16px; }
+  .text-muted { color: var(--muted); }
+  .text-accent { color: var(--accent); }
+  .text-sm { font-size: 11px; }
+  .text-xs { font-size: 10px; }
+  .font-bold { font-family: 'Syne', sans-serif; font-weight: 700; }
+
+  /* RESPONSIVE ADJUSTMENTS */
+  @media (max-width: 900px) {
+    .sidebar { width: 200px; }
+    .main { margin-left: 200px; }
+    .grid-4 { grid-template-columns: repeat(2,1fr); }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-title">DS Quest</div>
+    <div class="logo-sub">DATA SCIENCE TRACKER</div>
+  </div>
+  <div class="sidebar-xp">
+    <div class="level-badge">
+      <div class="level-num" id="level-num">3</div>
+      <div>
+        <div style="font-size:11px; font-family:'Syne',sans-serif; font-weight:700;">Junior Analyst</div>
+        <div class="level-text">CURRENT RANK</div>
+      </div>
+    </div>
+    <div class="xp-label">XP PROGRESS</div>
+    <div class="xp-bar-bg">
+      <div class="xp-bar-fill" id="xp-fill" style="width:42%"></div>
+    </div>
+    <div class="xp-nums">
+      <span id="xp-cur">1,240 XP</span>
+      <span id="xp-max">3,000 XP</span>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-section">NAVIGATE</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)">
+      <span class="nav-icon">⬡</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('roadmap',this)">
+      <span class="nav-icon">🗺</span> Roadmap
+    </div>
+    <div class="nav-item" onclick="showPage('skills',this)">
+      <span class="nav-icon">⚡</span> Skills
+    </div>
+    <div class="nav-item" onclick="showPage('projects',this)">
+      <span class="nav-icon">🔬</span> Projects
+    </div>
+    <div class="nav-section">PREP</div>
+    <div class="nav-item" onclick="showPage('gaps',this)">
+      <span class="nav-icon">🎯</span> Gap Analysis
+      <span class="nav-badge" id="gap-badge">5</span>
+    </div>
+    <div class="nav-item" onclick="showPage('interview',this)">
+      <span class="nav-icon">💬</span> Interview Prep
+    </div>
+    <div class="nav-item" onclick="showPage('resources',this)">
+      <span class="nav-icon">📚</span> Resources
+    </div>
+    <div class="nav-section">LOG</div>
+    <div class="nav-item" onclick="showPage('journal',this)">
+      <span class="nav-icon">📓</span> Daily Log
+    </div>
+    <div class="nav-item" onclick="showPage('stats',this)">
+      <span class="nav-icon">📊</span> My Stats
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div class="welcome-banner">
+      <div class="welcome-name">Welcome back, <span>Data Scientist</span> ✦</div>
+      <div class="welcome-sub">Your path to becoming a 2026-ready Data Scientist</div>
+      <div class="welcome-streak">
+        <span class="streak-fire">🔥</span>
+        <span id="streak-count">0 day streak</span>
+        <span style="color:var(--muted)">·</span>
+        <span style="color:var(--muted)" id="today-date"></span>
+      </div>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:20px">
+      <div class="stat-card">
+        <div class="stat-label">SKILLS DONE</div>
+        <div class="stat-num text-accent" id="stat-skills-done">0</div>
+        <div class="stat-trend up">of <span id="stat-skills-total">0</span> total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">PROJECTS</div>
+        <div class="stat-num" style="color:var(--accent2)" id="stat-projects">0</div>
+        <div class="stat-trend up">in portfolio</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">TOPICS LOGGED</div>
+        <div class="stat-num" style="color:var(--accent3)" id="stat-logs">0</div>
+        <div class="stat-trend">study sessions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">GAPS TO FIX</div>
+        <div class="stat-num" style="color:var(--danger)" id="stat-gaps">5</div>
+        <div class="stat-trend down">focus areas</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">📅 Activity Heatmap</div>
+        <div class="card-sub">Last 16 weeks of study activity</div>
+        <div class="heatmap" id="heatmap"></div>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:10px;font-size:10px;color:var(--muted)">
+          Less <div class="heat-cell"></div><div class="heat-cell h1"></div><div class="heat-cell h2"></div><div class="heat-cell h3"></div><div class="heat-cell h4"></div> More
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎯 Today's Focus</div>
+        <div class="card-sub">Recommended study targets</div>
+        <div id="todays-focus"></div>
+        <div style="margin-top:14px">
+          <button class="btn btn-primary btn-sm" onclick="openModal('log-modal')">+ Log Today's Study</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">📈 Phase Progress</div>
+        <div class="card-sub">Overall roadmap completion</div>
+        <div id="phase-progress-overview"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏆 Recent Achievements</div>
+        <div class="card-sub">Your milestones</div>
+        <div id="achievements-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="page-roadmap" class="page">
+    <div class="page-header">
+      <div class="page-title">2026 Data Science <span>Roadmap</span></div>
+      <div class="page-sub">Complete path from beginner to interview-ready — updated for 2026</div>
+    </div>
+
+    <div class="tabs" id="roadmap-tabs">
+      <div class="tab active" onclick="switchTab('roadmap',0,this)">All Phases</div>
+      <div class="tab" onclick="switchTab('roadmap',1,this)">Foundation</div>
+      <div class="tab" onclick="switchTab('roadmap',2,this)">Core ML</div>
+      <div class="tab" onclick="switchTab('roadmap',3,this)">Advanced</div>
+      <div class="tab" onclick="switchTab('roadmap',4,this)">Production</div>
+    </div>
+
+    <div id="roadmap-content"></div>
+  </div>
+
+  <!-- SKILLS -->
+  <div id="page-skills" class="page">
+    <div class="page-header">
+      <div class="page-title">Skill <span>Tracker</span></div>
+      <div class="page-sub">Mark skills as you learn them — builds your XP</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">By Domain</div>
+        <div class="card-sub">Completion across areas</div>
+        <div id="skills-by-domain"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Skill Legend</div>
+        <div class="card-sub">Track status</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:12px">
+          <div class="flex-center gap-8"><div class="check-box checked">✓</div> Completed — you've learned this</div>
+          <div class="flex-center gap-8"><div class="check-box" style="border-color:var(--accent);background:rgba(124,110,247,0.1)">→</div> In Progress</div>
+          <div class="flex-center gap-8"><div class="check-box"></div> Not Started</div>
+          <div class="flex-center gap-8"><div class="check-box" style="opacity:0.4"></div> Locked (complete previous)</div>
+        </div>
+        <div class="divider"></div>
+        <div style="font-size:11px;color:var(--muted)">Click any skill chip to toggle status. Each completed skill earns XP!</div>
+      </div>
+    </div>
+    <div style="margin-top:20px" id="skills-full-list"></div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div id="page-projects" class="page">
+    <div class="page-header">
+      <div class="page-title">Project <span>Portfolio</span></div>
+      <div class="page-sub">Build these to prove your skills to employers</div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+      <button class="btn btn-primary" onclick="openModal('project-modal')">+ Add Project</button>
+    </div>
+    <div class="grid-2" id="projects-grid"></div>
+  </div>
+
+  <!-- GAP ANALYSIS -->
+  <div id="page-gaps" class="page">
+    <div class="page-header">
+      <div class="page-title">Gap <span>Analysis</span></div>
+      <div class="page-sub">Know exactly what to fix before your interviews</div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">📋 How this works</div>
+      <div class="card-sub">Based on your skill completion, we identify the most critical gaps that could cost you offers at top companies in 2026. High priority gaps should be addressed first.</div>
+    </div>
+    <div id="gaps-content"></div>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div id="page-interview" class="page">
+    <div class="page-header">
+      <div class="page-title">Interview <span>Prep</span></div>
+      <div class="page-sub">Click each question to reveal the model answer</div>
+    </div>
+    <div class="tabs" id="interview-tabs">
+      <div class="tab active" onclick="switchTab('interview',0,this)">ML Concepts</div>
+      <div class="tab" onclick="switchTab('interview',1,this)">Statistics</div>
+      <div class="tab" onclick="switchTab('interview',2,this)">Python/SQL</div>
+      <div class="tab" onclick="switchTab('interview',3,this)">Case Studies</div>
+      <div class="tab" onclick="switchTab('interview',4,this)">LLM/GenAI ✦</div>
+    </div>
+    <div id="interview-content"></div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div id="page-resources" class="page">
+    <div class="page-header">
+      <div class="page-title">2026 <span>Resources</span></div>
+      <div class="page-sub">Curated, up-to-date learning materials</div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('resources',0,this)">Courses</div>
+      <div class="tab" onclick="switchTab('resources',1,this)">Books</div>
+      <div class="tab" onclick="switchTab('resources',2,this)">Practice</div>
+      <div class="tab" onclick="switchTab('resources',3,this)">YouTube</div>
+    </div>
+    <div id="resources-content"></div>
+  </div>
+
+  <!-- DAILY LOG -->
+  <div id="page-journal" class="page">
+    <div class="page-header">
+      <div class="page-title">Daily <span>Log</span></div>
+      <div class="page-sub">Track what you study each day — builds your streak</div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+      <button class="btn btn-primary" onclick="openModal('log-modal')">+ Log Today</button>
+    </div>
+    <div id="journal-list"></div>
+  </div>
+
+  <!-- STATS -->
+  <div id="page-stats" class="page">
+    <div class="page-header">
+      <div class="page-title">My <span>Stats</span></div>
+      <div class="page-sub">Your learning analytics</div>
+    </div>
+    <div class="grid-4" style="margin-bottom:20px" id="stats-cards"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">🌐 Skill Web</div>
+        <div class="card-sub">Completion by domain</div>
+        <div id="radar-chart" style="padding:10px 0"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📖 Study Log Summary</div>
+        <div class="card-sub">All sessions</div>
+        <div id="study-log-summary"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="log-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('log-modal')">✕</button>
+    <div class="modal-title">Log Today's Study</div>
+    <div class="modal-sub">What did you study today?</div>
+    <div class="form-group">
+      <label class="form-label">TOPIC</label>
+      <input class="form-input" id="log-topic" placeholder="e.g. Gradient Descent, Pandas, SQL Joins...">
+    </div>
+    <div class="form-group">
+      <label class="form-label">CATEGORY</label>
+      <select class="form-input" id="log-category">
+        <option>Python</option>
+        <option>Mathematics</option>
+        <option>Machine Learning</option>
+        <option>Deep Learning</option>
+        <option>Statistics</option>
+        <option>SQL / Databases</option>
+        <option>MLOps / Tools</option>
+        <option>GenAI / LLMs</option>
+        <option>Projects</option>
+        <option>Interview Prep</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">HOURS STUDIED</label>
+      <input class="form-input" id="log-hours" type="number" min="0.5" max="12" step="0.5" value="1">
+    </div>
+    <div class="form-group">
+      <label class="form-label">NOTES (OPTIONAL)</label>
+      <textarea class="form-input" id="log-notes" placeholder="What did you learn? Any breakthroughs?"></textarea>
+    </div>
+    <div class="flex gap-8">
+      <button class="btn btn-primary" onclick="saveLog()">Save Log</button>
+      <button class="btn btn-ghost" onclick="closeModal('log-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('project-modal')">✕</button>
+    <div class="modal-title">Add Project</div>
+    <div class="modal-sub">Add a project to your portfolio</div>
+    <div class="form-group">
+      <label class="form-label">PROJECT NAME</label>
+      <input class="form-input" id="proj-name" placeholder="e.g. Customer Churn Predictor">
+    </div>
+    <div class="form-group">
+      <label class="form-label">DESCRIPTION</label>
+      <textarea class="form-input" id="proj-desc" placeholder="What does it do?"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">STATUS</label>
+      <select class="form-input" id="proj-status">
+        <option value="idea">💡 Idea</option>
+        <option value="building">🔨 Building</option>
+        <option value="done">✅ Done</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">TAGS (comma separated)</label>
+      <input class="form-input" id="proj-tags" placeholder="Python, Scikit-learn, EDA">
+    </div>
+    <div class="flex gap-8">
+      <button class="btn btn-primary" onclick="saveProject()">Add Project</button>
+      <button class="btn btn-ghost" onclick="closeModal('project-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const ROADMAP = [
+  {
+    id: 'foundation', phase: '01', name: 'Foundation', color: '#4bc9a0',
+    desc: 'Build the essential programming and math base',
+    skills: [
+      { id: 's1', name: 'Python Basics', tag: 'PYTHON', xp: 100 },
+      { id: 's2', name: 'NumPy & Arrays', tag: 'PYTHON', xp: 80 },
+      { id: 's3', name: 'Pandas DataFrames', tag: 'PYTHON', xp: 100 },
+      { id: 's4', name: 'Matplotlib / Seaborn', tag: 'PYTHON', xp: 80 },
+      { id: 's5', name: 'Linear Algebra', tag: 'MATH', xp: 120 },
+      { id: 's6', name: 'Calculus & Derivatives', tag: 'MATH', xp: 120 },
+      { id: 's7', name: 'Probability Theory', tag: 'MATH', xp: 120 },
+      { id: 's8', name: 'Descriptive Statistics', tag: 'MATH', xp: 80 },
+      { id: 's9', name: 'SQL Basics', tag: 'SQL', xp: 100 },
+      { id: 's10', name: 'Advanced SQL', tag: 'SQL', xp: 120 },
+    ]
+  },
+  {
+    id: 'eda-ml', phase: '02', name: 'EDA & Core ML', color: '#7c6ef7',
+    desc: 'Explore data and build classic ML models',
+    skills: [
+      { id: 's11', name: 'EDA Pipeline', tag: 'ML', xp: 100 },
+      { id: 's12', name: 'Feature Engineering', tag: 'ML', xp: 120 },
+      { id: 's13', name: 'Feature Selection', tag: 'ML', xp: 100 },
+      { id: 's14', name: 'Linear Regression', tag: 'ML', xp: 80 },
+      { id: 's15', name: 'Logistic Regression', tag: 'ML', xp: 80 },
+      { id: 's16', name: 'Decision Trees', tag: 'ML', xp: 80 },
+      { id: 's17', name: 'Random Forests', tag: 'ML', xp: 100 },
+      { id: 's18', name: 'XGBoost / LightGBM', tag: 'ML', xp: 120 },
+      { id: 's19', name: 'SVM & KNN', tag: 'ML', xp: 80 },
+      { id: 's20', name: 'Clustering (K-Means)', tag: 'ML', xp: 80 },
+      { id: 's21', name: 'PCA & Dimensionality', tag: 'ML', xp: 100 },
+      { id: 's22', name: 'Cross Validation', tag: 'ML', xp: 100 },
+      { id: 's23', name: 'Hyperparameter Tuning', tag: 'ML', xp: 100 },
+    ]
+  },
+  {
+    id: 'deep-learning', phase: '03', name: 'Deep Learning', color: '#e8a54b',
+    desc: 'Neural networks, CNNs, RNNs and modern architectures',
+    skills: [
+      { id: 's24', name: 'Neural Networks Basics', tag: 'DL', xp: 120 },
+      { id: 's25', name: 'Backpropagation', tag: 'DL', xp: 120 },
+      { id: 's26', name: 'PyTorch / TensorFlow', tag: 'DL', xp: 150 },
+      { id: 's27', name: 'CNNs for Vision', tag: 'DL', xp: 120 },
+      { id: 's28', name: 'RNNs / LSTMs', tag: 'DL', xp: 120 },
+      { id: 's29', name: 'Transformers & Attention', tag: 'DL', xp: 150 },
+      { id: 's30', name: 'Transfer Learning', tag: 'DL', xp: 120 },
+      { id: 's31', name: 'Regularization Techniques', tag: 'DL', xp: 100 },
+    ]
+  },
+  {
+    id: 'genai', phase: '04', name: 'GenAI & LLMs ✦', color: '#f5c842',
+    desc: 'The 2026 essential: LLMs, RAG, agents and prompt engineering',
+    skills: [
+      { id: 's32', name: 'Prompt Engineering', tag: 'GENAI', xp: 100 },
+      { id: 's33', name: 'LLM API Integration', tag: 'GENAI', xp: 120 },
+      { id: 's34', name: 'RAG (Retrieval Augmented)', tag: 'GENAI', xp: 150 },
+      { id: 's35', name: 'Vector Databases', tag: 'GENAI', xp: 120 },
+      { id: 's36', name: 'LangChain / LlamaIndex', tag: 'GENAI', xp: 120 },
+      { id: 's37', name: 'Fine-tuning LLMs', tag: 'GENAI', xp: 150 },
+      { id: 's38', name: 'AI Agents', tag: 'GENAI', xp: 150 },
+      { id: 's39', name: 'Evaluation of LLMs', tag: 'GENAI', xp: 100 },
+    ]
+  },
+  {
+    id: 'mlops', phase: '05', name: 'MLOps & Production', color: '#f07070',
+    desc: 'Deploy, monitor, and maintain ML systems at scale',
+    skills: [
+      { id: 's40', name: 'Git & Version Control', tag: 'MLOPS', xp: 80 },
+      { id: 's41', name: 'Docker & Containers', tag: 'MLOPS', xp: 120 },
+      { id: 's42', name: 'MLflow / Experiment Tracking', tag: 'MLOPS', xp: 120 },
+      { id: 's43', name: 'FastAPI / Flask Serving', tag: 'MLOPS', xp: 100 },
+      { id: 's44', name: 'Cloud Platforms (AWS/GCP)', tag: 'MLOPS', xp: 150 },
+      { id: 's45', name: 'CI/CD for ML', tag: 'MLOPS', xp: 120 },
+      { id: 's46', name: 'Data Pipelines / Airflow', tag: 'MLOPS', xp: 120 },
+      { id: 's47', name: 'Model Monitoring', tag: 'MLOPS', xp: 100 },
+      { id: 's48', name: 'Spark / Big Data', tag: 'MLOPS', xp: 120 },
+    ]
+  },
+  {
+    id: 'interview-prep', phase: '06', name: 'Interview Ready', color: '#c084fc',
+    desc: 'Final prep to land that DS role',
+    skills: [
+      { id: 's49', name: 'ML System Design', tag: 'PREP', xp: 150 },
+      { id: 's50', name: 'Statistics Interview Q', tag: 'PREP', xp: 100 },
+      { id: 's51', name: 'Case Studies', tag: 'PREP', xp: 120 },
+      { id: 's52', name: 'LeetCode (Medium SQL)', tag: 'PREP', xp: 100 },
+      { id: 's53', name: 'Take-home Challenges', tag: 'PREP', xp: 150 },
+      { id: 's54', name: 'Behavioral (STAR method)', tag: 'PREP', xp: 80 },
+    ]
+  }
+];
+
+const INTERVIEW_QS = {
+  0: [
+    { q: 'Explain Bias-Variance tradeoff with an example', diff: 'CORE', a: 'Bias is error from wrong assumptions (underfitting), variance is error from sensitivity to fluctuations (overfitting). A high-bias model (linear regression on non-linear data) consistently misses patterns. A high-variance model (deep decision tree) fits training data perfectly but fails on new data. The goal: find the sweet spot. Cross-validation helps. Regularization (Ridge/Lasso) reduces variance. Better features reduce bias.' },
+    { q: 'What is the curse of dimensionality?', diff: 'CORE', a: 'As dimensions increase, data becomes sparse — points become equidistant and distance metrics lose meaning. To maintain statistical significance, you need exponentially more data per added feature. Solutions: dimensionality reduction (PCA, UMAP), feature selection, regularization.' },
+    { q: 'Explain how XGBoost works under the hood', diff: 'ADVANCED', a: 'XGBoost builds an ensemble of weak learners (shallow trees) sequentially. Each new tree corrects residuals of the previous ensemble. It uses second-order Taylor expansion of the loss for a more exact gradient, adds L1/L2 regularization on tree weights, uses column subsampling, and has efficient parallel tree building with weighted quantile sketch for split finding.' },
+    { q: 'What is gradient descent and its variants?', diff: 'CORE', a: 'Gradient descent minimizes a loss function by iteratively moving in the direction of the steepest descent (negative gradient). Variants: (1) Batch GD — uses all data, stable but slow. (2) SGD — uses 1 sample, noisy but fast. (3) Mini-batch GD — balance of both. Optimizers: Momentum adds velocity, AdaGrad adapts learning rates per parameter, Adam combines momentum + adaptive rates and is the 2026 default.' },
+    { q: 'How do you handle imbalanced datasets?', diff: 'CORE', a: 'Sampling: SMOTE oversamples minority class synthetically, undersampling reduces majority. Algorithm-level: class_weight parameter, focal loss. Threshold tuning: lower decision threshold for minority class. Evaluation: use F1, AUC-ROC, precision-recall curves — NOT accuracy.' },
+    { q: 'What is a Transformer and why did it replace RNNs?', diff: 'ADVANCED', a: 'Transformers use self-attention to relate all tokens to each other simultaneously, eliminating sequential computation. RNNs suffer from vanishing gradients and cannot parallelize. Transformers scale better, capture long-range dependencies, and are the backbone of GPT, BERT, etc. Key components: multi-head attention, positional encoding, feed-forward layers.' },
+  ],
+  1: [
+    { q: 'What is p-value and why is 0.05 arbitrary?', diff: 'CORE', a: 'P-value is the probability of observing results at least as extreme as your data, assuming H0 is true. 0.05 was chosen by Fisher as a convenient threshold, not derived statistically. In modern DS: report effect size + confidence intervals, not just p-values. A p=0.049 and p=0.051 are practically identical.' },
+    { q: 'Explain Central Limit Theorem in practical terms', diff: 'CORE', a: 'As sample size grows (usually n≥30), the sampling distribution of the mean approaches a normal distribution, regardless of the underlying population distribution. Practical use: even if your data is skewed, you can use parametric tests on sample means. Foundation of A/B testing and confidence intervals.' },
+    { q: 'What is the difference between Type I and Type II error?', diff: 'CORE', a: 'Type I (false positive): rejecting H0 when it\'s actually true. Controlled by α (significance level). Type II (false negative): failing to reject H0 when it\'s false. Controlled by β; power = 1-β. In medicine: false cancer diagnosis (Type I) vs. missing actual cancer (Type II). Context determines which is more costly.' },
+    { q: 'How do you design an A/B test correctly?', diff: 'ADVANCED', a: 'Define hypothesis and success metric. Calculate required sample size using power analysis (80% power, α=0.05). Randomize assignment. Run for full business cycles (avoid peeking). Check for novelty effects and network effects. Analyze with correct test (t-test, Mann-Whitney, Chi-square). Consider multiple testing correction (Bonferroni) if testing many variants.' },
+  ],
+  2: [
+    { q: 'Write SQL to find the second highest salary in a table', diff: 'CORE', a: 'SELECT MAX(salary) FROM employees WHERE salary < (SELECT MAX(salary) FROM employees); — OR — SELECT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1; — OR using DENSE_RANK(): SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rk FROM employees) t WHERE rk = 2;' },
+    { q: 'Explain the difference between list, tuple, and set in Python', diff: 'CORE', a: 'List: ordered, mutable, allows duplicates — [1,2,3]. Tuple: ordered, immutable, allows duplicates — (1,2,3). Set: unordered, mutable, no duplicates — {1,2,3}. Dict: key-value pairs, ordered (Python 3.7+). Use tuple when data shouldn\'t change (coordinates). Use set for O(1) lookups and deduplication. Use list for general ordered data.' },
+    { q: 'What are Python decorators and when would you use them in DS?', diff: 'ADVANCED', a: 'Decorators are functions that wrap other functions to add behavior without modifying the original. In DS: @timer to benchmark model training, @cache to memoize expensive feature computations, @log_inputs to track experiment parameters, @validate_df to check DataFrame schema before pipeline steps.' },
+    { q: 'What is a window function in SQL?', diff: 'ADVANCED', a: 'Window functions perform calculations across a set of rows related to the current row, without collapsing them (unlike GROUP BY). Examples: ROW_NUMBER(), RANK(), DENSE_RANK(), LAG(), LEAD(), SUM() OVER (PARTITION BY). Critical for: running totals, comparing current row to previous, ranking within groups. Essential for DS SQL interviews.' },
+  ],
+  3: [
+    { q: 'Design a recommendation system for an e-commerce platform', diff: 'SYSTEM', a: 'Approach: Hybrid of collaborative filtering + content-based. (1) Collaborative: user-item matrix with ALS or neural CF (NCF). (2) Content: item embeddings from product descriptions. (3) Two-stage: candidate generation (fast ANN search via FAISS) + ranking (GBDT or DNN). Cold start: use content + popularity. Infrastructure: feature store, A/B testing, real-time inference. Metrics: CTR, conversion, revenue per user, diversity.' },
+    { q: 'How would you detect fraud in real-time at a payment company?', diff: 'SYSTEM', a: '(1) Feature engineering: velocity features (5 transactions in 10 min), device fingerprinting, location distance, merchant category. (2) Models: ensemble of GBDT + rule-based + anomaly detection. (3) Real-time scoring: model served in <50ms via streaming (Kafka + Flink). (4) Feedback loop: label confirmed fraud, retrain weekly. (5) Metrics: precision (minimize false blocks), recall (catch fraud), cost-weighted.' },
+    { q: 'A model that was 95% accurate in testing has 60% accuracy in production. What do you investigate?', diff: 'CORE', a: 'Likely causes: (1) Data leakage in training — target encoded future info. (2) Distribution shift — production data is different from training data. (3) Overfitting — model memorized training set. (4) Label mismatch — how labels were collected differs. Investigation steps: compare feature distributions (PSI), check if predictions match expected base rates, shadow model testing, time-based validation split.' },
+  ],
+  4: [
+    { q: 'What is RAG (Retrieval-Augmented Generation) and when would you use it?', diff: '2026', a: 'RAG combines LLMs with a retrieval step to ground responses in external knowledge. Flow: query → embed query → vector search in knowledge base → retrieve top-k chunks → inject into LLM prompt → generate response. Use when: LLM\'s training data is outdated, domain-specific knowledge is required, hallucination reduction is critical (legal, medical). Vs fine-tuning: RAG is better for frequently changing knowledge; fine-tuning is better for style/format changes.' },
+    { q: 'Explain the difference between fine-tuning, PEFT, and LoRA', diff: '2026', a: 'Full fine-tuning: update all weights — expensive, requires much data. PEFT (Parameter-Efficient Fine-Tuning): update only a small subset of parameters. LoRA (Low-Rank Adaptation): freeze base model, inject trainable rank-decomposition matrices into attention layers. Reduces trainable params by 99%+ while achieving near-full fine-tune performance. QLoRA adds 4-bit quantization, enabling fine-tuning large models on consumer GPUs.' },
+    { q: 'What are AI Agents and how do they differ from chatbots?', diff: '2026', a: 'Agents have agency — they can take actions, use tools, and operate in loops until a goal is achieved. Key components: LLM as the reasoning engine, tools (web search, code execution, APIs), memory (short-term via context, long-term via vector DB), planning (ReAct, CoT). Unlike chatbots (stateless Q&A), agents persist state and decompose complex tasks autonomously. Frameworks: LangGraph, AutoGen, CrewAI.' },
+    { q: 'How do you evaluate an LLM-based system in production?', diff: '2026', a: 'Automated metrics: RAGAS for RAG (faithfulness, relevance, context recall), BERTScore, perplexity. LLM-as-judge: use a stronger model to grade outputs. Human eval: gold-standard but expensive. Production signals: user thumbs-up/down, task completion rate, conversation length, escalation rate. Don\'t rely only on benchmarks like MMLU — build domain-specific evals for your use case.' },
+    { q: 'What are vector databases and which would you recommend in 2026?', diff: '2026', a: 'Vector databases store and efficiently search high-dimensional embeddings using approximate nearest neighbor (ANN) algorithms (HNSW, IVF). Key options: Pinecone (managed, easy setup), Weaviate (open-source, GraphQL), Chroma (lightweight, local dev), pgvector (Postgres extension — great for existing infra), Qdrant (Rust-based, fast). For 2026 production: pgvector for small-medium scale, Qdrant/Weaviate for scale.' },
+  ]
+};
+
+const RESOURCES = {
+  0: [
+    { icon: '🎓', name: 'Fast.ai Practical Deep Learning', type: 'FREE COURSE', desc: 'Top-down approach, best for practical learners', url: 'https://fast.ai' },
+    { icon: '🎓', name: 'Andrew Ng ML Specialization (Coursera)', type: 'COURSE', desc: 'Updated 2024 version with modern content', url: '#' },
+    { icon: '🎓', name: 'DeepLearning.AI MLOps Specialization', type: 'COURSE', desc: 'Production ML from Day 1', url: '#' },
+    { icon: '🎓', name: 'Kaggle Learn (Free)', type: 'FREE COURSE', desc: 'Pandas, SQL, ML, Deep Learning — all free', url: 'https://kaggle.com/learn' },
+    { icon: '🎓', name: 'CS229 Stanford (YouTube)', type: 'FREE COURSE', desc: 'Rigorous ML foundations', url: '#' },
+    { icon: '🎓', name: 'LLM Engineering (Maven)', type: 'COURSE', desc: '2026 must: RAG, agents, evals', url: '#' },
+  ],
+  1: [
+    { icon: '📗', name: 'Hands-On ML with Scikit-Learn (Géron)', type: 'BOOK', desc: '3rd edition — 2024 updated, most practical ML book' },
+    { icon: '📗', name: 'Deep Learning (Goodfellow et al)', type: 'BOOK', desc: 'The theoretical bible' },
+    { icon: '📗', name: 'The Hundred-Page ML Book', type: 'BOOK', desc: 'Great for revision & interview prep' },
+    { icon: '📗', name: 'Python for Data Analysis (McKinney)', type: 'BOOK', desc: 'Pandas author — definitive reference' },
+    { icon: '📗', name: 'Designing ML Systems (Chip Huyen)', type: 'BOOK', desc: '2026 must-read for production ML' },
+    { icon: '📗', name: 'Build LLM Apps from Scratch', type: 'BOOK', desc: 'Sebastian Raschka — LLM internals' },
+  ],
+  2: [
+    { icon: '💻', name: 'LeetCode SQL 50', type: 'PRACTICE', desc: 'The essential SQL problem set for DS interviews' },
+    { icon: '💻', name: 'Kaggle Competitions', type: 'PRACTICE', desc: 'Tabular competitions → portfolio gold' },
+    { icon: '💻', name: 'StrataScratch', type: 'PRACTICE', desc: 'Real DS interview questions from top companies' },
+    { icon: '💻', name: 'DataLemur', type: 'PRACTICE', desc: 'SQL interview questions — great UI' },
+    { icon: '💻', name: 'DrivenData', type: 'PRACTICE', desc: 'Social good ML competitions' },
+    { icon: '💻', name: 'Hugging Face Spaces', type: 'PRACTICE', desc: 'Deploy and explore real models' },
+  ],
+  3: [
+    { icon: '▶️', name: '3Blue1Brown — Neural Networks', type: 'YOUTUBE', desc: 'Best visual intuition for DL math' },
+    { icon: '▶️', name: 'Andrej Karpathy — Zero to Hero', type: 'YOUTUBE', desc: 'Build GPT from scratch — legendary series' },
+    { icon: '▶️', name: 'Yannic Kilcher — Paper Reviews', type: 'YOUTUBE', desc: 'Stay current with SOTA research' },
+    { icon: '▶️', name: 'Sentdex', type: 'YOUTUBE', desc: 'Practical Python & ML tutorials' },
+    { icon: '▶️', name: 'StatQuest with Josh Starmer', type: 'YOUTUBE', desc: 'Best statistics explainers on YouTube' },
+    { icon: '▶️', name: 'AI Jason', type: 'YOUTUBE', desc: 'LLM agents and RAG systems 2025/2026' },
+  ]
+};
+
+const DEFAULT_PROJECTS = [
+  { id: 'p1', name: 'EDA & Visualization Dashboard', desc: 'Full exploratory analysis of a public dataset with Plotly Dash. Shows you can communicate insights visually.', status: 'idea', tags: ['Python', 'Pandas', 'Plotly', 'EDA'] },
+  { id: 'p2', name: 'End-to-End ML Pipeline', desc: 'Customer churn predictor or house price model with feature engineering, model comparison, and MLflow tracking.', status: 'idea', tags: ['Scikit-learn', 'MLflow', 'XGBoost', 'Feature Eng'] },
+  { id: 'p3', name: 'NLP Text Classifier', desc: 'Sentiment analysis or news categorization using fine-tuned BERT. Deployed via FastAPI.', status: 'idea', tags: ['Transformers', 'HuggingFace', 'FastAPI'] },
+  { id: 'p4', name: 'RAG Application', desc: 'Chat with your own documents using RAG, LangChain, and a vector database. The 2026 must-have project.', status: 'idea', tags: ['LangChain', 'RAG', 'OpenAI', 'ChromaDB'] },
+  { id: 'p5', name: 'SQL Analytics Project', desc: 'Complex business analytics using window functions, CTEs, and visualization. Prove your SQL for DS skills.', status: 'idea', tags: ['SQL', 'PostgreSQL', 'Analytics'] },
+  { id: 'p6', name: 'Kaggle Top 20% Finish', desc: 'Enter a tabular Kaggle competition and finish in top 20%. Document your approach in a Kaggle notebook.', status: 'idea', tags: ['Kaggle', 'XGBoost', 'Feature Eng', 'Ensemble'] },
+];
+
+const GAPS = [
+  { icon: '🤖', title: 'GenAI & LLM Skills', priority: 'high', desc: '2026 DS roles increasingly require RAG, prompt engineering, and LLM evaluation. Most candidates skip this. Build at least one RAG project.' },
+  { icon: '📦', title: 'MLOps & Deployment', priority: 'high', desc: 'Can you actually ship a model? Docker, MLflow, and basic cloud deployment separate senior candidates. 80% of DS aspirants skip this phase.' },
+  { icon: '🗄️', title: 'Advanced SQL', priority: 'high', desc: 'Window functions, CTEs, and query optimization are tested at FAANG-level interviews. Practice on StrataScratch and DataLemur.' },
+  { icon: '🎯', title: 'Project Portfolio', priority: 'med', desc: 'No portfolio = no interviews at good companies. You need 3-4 end-to-end projects. Kaggle + GitHub + write-up is the formula.' },
+  { icon: '📐', title: 'ML System Design', priority: 'med', desc: 'Mid-senior DS roles (2+ YoE) include a system design round. Study recommendation systems, fraud detection, and search ranking.' },
+  { icon: '📊', title: 'A/B Testing Depth', priority: 'low', desc: 'Every company runs experiments. Know power analysis, multiple testing, novelty effects, and network effects deeply.' },
+];
+
+// ===================== STATE =====================
+let state = JSON.parse(localStorage.getItem('dsq-state') || 'null') || {
+  completedSkills: [],
+  inProgressSkills: [],
+  projects: [...DEFAULT_PROJECTS],
+  logs: [],
+  streak: 0,
+  lastLogDate: null,
+  activeInterviewTab: 0,
+  activeResourcesTab: 0,
+};
+
+function saveState() { localStorage.setItem('dsq-state', JSON.stringify(state)); }
+
+// ===================== XP =====================
+function calcXP() {
+  let xp = 0;
+  ROADMAP.forEach(phase => phase.skills.forEach(sk => {
+    if (state.completedSkills.includes(sk.id)) xp += sk.xp;
+    else if (state.inProgressSkills.includes(sk.id)) xp += Math.floor(sk.xp * 0.3);
+  }));
+  xp += state.logs.length * 30;
+  xp += state.projects.filter(p => p.status === 'done').length * 200;
+  xp += state.projects.filter(p => p.status === 'building').length * 50;
+  return xp;
+}
+
+function getLevel(xp) {
+  const levels = [
+    { min: 0, name: 'Curious Beginner', max: 500 },
+    { min: 500, name: 'Data Explorer', max: 1500 },
+    { min: 1500, name: 'Junior Analyst', max: 3000 },
+    { min: 3000, name: 'ML Practitioner', max: 5000 },
+    { min: 5000, name: 'Data Scientist', max: 8000 },
+    { min: 8000, name: 'Senior DS', max: 12000 },
+    { min: 12000, name: 'ML Engineer', max: 18000 },
+    { min: 18000, name: 'DS Wizard', max: 99999 },
+  ];
+  for (let i = levels.length - 1; i >= 0; i--) {
+    if (xp >= levels[i].min) return { level: i + 1, ...levels[i] };
+  }
+  return { level: 1, ...levels[0] };
+}
+
+function updateXPDisplay() {
+  const xp = calcXP();
+  const lv = getLevel(xp);
+  const pct = Math.min(100, ((xp - lv.min) / (lv.max - lv.min)) * 100);
+  document.getElementById('level-num').textContent = lv.level;
+  document.querySelector('.level-text').previousElementSibling.textContent = lv.name;
+  document.getElementById('xp-fill').style.width = pct + '%';
+  document.getElementById('xp-cur').textContent = xp.toLocaleString() + ' XP';
+  document.getElementById('xp-max').textContent = lv.max.toLocaleString() + ' XP';
+}
+
+// ===================== NAVIGATION =====================
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  renderPage(id);
+}
+
+function renderPage(id) {
+  if (id === 'dashboard') renderDashboard();
+  else if (id === 'roadmap') renderRoadmap(0);
+  else if (id === 'skills') renderSkills();
+  else if (id === 'projects') renderProjects();
+  else if (id === 'gaps') renderGaps();
+  else if (id === 'interview') renderInterview(0);
+  else if (id === 'resources') renderResources(0);
+  else if (id === 'journal') renderJournal();
+  else if (id === 'stats') renderStats();
+}
+
+// ===================== DASHBOARD =====================
+function renderDashboard() {
+  // Date
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+  // Streak
+  document.getElementById('streak-count').textContent = state.streak + ' day streak';
+  // Stats
+  let done = state.completedSkills.length;
+  let total = ROADMAP.reduce((a,p) => a + p.skills.length, 0);
+  document.getElementById('stat-skills-done').textContent = done;
+  document.getElementById('stat-skills-total').textContent = total;
+  document.getElementById('stat-projects').textContent = state.projects.filter(p => p.status !== 'idea').length;
+  document.getElementById('stat-logs').textContent = state.logs.length;
+
+  // Heatmap
+  const hm = document.getElementById('heatmap');
+  hm.innerHTML = '';
+  const today = new Date();
+  for (let i = 111; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0,10);
+    const count = state.logs.filter(l => l.date === key).length;
+    const cell = document.createElement('div');
+    cell.className = 'heat-cell' + (count >= 3 ? ' h4' : count >= 2 ? ' h3' : count >= 1 ? ' h2' : count > 0 ? ' h1' : '');
+    cell.title = key + (count > 0 ? ` — ${count} sessions` : '');
+    hm.appendChild(cell);
+  }
+
+  // Today's focus
+  const focus = document.getElementById('todays-focus');
+  const inProg = state.inProgressSkills;
+  const suggestions = [];
+  ROADMAP.forEach(phase => {
+    phase.skills.forEach(sk => {
+      if (!state.completedSkills.includes(sk.id) && suggestions.length < 3) {
+        suggestions.push({ sk, phase });
+      }
+    });
+  });
+  focus.innerHTML = suggestions.map(({sk, phase}) => `
+    <div class="check-item" onclick="toggleSkill('${sk.id}')">
+      <div class="check-box ${state.completedSkills.includes(sk.id) ? 'checked' : state.inProgressSkills.includes(sk.id) ? '' : ''}" style="${state.inProgressSkills.includes(sk.id) ? 'border-color:var(--accent)' : ''}">
+        ${state.completedSkills.includes(sk.id) ? '✓' : state.inProgressSkills.includes(sk.id) ? '→' : ''}
+      </div>
+      <div>
+        <div class="check-text ${state.completedSkills.includes(sk.id) ? 'done' : ''}">${sk.name}</div>
+        <div class="check-meta">${phase.name} · ${sk.xp} XP</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Phase progress overview
+  const ppo = document.getElementById('phase-progress-overview');
+  ppo.innerHTML = ROADMAP.map(phase => {
+    const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
+    const pct = Math.round((done / phase.skills.length) * 100);
+    return `
+      <div class="progress-item">
+        <div class="progress-label">
+          <span>${phase.name}</span>
+          <span class="progress-pct">${pct}%</span>
+        </div>
+        <div class="progress-bg">
+          <div class="progress-fill" style="width:${pct}%;background:${phase.color}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Achievements
+  const ach = document.getElementById('achievements-list');
+  const achievements = [];
+  if (state.completedSkills.length >= 1) achievements.push({ icon: '⚡', text: 'First skill completed!' });
+  if (state.completedSkills.length >= 10) achievements.push({ icon: '🔥', text: '10 skills mastered' });
+  if (state.logs.length >= 1) achievements.push({ icon: '📓', text: 'First study log!' });
+  if (state.logs.length >= 7) achievements.push({ icon: '📅', text: '7 study sessions logged' });
+  if (state.projects.filter(p => p.status === 'done').length >= 1) achievements.push({ icon: '🚀', text: 'First project shipped!' });
+  if (achievements.length === 0) achievements.push({ icon: '🎯', text: 'Start your journey — complete your first skill!' });
+
+  ach.innerHTML = achievements.map(a => `
+    <div class="flex-center gap-8" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+      <span style="font-size:16px">${a.icon}</span> ${a.text}
+    </div>
+  `).join('');
+}
+
+// ===================== ROADMAP =====================
+function renderRoadmap(tabIdx) {
+  const phases = tabIdx === 0 ? ROADMAP : [ROADMAP[tabIdx - 1]];
+  const content = document.getElementById('roadmap-content');
+  content.innerHTML = phases.map(phase => {
+    const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
+    const pct = Math.round((done / phase.skills.length) * 100);
+    const status = pct === 100 ? 'done' : pct > 0 ? 'active' : 'locked';
+    return `
+      <div class="skill-phase">
+        <div class="phase-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'grid':'none'">
+          <div class="phase-dot ${status}">${phase.phase}</div>
+          <div>
+            <div class="phase-name">${phase.name}</div>
+            <div style="font-size:10px;color:var(--muted)">${phase.desc}</div>
+          </div>
+          <div class="phase-prog">${done}/${phase.skills.length} · ${pct}%</div>
+        </div>
+        <div style="margin-left:44px;margin-bottom:6px">
+          <div class="phase-bar"><div class="phase-bar-fill" style="width:${pct}%;background:${phase.color}"></div></div>
+        </div>
+        <div class="skills-grid">
+          ${phase.skills.map(sk => {
+            const isDone = state.completedSkills.includes(sk.id);
+            const isIP = state.inProgressSkills.includes(sk.id);
+            return `
+              <div class="skill-chip ${isDone?'completed':isIP?'in-progress':''}" onclick="toggleSkill('${sk.id}')">
+                <div class="skill-status">${isDone?'✅':isIP?'🔄':''}</div>
+                <div class="skill-chip-name">${sk.name}</div>
+                <div class="skill-chip-tag">${sk.tag} · +${sk.xp} XP</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function switchTab(page, idx, el) {
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (page === 'roadmap') renderRoadmap(idx);
+  else if (page === 'interview') renderInterview(idx);
+  else if (page === 'resources') renderResources(idx);
+}
+
+// ===================== SKILLS =====================
+function toggleSkill(id) {
+  if (state.completedSkills.includes(id)) {
+    state.completedSkills = state.completedSkills.filter(s => s !== id);
+    if (!state.inProgressSkills.includes(id)) state.inProgressSkills.push(id);
+  } else if (state.inProgressSkills.includes(id)) {
+    state.inProgressSkills = state.inProgressSkills.filter(s => s !== id);
+    state.completedSkills.push(id);
+  } else {
+    state.inProgressSkills.push(id);
+  }
+  saveState();
+  updateXPDisplay();
+  updateStats();
+}
+
+function renderSkills() {
+  // By domain progress
+  const sbd = document.getElementById('skills-by-domain');
+  sbd.innerHTML = ROADMAP.map(phase => {
+    const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
+    const pct = Math.round((done / phase.skills.length) * 100);
+    return `
+      <div class="progress-item">
+        <div class="progress-label">
+          <span>${phase.name}</span>
+          <span class="progress-pct">${pct}%</span>
+        </div>
+        <div class="progress-bg">
+          <div class="progress-fill" style="width:${pct}%;background:${phase.color}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Full list
+  const sfl = document.getElementById('skills-full-list');
+  sfl.innerHTML = ROADMAP.map(phase => {
+    const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
+    return `
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title" style="color:${phase.color}">${phase.phase}. ${phase.name}</div>
+        <div class="card-sub">${done}/${phase.skills.length} completed</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">
+          ${phase.skills.map(sk => {
+            const isDone = state.completedSkills.includes(sk.id);
+            const isIP = state.inProgressSkills.includes(sk.id);
+            return `
+              <div class="check-item" onclick="toggleSkill('${sk.id}')" style="padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+                <div class="check-box ${isDone?'checked':''}" style="${isIP?'border-color:var(--accent);background:rgba(124,110,247,0.1)':''}">${isDone?'✓':isIP?'→':''}</div>
+                <div>
+                  <div class="check-text ${isDone?'done':''}">${sk.name}</div>
+                  <div class="check-meta">+${sk.xp} XP</div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ===================== PROJECTS =====================
+function renderProjects() {
+  const grid = document.getElementById('projects-grid');
+  grid.innerHTML = state.projects.map(p => `
+    <div class="project-card">
+      <div class="project-header">
+        <div class="project-title">${p.name}</div>
+        <div class="project-status ${p.status}">${p.status === 'idea' ? '💡 IDEA' : p.status === 'building' ? '🔨 BUILDING' : '✅ DONE'}</div>
+      </div>
+      <div class="project-desc">${p.desc || 'No description'}</div>
+      <div class="project-tags">
+        ${(p.tags || []).map(t => `<span class="tag project">${t}</span>`).join('')}
+      </div>
+      <div style="margin-top:12px;display:flex;gap:6px">
+        ${p.status === 'idea' ? `<button class="btn btn-ghost btn-sm" onclick="advanceProject('${p.id}')">Start Building</button>` : ''}
+        ${p.status === 'building' ? `<button class="btn btn-ghost btn-sm" onclick="advanceProject('${p.id}')">Mark Done ✓</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function advanceProject(id) {
+  const p = state.projects.find(p => p.id === id);
+  if (!p) return;
+  p.status = p.status === 'idea' ? 'building' : 'done';
+  saveState();
+  updateXPDisplay();
+  renderProjects();
+  updateStats();
+}
+
+function saveProject() {
+  const name = document.getElementById('proj-name').value.trim();
+  if (!name) return;
+  state.projects.push({
+    id: 'p' + Date.now(),
+    name,
+    desc: document.getElementById('proj-desc').value,
+    status: document.getElementById('proj-status').value,
+    tags: document.getElementById('proj-tags').value.split(',').map(t => t.trim()).filter(Boolean)
+  });
+  saveState();
+  closeModal('project-modal');
+  renderProjects();
+  updateStats();
+}
+
+// ===================== GAPS =====================
+function renderGaps() {
+  const gc = document.getElementById('gaps-content');
+  gc.innerHTML = GAPS.map(g => `
+    <div class="gap-item">
+      <div class="gap-header">
+        <span class="gap-icon">${g.icon}</span>
+        <span class="gap-title">${g.title}</span>
+        <span class="gap-priority ${g.priority}">${g.priority.toUpperCase()}</span>
+      </div>
+      <div class="gap-desc">${g.desc}</div>
+    </div>
+  `).join('');
+}
+
+// ===================== INTERVIEW =====================
+function renderInterview(idx) {
+  const qs = INTERVIEW_QS[idx] || [];
+  const content = document.getElementById('interview-content');
+  content.innerHTML = qs.map((q, i) => `
+    <div class="interview-card" onclick="this.classList.toggle('open')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div class="interview-q">${q.q}</div>
+        <span style="color:var(--muted);font-size:12px;flex-shrink:0">▾</span>
+      </div>
+      <div class="interview-meta">
+        <span class="tag ${idx === 4 ? 'project' : idx <= 1 ? 'ml' : 'python'}">${q.diff}</span>
+      </div>
+      <div class="interview-a">${q.a}</div>
+    </div>
+  `).join('');
+}
+
+// ===================== RESOURCES =====================
+function renderResources(idx) {
+  const items = RESOURCES[idx] || [];
+  const content = document.getElementById('resources-content');
+  content.innerHTML = `<div class="card">${items.map(r => `
+    <div class="resource-item">
+      <div class="resource-icon">${r.icon}</div>
+      <div>
+        <div class="resource-name">${r.name}</div>
+        <div class="resource-type">${r.type}${r.desc ? ' · ' + r.desc : ''}</div>
+      </div>
+      ${r.url ? `<a href="${r.url}" target="_blank" class="btn btn-ghost btn-sm resource-action">Open →</a>` : ''}
+    </div>
+  `).join('')}</div>`;
+}
+
+// ===================== JOURNAL =====================
+function saveLog() {
+  const topic = document.getElementById('log-topic').value.trim();
+  if (!topic) return;
+  const today = new Date().toISOString().slice(0, 10);
+  state.logs.unshift({
+    id: Date.now(),
+    date: today,
+    topic,
+    category: document.getElementById('log-category').value,
+    hours: parseFloat(document.getElementById('log-hours').value),
+    notes: document.getElementById('log-notes').value
+  });
+  // Streak
+  if (state.lastLogDate !== today) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yKey = yesterday.toISOString().slice(0,10);
+    state.streak = state.lastLogDate === yKey ? state.streak + 1 : 1;
+    state.lastLogDate = today;
+  }
+  document.getElementById('log-topic').value = '';
+  document.getElementById('log-notes').value = '';
+  saveState();
+  closeModal('log-modal');
+  updateXPDisplay();
+  updateStats();
+  if (document.getElementById('page-journal').classList.contains('active')) renderJournal();
+  if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+}
+
+function renderJournal() {
+  const jl = document.getElementById('journal-list');
+  if (state.logs.length === 0) {
+    jl.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:var(--muted)">No study logs yet. Start logging your sessions!</div>';
+    return;
+  }
+  jl.innerHTML = state.logs.map(l => `
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:14px">${l.topic}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">${l.date} · ${l.hours}h · ${l.category}</div>
+        </div>
+        <span class="tag python">+${30} XP</span>
+      </div>
+      ${l.notes ? `<div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">${l.notes}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ===================== STATS =====================
+function renderStats() {
+  const sc = document.getElementById('stats-cards');
+  const totalHours = state.logs.reduce((a, l) => a + (l.hours || 0), 0);
+  const totalXP = calcXP();
+  const completionPct = Math.round((state.completedSkills.length / ROADMAP.reduce((a,p)=>a+p.skills.length,0)) * 100);
+  sc.innerHTML = `
+    <div class="stat-card"><div class="stat-label">TOTAL XP</div><div class="stat-num text-accent">${totalXP.toLocaleString()}</div></div>
+    <div class="stat-card"><div class="stat-label">HOURS STUDIED</div><div class="stat-num" style="color:var(--accent2)">${totalHours.toFixed(1)}</div></div>
+    <div class="stat-card"><div class="stat-label">OVERALL PROGRESS</div><div class="stat-num" style="color:var(--accent3)">${completionPct}%</div></div>
+    <div class="stat-card"><div class="stat-label">CURRENT STREAK</div><div class="stat-num" style="color:var(--gold)">${state.streak}🔥</div></div>
+  `;
+
+  // Radar-style bars
+  const radar = document.getElementById('radar-chart');
+  radar.innerHTML = ROADMAP.map(phase => {
+    const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
+    const pct = Math.round((done / phase.skills.length) * 100);
+    return `
+      <div class="progress-item">
+        <div class="progress-label">
+          <span style="font-size:10px">${phase.name}</span>
+          <span style="color:${phase.color};font-size:10px">${pct}%</span>
+        </div>
+        <div class="progress-bg">
+          <div class="progress-fill" style="width:${pct}%;background:${phase.color}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Log summary
+  const sls = document.getElementById('study-log-summary');
+  const byCategory = {};
+  state.logs.forEach(l => {
+    byCategory[l.category] = (byCategory[l.category] || 0) + l.hours;
+  });
+  sls.innerHTML = Object.entries(byCategory).length === 0
+    ? '<div style="color:var(--muted);font-size:12px">No logs yet.</div>'
+    : Object.entries(byCategory).map(([cat, hrs]) => `
+      <div class="flex-center justify-between" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+        <span>${cat}</span>
+        <span style="color:var(--accent)">${hrs.toFixed(1)}h</span>
+      </div>
+    `).join('');
+}
+
+function updateStats() {
+  const done = state.completedSkills.length;
+  const total = ROADMAP.reduce((a,p) => a + p.skills.length, 0);
+  document.getElementById('stat-skills-done').textContent = done;
+  document.getElementById('stat-skills-total').textContent = total;
+  document.getElementById('stat-projects').textContent = state.projects.filter(p => p.status !== 'idea').length;
+  document.getElementById('stat-logs').textContent = state.logs.length;
+  document.getElementById('streak-count').textContent = state.streak + ' day streak';
+}
+
+// ===================== MODALS =====================
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+  updateXPDisplay();
+  renderDashboard();
+  // Level name in sidebar
+  const xp = calcXP();
+  const lv = getLevel(xp);
+  document.querySelector('.level-text').previousElementSibling.textContent = lv.name;
+});
+</script>
+</body>
+</html>

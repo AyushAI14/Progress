@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>DS Quest — Data Science Journey Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -18,6 +18,8 @@
     --muted: #6b6b80;
     --danger: #f07070;
     --gold: #f5c842;
+    --sidebar-w: 240px;
+    --topbar-h: 56px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -37,15 +39,67 @@
     pointer-events: none; z-index: 0; opacity: 0.4;
   }
 
+  /* ===================== MOBILE TOPBAR ===================== */
+  .mobile-topbar {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--topbar-h);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: 200;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+  }
+  .hamburger {
+    width: 36px; height: 36px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .hamburger span {
+    display: block; width: 18px; height: 1.5px;
+    background: var(--text); border-radius: 2px;
+    transition: all 0.25s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .topbar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; color: var(--accent); }
+  .topbar-xp {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .topbar-level {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 13px; color: var(--accent);
+  }
+  .topbar-bar-wrap { width: 60px; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .topbar-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.6s ease; }
+
+  /* OVERLAY for mobile sidebar */
+  .sidebar-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 149;
+    backdrop-filter: blur(2px);
+  }
+  .sidebar-overlay.open { display: block; }
+
   /* SIDEBAR */
   .sidebar {
     position: fixed; left: 0; top: 0; bottom: 0;
-    width: 240px;
+    width: var(--sidebar-w);
     background: var(--surface);
     border-right: 1px solid var(--border);
     display: flex; flex-direction: column;
-    z-index: 100;
+    z-index: 150;
     padding: 28px 0;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   }
   .logo {
     padding: 0 24px 28px;
@@ -102,7 +156,7 @@
   }
 
   /* MAIN */
-  .main { margin-left: 240px; min-height: 100vh; padding: 32px 36px; position: relative; z-index: 1; }
+  .main { margin-left: var(--sidebar-w); min-height: 100vh; padding: 32px 36px; position: relative; z-index: 1; }
 
   /* PAGES */
   .page { display: none; }
@@ -163,9 +217,7 @@
   .stat-trend.down { color: var(--danger); }
 
   /* SKILL TREE */
-  .skill-phase {
-    margin-bottom: 28px;
-  }
+  .skill-phase { margin-bottom: 28px; }
   .phase-header {
     display: flex; align-items: center; gap: 12px;
     margin-bottom: 14px;
@@ -183,7 +235,7 @@
   .phase-dot.active { background: var(--accent); color: #fff; }
   .phase-dot.locked { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
   .phase-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
-  .phase-prog { margin-left: auto; font-size: 11px; color: var(--muted); }
+  .phase-prog { margin-left: auto; font-size: 11px; color: var(--muted); white-space: nowrap; }
   .phase-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
   .phase-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.6s ease; }
 
@@ -238,8 +290,29 @@
   .check-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
   /* TABS */
-  .tabs { display: flex; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 10px; margin-bottom: 20px; width: fit-content; }
-  .tab { padding: 7px 16px; border-radius: 7px; cursor: pointer; font-size: 11px; color: var(--muted); transition: all 0.15s; }
+  .tabs {
+    display: flex; gap: 4px;
+    background: var(--surface2);
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 7px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 11px;
+    color: var(--muted);
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
   .tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
 
   /* TAGS */
@@ -276,7 +349,8 @@
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.7); z-index: 999;
-    align-items: center; justify-content: center;
+    align-items: flex-end;
+    justify-content: center;
     backdrop-filter: blur(4px);
   }
   .modal-overlay.open { display: flex; }
@@ -288,6 +362,7 @@
     max-width: 500px; width: 90%;
     animation: fadeUp 0.2s ease;
     position: relative;
+    margin-bottom: 40px;
   }
   .modal-close { position: absolute; top: 16px; right: 16px; cursor: pointer; color: var(--muted); font-size: 18px; background: none; border: none; }
   .modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
@@ -307,6 +382,7 @@
     font-size: 12px;
     outline: none;
     transition: border-color 0.15s;
+    -webkit-appearance: none;
   }
   .form-input:focus { border-color: var(--accent); }
   select.form-input { cursor: pointer; }
@@ -322,6 +398,7 @@
     border: none;
     transition: all 0.15s;
     display: inline-flex; align-items: center; gap: 6px;
+    -webkit-tap-highlight-color: transparent;
   }
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-primary:hover { background: #6b5ee0; transform: translateY(-1px); }
@@ -380,6 +457,7 @@
   .project-status {
     font-size: 9px; letter-spacing: 1px;
     padding: 3px 8px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0; margin-left: 8px;
   }
   .project-status.building { background: rgba(232,165,75,0.15); color: var(--accent2); }
   .project-status.done { background: rgba(75,201,160,0.15); color: var(--accent3); }
@@ -393,10 +471,10 @@
     padding: 12px 0;
     border-bottom: 1px solid var(--border);
   }
-  .resource-icon { font-size: 20px; width: 36px; text-align: center; }
+  .resource-icon { font-size: 20px; width: 36px; text-align: center; flex-shrink: 0; }
   .resource-name { font-size: 13px; }
   .resource-type { font-size: 10px; color: var(--muted); }
-  .resource-action { margin-left: auto; }
+  .resource-action { margin-left: auto; flex-shrink: 0; }
 
   /* INTERVIEW */
   .interview-card {
@@ -433,6 +511,7 @@
   .gap-priority {
     margin-left: auto; font-size: 9px; letter-spacing: 1px;
     padding: 2px 8px; border-radius: 4px;
+    white-space: nowrap;
   }
   .gap-priority.high { background: rgba(240,112,112,0.15); color: var(--danger); }
   .gap-priority.med { background: rgba(232,165,75,0.15); color: var(--accent2); }
@@ -465,19 +544,169 @@
   .text-xs { font-size: 10px; }
   .font-bold { font-family: 'Syne', sans-serif; font-weight: 700; }
 
-  /* RESPONSIVE ADJUSTMENTS */
+  /* ===================== MOBILE BOTTOM NAV ===================== */
+  .bottom-nav {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 60px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 200;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bottom-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; padding: 6px 10px;
+    border-radius: 8px; cursor: pointer;
+    transition: all 0.15s;
+    min-width: 52px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bottom-nav-item .bn-icon { font-size: 18px; }
+  .bottom-nav-item .bn-label { font-size: 9px; color: var(--muted); letter-spacing: 0.5px; }
+  .bottom-nav-item.active .bn-label { color: var(--accent); }
+  .bottom-nav-item.active .bn-icon { filter: drop-shadow(0 0 6px var(--accent)); }
+
+  /* ===================== RESPONSIVE BREAKPOINTS ===================== */
+
+  /* Large desktop */
+  @media (max-width: 1200px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Tablet */
   @media (max-width: 900px) {
-    .sidebar { width: 200px; }
-    .main { margin-left: 200px; }
-    .grid-4 { grid-template-columns: repeat(2,1fr); }
+    :root { --sidebar-w: 200px; }
+    .main { padding: 24px 20px; }
     .grid-3 { grid-template-columns: 1fr 1fr; }
+    .page-title { font-size: 26px; }
+  }
+
+  /* Mobile landscape + small tablet */
+  @media (max-width: 720px) {
+    :root { --sidebar-w: 260px; }
+
+    /* Show topbar + bottom nav, hide desktop sidebar on mobile */
+    .mobile-topbar { display: flex; }
+    .bottom-nav { display: flex; }
+
+    /* Sidebar becomes a drawer */
+    .sidebar {
+      top: 0;
+      transform: translateX(-100%);
+      padding-top: 16px;
+      box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    /* Push main content down for topbar and up for bottom nav */
+    .main {
+      margin-left: 0 !important;
+      padding: 80px 16px 80px;
+    }
+
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+
+    .page-title { font-size: 22px; letter-spacing: -0.5px; }
+    .page-header { margin-bottom: 20px; }
+
+    .welcome-banner { padding: 18px; }
+    .welcome-banner::after { font-size: 50px; }
+    .welcome-name { font-size: 20px; }
+
+    .stat-num { font-size: 24px; }
+
+    /* Skills grid on mobile */
+    .skills-grid {
+      grid-template-columns: 1fr 1fr;
+      margin-left: 0;
+    }
+
+    /* Phase header on mobile */
+    .phase-header { gap: 8px; }
+    .phase-name { font-size: 13px; }
+
+    /* Modal slides up from bottom */
+    .modal-overlay { align-items: flex-end; }
+    .modal {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 20px 20px 0 0;
+      margin-bottom: 0;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding-bottom: 32px;
+    }
+
+    /* Heatmap on mobile */
+    .heat-cell { width: 9px; height: 9px; }
+
+    /* Interview cards */
+    .interview-q { font-size: 12px; }
+
+    /* Resource items */
+    .resource-item { flex-wrap: wrap; }
+    .resource-action { margin-left: 0; margin-top: 8px; width: 100%; }
+    .resource-action .btn { width: 100%; justify-content: center; }
+
+    /* Project cards */
+    .project-card:hover { transform: none; }
+
+    /* Tabs scroll */
+    .tabs { width: 100%; }
+
+    /* Gap header */
+    .gap-title { font-size: 12px; }
+  }
+
+  /* Very small phones */
+  @media (max-width: 380px) {
+    .main { padding: 72px 12px 76px; }
+    .grid-4 { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-card { padding: 14px; }
+    .stat-num { font-size: 22px; }
+    .stat-label { font-size: 9px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .card { padding: 14px; }
+    .welcome-banner { padding: 14px; }
+    .welcome-name { font-size: 17px; }
+  }
+
+  /* Safe area for notched phones */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .bottom-nav { padding-bottom: calc(env(safe-area-inset-bottom) + 4px); height: calc(60px + env(safe-area-inset-bottom)); }
+    @media (max-width: 720px) {
+      .main { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+    }
   }
 </style>
 </head>
 <body>
 
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar" id="mobile-topbar">
+  <div class="hamburger" id="hamburger" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="topbar-logo">DS Quest</div>
+  <div class="topbar-xp">
+    <div class="topbar-level" id="topbar-level">Lv.3</div>
+    <div class="topbar-bar-wrap">
+      <div class="topbar-bar-fill" id="topbar-fill" style="width:42%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="logo">
     <div class="logo-title">DS Quest</div>
     <div class="logo-sub">DATA SCIENCE TRACKER</div>
@@ -486,7 +715,7 @@
     <div class="level-badge">
       <div class="level-num" id="level-num">3</div>
       <div>
-        <div style="font-size:11px; font-family:'Syne',sans-serif; font-weight:700;">Junior Analyst</div>
+        <div style="font-size:11px; font-family:'Syne',sans-serif; font-weight:700;" id="level-name">Junior Analyst</div>
         <div class="level-text">CURRENT RANK</div>
       </div>
     </div>
@@ -614,9 +843,8 @@
   <div id="page-roadmap" class="page">
     <div class="page-header">
       <div class="page-title">2026 Data Science <span>Roadmap</span></div>
-      <div class="page-sub">Complete path from beginner to interview-ready — updated for 2026</div>
+      <div class="page-sub">Complete path from beginner to interview-ready</div>
     </div>
-
     <div class="tabs" id="roadmap-tabs">
       <div class="tab active" onclick="switchTab('roadmap',0,this)">All Phases</div>
       <div class="tab" onclick="switchTab('roadmap',1,this)">Foundation</div>
@@ -624,7 +852,6 @@
       <div class="tab" onclick="switchTab('roadmap',3,this)">Advanced</div>
       <div class="tab" onclick="switchTab('roadmap',4,this)">Production</div>
     </div>
-
     <div id="roadmap-content"></div>
   </div>
 
@@ -644,13 +871,12 @@
         <div class="card-title">Skill Legend</div>
         <div class="card-sub">Track status</div>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:12px">
-          <div class="flex-center gap-8"><div class="check-box checked">✓</div> Completed — you've learned this</div>
+          <div class="flex-center gap-8"><div class="check-box checked">✓</div> Completed</div>
           <div class="flex-center gap-8"><div class="check-box" style="border-color:var(--accent);background:rgba(124,110,247,0.1)">→</div> In Progress</div>
           <div class="flex-center gap-8"><div class="check-box"></div> Not Started</div>
-          <div class="flex-center gap-8"><div class="check-box" style="opacity:0.4"></div> Locked (complete previous)</div>
         </div>
         <div class="divider"></div>
-        <div style="font-size:11px;color:var(--muted)">Click any skill chip to toggle status. Each completed skill earns XP!</div>
+        <div style="font-size:11px;color:var(--muted)">Tap any skill to toggle status. Each completed skill earns XP!</div>
       </div>
     </div>
     <div style="margin-top:20px" id="skills-full-list"></div>
@@ -676,7 +902,7 @@
     </div>
     <div class="card" style="margin-bottom:16px">
       <div class="card-title">📋 How this works</div>
-      <div class="card-sub">Based on your skill completion, we identify the most critical gaps that could cost you offers at top companies in 2026. High priority gaps should be addressed first.</div>
+      <div class="card-sub">Based on your skill completion, we identify the most critical gaps. High priority gaps should be addressed first.</div>
     </div>
     <div id="gaps-content"></div>
   </div>
@@ -685,7 +911,7 @@
   <div id="page-interview" class="page">
     <div class="page-header">
       <div class="page-title">Interview <span>Prep</span></div>
-      <div class="page-sub">Click each question to reveal the model answer</div>
+      <div class="page-sub">Tap each question to reveal the model answer</div>
     </div>
     <div class="tabs" id="interview-tabs">
       <div class="tab active" onclick="switchTab('interview',0,this)">ML Concepts</div>
@@ -747,6 +973,30 @@
 
 </main>
 
+<!-- BOTTOM NAV (mobile) -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-item active" id="bn-dashboard" onclick="showPageMobile('dashboard')">
+    <span class="bn-icon">⬡</span>
+    <span class="bn-label">Home</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-roadmap" onclick="showPageMobile('roadmap')">
+    <span class="bn-icon">🗺</span>
+    <span class="bn-label">Roadmap</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-skills" onclick="showPageMobile('skills')">
+    <span class="bn-icon">⚡</span>
+    <span class="bn-label">Skills</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-journal" onclick="openModal('log-modal')">
+    <span class="bn-icon">➕</span>
+    <span class="bn-label">Log</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-stats" onclick="showPageMobile('stats')">
+    <span class="bn-icon">📊</span>
+    <span class="bn-label">Stats</span>
+  </div>
+</div>
+
 <!-- MODALS -->
 <div class="modal-overlay" id="log-modal">
   <div class="modal">
@@ -774,14 +1024,14 @@
     </div>
     <div class="form-group">
       <label class="form-label">HOURS STUDIED</label>
-      <input class="form-input" id="log-hours" type="number" min="0.5" max="12" step="0.5" value="1">
+      <input class="form-input" id="log-hours" type="number" min="0.5" max="12" step="0.5" value="1" inputmode="decimal">
     </div>
     <div class="form-group">
       <label class="form-label">NOTES (OPTIONAL)</label>
       <textarea class="form-input" id="log-notes" placeholder="What did you learn? Any breakthroughs?"></textarea>
     </div>
     <div class="flex gap-8">
-      <button class="btn btn-primary" onclick="saveLog()">Save Log</button>
+      <button class="btn btn-primary" onclick="saveLog()" style="flex:1;justify-content:center">Save Log</button>
       <button class="btn btn-ghost" onclick="closeModal('log-modal')">Cancel</button>
     </div>
   </div>
@@ -813,7 +1063,7 @@
       <input class="form-input" id="proj-tags" placeholder="Python, Scikit-learn, EDA">
     </div>
     <div class="flex gap-8">
-      <button class="btn btn-primary" onclick="saveProject()">Add Project</button>
+      <button class="btn btn-primary" onclick="saveProject()" style="flex:1;justify-content:center">Add Project</button>
       <button class="btn btn-ghost" onclick="closeModal('project-modal')">Cancel</button>
     </div>
   </div>
@@ -931,14 +1181,14 @@ const INTERVIEW_QS = {
   ],
   2: [
     { q: 'Write SQL to find the second highest salary in a table', diff: 'CORE', a: 'SELECT MAX(salary) FROM employees WHERE salary < (SELECT MAX(salary) FROM employees); — OR — SELECT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1; — OR using DENSE_RANK(): SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rk FROM employees) t WHERE rk = 2;' },
-    { q: 'Explain the difference between list, tuple, and set in Python', diff: 'CORE', a: 'List: ordered, mutable, allows duplicates — [1,2,3]. Tuple: ordered, immutable, allows duplicates — (1,2,3). Set: unordered, mutable, no duplicates — {1,2,3}. Dict: key-value pairs, ordered (Python 3.7+). Use tuple when data shouldn\'t change (coordinates). Use set for O(1) lookups and deduplication. Use list for general ordered data.' },
+    { q: 'Explain the difference between list, tuple, and set in Python', diff: 'CORE', a: 'List: ordered, mutable, allows duplicates — [1,2,3]. Tuple: ordered, immutable, allows duplicates — (1,2,3). Set: unordered, mutable, no duplicates — {1,2,3}. Dict: key-value pairs, ordered (Python 3.7+). Use tuple when data shouldn\'t change (coordinates). Use set for O(1) lookups and deduplication.' },
     { q: 'What are Python decorators and when would you use them in DS?', diff: 'ADVANCED', a: 'Decorators are functions that wrap other functions to add behavior without modifying the original. In DS: @timer to benchmark model training, @cache to memoize expensive feature computations, @log_inputs to track experiment parameters, @validate_df to check DataFrame schema before pipeline steps.' },
     { q: 'What is a window function in SQL?', diff: 'ADVANCED', a: 'Window functions perform calculations across a set of rows related to the current row, without collapsing them (unlike GROUP BY). Examples: ROW_NUMBER(), RANK(), DENSE_RANK(), LAG(), LEAD(), SUM() OVER (PARTITION BY). Critical for: running totals, comparing current row to previous, ranking within groups. Essential for DS SQL interviews.' },
   ],
   3: [
     { q: 'Design a recommendation system for an e-commerce platform', diff: 'SYSTEM', a: 'Approach: Hybrid of collaborative filtering + content-based. (1) Collaborative: user-item matrix with ALS or neural CF (NCF). (2) Content: item embeddings from product descriptions. (3) Two-stage: candidate generation (fast ANN search via FAISS) + ranking (GBDT or DNN). Cold start: use content + popularity. Infrastructure: feature store, A/B testing, real-time inference. Metrics: CTR, conversion, revenue per user, diversity.' },
     { q: 'How would you detect fraud in real-time at a payment company?', diff: 'SYSTEM', a: '(1) Feature engineering: velocity features (5 transactions in 10 min), device fingerprinting, location distance, merchant category. (2) Models: ensemble of GBDT + rule-based + anomaly detection. (3) Real-time scoring: model served in <50ms via streaming (Kafka + Flink). (4) Feedback loop: label confirmed fraud, retrain weekly. (5) Metrics: precision (minimize false blocks), recall (catch fraud), cost-weighted.' },
-    { q: 'A model that was 95% accurate in testing has 60% accuracy in production. What do you investigate?', diff: 'CORE', a: 'Likely causes: (1) Data leakage in training — target encoded future info. (2) Distribution shift — production data is different from training data. (3) Overfitting — model memorized training set. (4) Label mismatch — how labels were collected differs. Investigation steps: compare feature distributions (PSI), check if predictions match expected base rates, shadow model testing, time-based validation split.' },
+    { q: 'A model that was 95% accurate in testing has 60% accuracy in production. What do you investigate?', diff: 'CORE', a: 'Likely causes: (1) Data leakage in training — target encoded future info. (2) Distribution shift — production data differs from training data. (3) Overfitting — model memorized training set. (4) Label mismatch — how labels were collected differs. Investigation: compare feature distributions (PSI), check if predictions match expected base rates, shadow model testing, time-based validation split.' },
   ],
   4: [
     { q: 'What is RAG (Retrieval-Augmented Generation) and when would you use it?', diff: '2026', a: 'RAG combines LLMs with a retrieval step to ground responses in external knowledge. Flow: query → embed query → vector search in knowledge base → retrieve top-k chunks → inject into LLM prompt → generate response. Use when: LLM\'s training data is outdated, domain-specific knowledge is required, hallucination reduction is critical (legal, medical). Vs fine-tuning: RAG is better for frequently changing knowledge; fine-tuning is better for style/format changes.' },
@@ -985,20 +1235,20 @@ const RESOURCES = {
 };
 
 const DEFAULT_PROJECTS = [
-  { id: 'p1', name: 'EDA & Visualization Dashboard', desc: 'Full exploratory analysis of a public dataset with Plotly Dash. Shows you can communicate insights visually.', status: 'idea', tags: ['Python', 'Pandas', 'Plotly', 'EDA'] },
-  { id: 'p2', name: 'End-to-End ML Pipeline', desc: 'Customer churn predictor or house price model with feature engineering, model comparison, and MLflow tracking.', status: 'idea', tags: ['Scikit-learn', 'MLflow', 'XGBoost', 'Feature Eng'] },
-  { id: 'p3', name: 'NLP Text Classifier', desc: 'Sentiment analysis or news categorization using fine-tuned BERT. Deployed via FastAPI.', status: 'idea', tags: ['Transformers', 'HuggingFace', 'FastAPI'] },
-  { id: 'p4', name: 'RAG Application', desc: 'Chat with your own documents using RAG, LangChain, and a vector database. The 2026 must-have project.', status: 'idea', tags: ['LangChain', 'RAG', 'OpenAI', 'ChromaDB'] },
-  { id: 'p5', name: 'SQL Analytics Project', desc: 'Complex business analytics using window functions, CTEs, and visualization. Prove your SQL for DS skills.', status: 'idea', tags: ['SQL', 'PostgreSQL', 'Analytics'] },
-  { id: 'p6', name: 'Kaggle Top 20% Finish', desc: 'Enter a tabular Kaggle competition and finish in top 20%. Document your approach in a Kaggle notebook.', status: 'idea', tags: ['Kaggle', 'XGBoost', 'Feature Eng', 'Ensemble'] },
+  { id: 'p1', name: 'EDA & Visualization Dashboard', desc: 'Full exploratory analysis of a public dataset with Plotly Dash.', status: 'idea', tags: ['Python', 'Pandas', 'Plotly', 'EDA'] },
+  { id: 'p2', name: 'End-to-End ML Pipeline', desc: 'Customer churn predictor with feature engineering, model comparison, and MLflow tracking.', status: 'idea', tags: ['Scikit-learn', 'MLflow', 'XGBoost'] },
+  { id: 'p3', name: 'NLP Text Classifier', desc: 'Sentiment analysis using fine-tuned BERT. Deployed via FastAPI.', status: 'idea', tags: ['Transformers', 'HuggingFace', 'FastAPI'] },
+  { id: 'p4', name: 'RAG Application', desc: 'Chat with your own documents using RAG, LangChain, and a vector database.', status: 'idea', tags: ['LangChain', 'RAG', 'OpenAI', 'ChromaDB'] },
+  { id: 'p5', name: 'SQL Analytics Project', desc: 'Complex business analytics using window functions, CTEs, and visualization.', status: 'idea', tags: ['SQL', 'PostgreSQL', 'Analytics'] },
+  { id: 'p6', name: 'Kaggle Top 20% Finish', desc: 'Enter a tabular Kaggle competition and finish in top 20%.', status: 'idea', tags: ['Kaggle', 'XGBoost', 'Feature Eng'] },
 ];
 
 const GAPS = [
-  { icon: '🤖', title: 'GenAI & LLM Skills', priority: 'high', desc: '2026 DS roles increasingly require RAG, prompt engineering, and LLM evaluation. Most candidates skip this. Build at least one RAG project.' },
-  { icon: '📦', title: 'MLOps & Deployment', priority: 'high', desc: 'Can you actually ship a model? Docker, MLflow, and basic cloud deployment separate senior candidates. 80% of DS aspirants skip this phase.' },
-  { icon: '🗄️', title: 'Advanced SQL', priority: 'high', desc: 'Window functions, CTEs, and query optimization are tested at FAANG-level interviews. Practice on StrataScratch and DataLemur.' },
-  { icon: '🎯', title: 'Project Portfolio', priority: 'med', desc: 'No portfolio = no interviews at good companies. You need 3-4 end-to-end projects. Kaggle + GitHub + write-up is the formula.' },
-  { icon: '📐', title: 'ML System Design', priority: 'med', desc: 'Mid-senior DS roles (2+ YoE) include a system design round. Study recommendation systems, fraud detection, and search ranking.' },
+  { icon: '🤖', title: 'GenAI & LLM Skills', priority: 'high', desc: '2026 DS roles increasingly require RAG, prompt engineering, and LLM evaluation. Build at least one RAG project.' },
+  { icon: '📦', title: 'MLOps & Deployment', priority: 'high', desc: 'Can you actually ship a model? Docker, MLflow, and basic cloud deployment separate senior candidates.' },
+  { icon: '🗄️', title: 'Advanced SQL', priority: 'high', desc: 'Window functions, CTEs, and query optimization are tested at FAANG-level interviews.' },
+  { icon: '🎯', title: 'Project Portfolio', priority: 'med', desc: 'No portfolio = no interviews at good companies. You need 3-4 end-to-end projects.' },
+  { icon: '📐', title: 'ML System Design', priority: 'med', desc: 'Mid-senior DS roles include a system design round. Study recommendation systems, fraud detection, and search ranking.' },
   { icon: '📊', title: 'A/B Testing Depth', priority: 'low', desc: 'Every company runs experiments. Know power analysis, multiple testing, novelty effects, and network effects deeply.' },
 ];
 
@@ -1010,8 +1260,6 @@ let state = JSON.parse(localStorage.getItem('dsq-state') || 'null') || {
   logs: [],
   streak: 0,
   lastLogDate: null,
-  activeInterviewTab: 0,
-  activeResourcesTab: 0,
 };
 
 function saveState() { localStorage.setItem('dsq-state', JSON.stringify(state)); }
@@ -1051,10 +1299,30 @@ function updateXPDisplay() {
   const lv = getLevel(xp);
   const pct = Math.min(100, ((xp - lv.min) / (lv.max - lv.min)) * 100);
   document.getElementById('level-num').textContent = lv.level;
-  document.querySelector('.level-text').previousElementSibling.textContent = lv.name;
+  document.getElementById('level-name').textContent = lv.name;
   document.getElementById('xp-fill').style.width = pct + '%';
   document.getElementById('xp-cur').textContent = xp.toLocaleString() + ' XP';
   document.getElementById('xp-max').textContent = lv.max.toLocaleString() + ' XP';
+  // Topbar
+  document.getElementById('topbar-level').textContent = 'Lv.' + lv.level;
+  document.getElementById('topbar-fill').style.width = pct + '%';
+}
+
+// ===================== MOBILE SIDEBAR =====================
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const hamburger = document.getElementById('hamburger');
+  const isOpen = sidebar.classList.contains('open');
+  sidebar.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('open', !isOpen);
+  hamburger.classList.toggle('open', !isOpen);
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
 }
 
 // ===================== NAVIGATION =====================
@@ -1064,6 +1332,27 @@ function showPage(id, el) {
   document.getElementById('page-' + id).classList.add('active');
   if (el) el.classList.add('active');
   renderPage(id);
+  closeSidebar();
+  // sync bottom nav
+  syncBottomNav(id);
+}
+
+function showPageMobile(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  // Activate matching sidebar item
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) n.classList.add('active');
+  });
+  document.getElementById('page-' + id).classList.add('active');
+  renderPage(id);
+  syncBottomNav(id);
+}
+
+function syncBottomNav(id) {
+  document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+  const map = { dashboard: 'bn-dashboard', roadmap: 'bn-roadmap', skills: 'bn-skills', stats: 'bn-stats' };
+  if (map[id]) document.getElementById(map[id]).classList.add('active');
 }
 
 function renderPage(id) {
@@ -1080,11 +1369,8 @@ function renderPage(id) {
 
 // ===================== DASHBOARD =====================
 function renderDashboard() {
-  // Date
-  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
-  // Streak
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
   document.getElementById('streak-count').textContent = state.streak + ' day streak';
-  // Stats
   let done = state.completedSkills.length;
   let total = ROADMAP.reduce((a,p) => a + p.skills.length, 0);
   document.getElementById('stat-skills-done').textContent = done;
@@ -1092,7 +1378,6 @@ function renderDashboard() {
   document.getElementById('stat-projects').textContent = state.projects.filter(p => p.status !== 'idea').length;
   document.getElementById('stat-logs').textContent = state.logs.length;
 
-  // Heatmap
   const hm = document.getElementById('heatmap');
   hm.innerHTML = '';
   const today = new Date();
@@ -1103,13 +1388,11 @@ function renderDashboard() {
     const count = state.logs.filter(l => l.date === key).length;
     const cell = document.createElement('div');
     cell.className = 'heat-cell' + (count >= 3 ? ' h4' : count >= 2 ? ' h3' : count >= 1 ? ' h2' : count > 0 ? ' h1' : '');
-    cell.title = key + (count > 0 ? ` — ${count} sessions` : '');
+    cell.title = key;
     hm.appendChild(cell);
   }
 
-  // Today's focus
   const focus = document.getElementById('todays-focus');
-  const inProg = state.inProgressSkills;
   const suggestions = [];
   ROADMAP.forEach(phase => {
     phase.skills.forEach(sk => {
@@ -1120,7 +1403,7 @@ function renderDashboard() {
   });
   focus.innerHTML = suggestions.map(({sk, phase}) => `
     <div class="check-item" onclick="toggleSkill('${sk.id}')">
-      <div class="check-box ${state.completedSkills.includes(sk.id) ? 'checked' : state.inProgressSkills.includes(sk.id) ? '' : ''}" style="${state.inProgressSkills.includes(sk.id) ? 'border-color:var(--accent)' : ''}">
+      <div class="check-box ${state.completedSkills.includes(sk.id) ? 'checked' : ''}" style="${state.inProgressSkills.includes(sk.id) ? 'border-color:var(--accent)' : ''}">
         ${state.completedSkills.includes(sk.id) ? '✓' : state.inProgressSkills.includes(sk.id) ? '→' : ''}
       </div>
       <div>
@@ -1130,7 +1413,6 @@ function renderDashboard() {
     </div>
   `).join('');
 
-  // Phase progress overview
   const ppo = document.getElementById('phase-progress-overview');
   ppo.innerHTML = ROADMAP.map(phase => {
     const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
@@ -1148,7 +1430,6 @@ function renderDashboard() {
     `;
   }).join('');
 
-  // Achievements
   const ach = document.getElementById('achievements-list');
   const achievements = [];
   if (state.completedSkills.length >= 1) achievements.push({ icon: '⚡', text: 'First skill completed!' });
@@ -1157,7 +1438,6 @@ function renderDashboard() {
   if (state.logs.length >= 7) achievements.push({ icon: '📅', text: '7 study sessions logged' });
   if (state.projects.filter(p => p.status === 'done').length >= 1) achievements.push({ icon: '🚀', text: 'First project shipped!' });
   if (achievements.length === 0) achievements.push({ icon: '🎯', text: 'Start your journey — complete your first skill!' });
-
   ach.innerHTML = achievements.map(a => `
     <div class="flex-center gap-8" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
       <span style="font-size:16px">${a.icon}</span> ${a.text}
@@ -1177,11 +1457,11 @@ function renderRoadmap(tabIdx) {
       <div class="skill-phase">
         <div class="phase-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'grid':'none'">
           <div class="phase-dot ${status}">${phase.phase}</div>
-          <div>
+          <div style="min-width:0">
             <div class="phase-name">${phase.name}</div>
             <div style="font-size:10px;color:var(--muted)">${phase.desc}</div>
           </div>
-          <div class="phase-prog">${done}/${phase.skills.length} · ${pct}%</div>
+          <div class="phase-prog">${done}/${phase.skills.length}</div>
         </div>
         <div style="margin-left:44px;margin-bottom:6px">
           <div class="phase-bar"><div class="phase-bar-fill" style="width:${pct}%;background:${phase.color}"></div></div>
@@ -1229,7 +1509,6 @@ function toggleSkill(id) {
 }
 
 function renderSkills() {
-  // By domain progress
   const sbd = document.getElementById('skills-by-domain');
   sbd.innerHTML = ROADMAP.map(phase => {
     const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
@@ -1247,7 +1526,6 @@ function renderSkills() {
     `;
   }).join('');
 
-  // Full list
   const sfl = document.getElementById('skills-full-list');
   sfl.innerHTML = ROADMAP.map(phase => {
     const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
@@ -1255,7 +1533,7 @@ function renderSkills() {
       <div class="card" style="margin-bottom:16px">
         <div class="card-title" style="color:${phase.color}">${phase.phase}. ${phase.name}</div>
         <div class="card-sub">${done}/${phase.skills.length} completed</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">
           ${phase.skills.map(sk => {
             const isDone = state.completedSkills.includes(sk.id);
             const isIP = state.inProgressSkills.includes(sk.id);
@@ -1285,9 +1563,7 @@ function renderProjects() {
         <div class="project-status ${p.status}">${p.status === 'idea' ? '💡 IDEA' : p.status === 'building' ? '🔨 BUILDING' : '✅ DONE'}</div>
       </div>
       <div class="project-desc">${p.desc || 'No description'}</div>
-      <div class="project-tags">
-        ${(p.tags || []).map(t => `<span class="tag project">${t}</span>`).join('')}
-      </div>
+      <div class="project-tags">${(p.tags || []).map(t => `<span class="tag project">${t}</span>`).join('')}</div>
       <div style="margin-top:12px;display:flex;gap:6px">
         ${p.status === 'idea' ? `<button class="btn btn-ghost btn-sm" onclick="advanceProject('${p.id}')">Start Building</button>` : ''}
         ${p.status === 'building' ? `<button class="btn btn-ghost btn-sm" onclick="advanceProject('${p.id}')">Mark Done ✓</button>` : ''}
@@ -1362,7 +1638,7 @@ function renderResources(idx) {
   content.innerHTML = `<div class="card">${items.map(r => `
     <div class="resource-item">
       <div class="resource-icon">${r.icon}</div>
-      <div>
+      <div style="min-width:0;flex:1">
         <div class="resource-name">${r.name}</div>
         <div class="resource-type">${r.type}${r.desc ? ' · ' + r.desc : ''}</div>
       </div>
@@ -1384,7 +1660,6 @@ function saveLog() {
     hours: parseFloat(document.getElementById('log-hours').value),
     notes: document.getElementById('log-notes').value
   });
-  // Streak
   if (state.lastLogDate !== today) {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -1412,10 +1687,10 @@ function renderJournal() {
     <div class="card" style="margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <div>
-          <div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:14px">${l.topic}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px">${l.topic}</div>
           <div style="font-size:10px;color:var(--muted);margin-top:2px">${l.date} · ${l.hours}h · ${l.category}</div>
         </div>
-        <span class="tag python">+${30} XP</span>
+        <span class="tag python">+30 XP</span>
       </div>
       ${l.notes ? `<div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">${l.notes}</div>` : ''}
     </div>
@@ -1431,11 +1706,10 @@ function renderStats() {
   sc.innerHTML = `
     <div class="stat-card"><div class="stat-label">TOTAL XP</div><div class="stat-num text-accent">${totalXP.toLocaleString()}</div></div>
     <div class="stat-card"><div class="stat-label">HOURS STUDIED</div><div class="stat-num" style="color:var(--accent2)">${totalHours.toFixed(1)}</div></div>
-    <div class="stat-card"><div class="stat-label">OVERALL PROGRESS</div><div class="stat-num" style="color:var(--accent3)">${completionPct}%</div></div>
-    <div class="stat-card"><div class="stat-label">CURRENT STREAK</div><div class="stat-num" style="color:var(--gold)">${state.streak}🔥</div></div>
+    <div class="stat-card"><div class="stat-label">OVERALL</div><div class="stat-num" style="color:var(--accent3)">${completionPct}%</div></div>
+    <div class="stat-card"><div class="stat-label">STREAK</div><div class="stat-num" style="color:var(--gold)">${state.streak}🔥</div></div>
   `;
 
-  // Radar-style bars
   const radar = document.getElementById('radar-chart');
   radar.innerHTML = ROADMAP.map(phase => {
     const done = phase.skills.filter(sk => state.completedSkills.includes(sk.id)).length;
@@ -1453,12 +1727,9 @@ function renderStats() {
     `;
   }).join('');
 
-  // Log summary
   const sls = document.getElementById('study-log-summary');
   const byCategory = {};
-  state.logs.forEach(l => {
-    byCategory[l.category] = (byCategory[l.category] || 0) + l.hours;
-  });
+  state.logs.forEach(l => { byCategory[l.category] = (byCategory[l.category] || 0) + l.hours; });
   sls.innerHTML = Object.entries(byCategory).length === 0
     ? '<div style="color:var(--muted);font-size:12px">No logs yet.</div>'
     : Object.entries(byCategory).map(([cat, hrs]) => `
@@ -1472,44 +1743,35 @@ function renderStats() {
 function updateStats() {
   const done = state.completedSkills.length;
   const total = ROADMAP.reduce((a,p) => a + p.skills.length, 0);
-  document.getElementById('stat-skills-done').textContent = done;
-  document.getElementById('stat-skills-total').textContent = total;
-  document.getElementById('stat-projects').textContent = state.projects.filter(p => p.status !== 'idea').length;
-  document.getElementById('stat-logs').textContent = state.logs.length;
-  document.getElementById('streak-count').textContent = state.streak + ' day streak';
+  const el1 = document.getElementById('stat-skills-done');
+  const el2 = document.getElementById('stat-skills-total');
+  const el3 = document.getElementById('stat-projects');
+  const el4 = document.getElementById('stat-logs');
+  if (el1) el1.textContent = done;
+  if (el2) el2.textContent = total;
+  if (el3) el3.textContent = state.projects.filter(p => p.status !== 'idea').length;
+  if (el4) el4.textContent = state.logs.length;
+  const sc = document.getElementById('streak-count');
+  if (sc) sc.textContent = state.streak + ' day streak';
 }
 
 // ===================== MODALS =====================
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
 });
 
-// ===================== INIT =====================
-document.addEventListener('DOMContentLoaded', () => {
-  updateXPDisplay();
-  renderDashboard();
-  // Level name in sidebar
-  const xp = calcXP();
-  const lv = getLevel(xp);
-  document.querySelector('.level-text').previousElementSibling.textContent = lv.name;
-});
-  function confirmReset() {
+// ===================== RESET =====================
+function confirmReset() {
   const modal = document.createElement('div');
   modal.className = 'modal-overlay open';
   modal.innerHTML = `
     <div class="modal" style="max-width:380px">
       <div class="modal-title" style="color:var(--danger)">⚠️ Reset Everything?</div>
-      <div class="modal-sub" style="margin-bottom:16px">
-        This will permanently delete all your progress — skills, logs, projects, streak, and XP. This cannot be undone.
-      </div>
+      <div class="modal-sub" style="margin-bottom:16px">This will permanently delete all your progress. This cannot be undone.</div>
       <div class="flex gap-8">
-        <button class="btn btn-danger" onclick="doReset()">Yes, Reset All</button>
+        <button class="btn btn-danger" onclick="doReset()" style="flex:1;justify-content:center">Yes, Reset All</button>
         <button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
       </div>
     </div>
@@ -1521,23 +1783,23 @@ document.addEventListener('DOMContentLoaded', () => {
 function doReset() {
   localStorage.removeItem('dsq-state');
   state = {
-    completedSkills: [],
-    inProgressSkills: [],
+    completedSkills: [], inProgressSkills: [],
     projects: [...DEFAULT_PROJECTS],
-    logs: [],
-    streak: 0,
-    lastLogDate: null,
-    activeInterviewTab: 0,
-    activeResourcesTab: 0,
+    logs: [], streak: 0, lastLogDate: null,
   };
   saveState();
   document.querySelector('.modal-overlay.open')?.remove();
   updateXPDisplay();
-  // Re-render active page
   const activePage = document.querySelector('.page.active')?.id?.replace('page-', '');
   if (activePage) renderPage(activePage);
   updateStats();
 }
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+  updateXPDisplay();
+  renderDashboard();
+});
 </script>
 </body>
 </html>

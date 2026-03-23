@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>DS Quest — Data Science Journey Tracker</title>
+
+<!-- PWA: Theme & Status Bar -->
+<meta name="theme-color" content="#0a0a0f">
+<meta name="background-color" content="#0a0a0f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DS Quest">
+<meta name="application-name" content="DS Quest">
+<meta name="description" content="Your personal Data Science learning tracker — roadmap, skills, projects, and interview prep.">
+
+<!-- PWA: Inline Manifest (no separate file needed) -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22DS+Quest+%E2%80%94+Data+Science+Tracker%22%2C%22short_name%22%3A%22DS+Quest%22%2C%22description%22%3A%22Your+personal+Data+Science+learning+tracker%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0a0f%22%2C%22theme_color%22%3A%22%237c6ef7%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg+xmlns%3D%2527http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527+viewBox%3D%25270+0+512+512%2527%253E%253Crect+width%3D%2527512%2527+height%3D%2527512%2527+rx%3D%252780%2527+fill%3D%2527%25230a0a0f%2527%2F%253E%253Ctext+x%3D%2527256%2527+y%3D%2527340%2527+font-size%3D%2527280%2527+text-anchor%3D%2527middle%2527+fill%3D%2527%25237c6ef7%2527%253E%25E2%25AC%25A1%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any+maskable%22%7D%5D%7D">
+
+<!-- PWA: Apple Touch Icon (inline SVG as data URI) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230a0a0f'/><text x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'>⬡</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -1799,6 +1815,131 @@ function doReset() {
 document.addEventListener('DOMContentLoaded', () => {
   updateXPDisplay();
   renderDashboard();
+});
+</script>
+
+<!-- ===================== PWA: INSTALL PROMPT ===================== -->
+<style>
+  .install-banner {
+    display: none;
+    position: fixed;
+    bottom: 70px; /* above bottom nav on mobile */
+    left: 12px; right: 12px;
+    background: linear-gradient(135deg, rgba(124,110,247,0.95), rgba(75,201,160,0.9));
+    border-radius: 14px;
+    padding: 14px 16px;
+    z-index: 300;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1);
+    backdrop-filter: blur(8px);
+  }
+  @media (min-width: 721px) {
+    .install-banner { bottom: 24px; max-width: 380px; left: auto; right: 24px; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .install-banner-inner { display: flex; align-items: center; gap: 12px; }
+  .install-icon { font-size: 28px; flex-shrink: 0; }
+  .install-text { flex: 1; }
+  .install-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: #fff; }
+  .install-sub { font-size: 10px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+  .install-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .install-btn {
+    padding: 7px 16px; border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .install-btn-yes { background: #fff; color: #7c6ef7; font-weight: 600; }
+  .install-btn-yes:hover { background: #f0eeff; }
+  .install-btn-no { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+</style>
+
+<div class="install-banner" id="install-banner">
+  <div class="install-banner-inner">
+    <div class="install-icon">⬡</div>
+    <div class="install-text">
+      <div class="install-title">Install DS Quest</div>
+      <div class="install-sub">Add to home screen for the full app experience</div>
+    </div>
+  </div>
+  <div class="install-actions">
+    <button class="install-btn install-btn-yes" id="install-btn-yes">Install App</button>
+    <button class="install-btn install-btn-no" onclick="dismissInstall()">Not now</button>
+  </div>
+</div>
+
+<script>
+// ===================== PWA: SERVICE WORKER (inline) =====================
+const SW_CODE = `
+const CACHE = 'dsquest-v1';
+self.addEventListener('install', e => {
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(clients.claim());
+});
+self.addEventListener('fetch', e => {
+  // Cache-first for same-origin, network-first fallback
+  if (e.request.method !== 'GET') return;
+  e.respondWith(
+    caches.open(CACHE).then(cache =>
+      cache.match(e.request).then(cached => {
+        const fresh = fetch(e.request).then(res => {
+          if (res.ok) cache.put(e.request, res.clone());
+          return res;
+        }).catch(() => cached);
+        return cached || fresh;
+      })
+    )
+  );
+});
+`;
+
+// Register service worker via blob URL (works for local files too)
+if ('serviceWorker' in navigator) {
+  const blob = new Blob([SW_CODE], { type: 'application/javascript' });
+  const swURL = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swURL, { scope: './' })
+    .then(reg => console.log('[DS Quest] SW registered', reg.scope))
+    .catch(err => console.log('[DS Quest] SW error', err));
+}
+
+// ===================== PWA: INSTALL PROMPT =====================
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after a short delay (not immediately on load)
+  setTimeout(() => {
+    if (!localStorage.getItem('dsq-install-dismissed')) {
+      document.getElementById('install-banner').style.display = 'block';
+    }
+  }, 3000);
+});
+
+document.getElementById('install-btn-yes').addEventListener('click', async () => {
+  document.getElementById('install-banner').style.display = 'none';
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log('[DS Quest] Install outcome:', outcome);
+    deferredPrompt = null;
+  }
+});
+
+function dismissInstall() {
+  document.getElementById('install-banner').style.display = 'none';
+  localStorage.setItem('dsq-install-dismissed', '1');
+}
+
+// Hide banner if already installed
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').style.display = 'none';
+  deferredPrompt = null;
+  console.log('[DS Quest] App installed!');
 });
 </script>
 </body>

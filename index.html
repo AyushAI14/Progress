@@ -4,37 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DS Quest — Data Science Journey Tracker</title>
-
-<!-- PWA Essential Meta -->
 <meta name="theme-color" content="#7c6ef7">
-<meta name="background-color" content="#0a0a0f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DS Quest">
-<meta name="application-name" content="DS Quest">
-<meta name="description" content="Your personal Data Science learning tracker — roadmap, skills, projects, and interview prep.">
-<meta name="msapplication-TileColor" content="#0a0a0f">
-<meta name="msapplication-tap-highlight" content="no">
-<meta name="format-detection" content="telephone=no">
-
-<!-- Open Graph -->
-<meta property="og:title" content="DS Quest — Data Science Journey Tracker">
-<meta property="og:description" content="Your personal Data Science learning tracker — roadmap, skills, projects, and interview prep.">
-<meta property="og:type" content="website">
-
-<!-- PWA Icons (inline SVG data URIs) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" sizes="152x152" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E">
-
-<!-- Apple Splash Screens -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 <style>
   :root {
     --bg: #0a0a0f;
@@ -60,11 +36,8 @@
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
   }
-
-  /* NOISE OVERLAY */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -72,48 +45,7 @@
     pointer-events: none; z-index: 0; opacity: 0.4;
   }
 
-  /* =================== OFFLINE BANNER =================== */
-  .offline-banner {
-    display: none;
-    position: fixed; top: 0; left: 0; right: 0;
-    background: var(--danger);
-    color: #fff;
-    text-align: center;
-    font-size: 11px;
-    padding: 6px 16px;
-    z-index: 9999;
-    letter-spacing: 0.5px;
-  }
-  .offline-banner.show { display: block; }
-  body.offline-mode .mobile-topbar { top: 28px; }
-  body.offline-mode .sidebar { top: 28px; }
-  body.offline-mode .main { padding-top: calc(80px + 28px); }
-  @media (min-width: 721px) {
-    body.offline-mode .main { padding-top: calc(32px + 28px); }
-  }
-
-  /* =================== UPDATE BANNER =================== */
-  .update-banner {
-    display: none;
-    position: fixed; bottom: 80px; left: 12px; right: 12px;
-    background: linear-gradient(135deg, rgba(75,201,160,0.95), rgba(124,110,247,0.9));
-    border-radius: 12px;
-    padding: 12px 16px;
-    z-index: 500;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    animation: slideUp 0.3s ease;
-    backdrop-filter: blur(8px);
-  }
-  .update-banner.show { display: flex; align-items: center; gap: 12px; }
-  @media (min-width: 721px) {
-    .update-banner { bottom: 24px; max-width: 360px; left: auto; right: 24px; }
-  }
-  .update-banner-text { flex: 1; font-size: 12px; color: #fff; }
-  .update-banner-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
-  .update-banner-sub { font-size: 10px; opacity: 0.8; margin-top: 1px; }
-  .update-btn { padding: 6px 14px; border-radius: 7px; font-size: 11px; cursor: pointer; border: none; font-family: 'JetBrains Mono', monospace; background: #fff; color: #7c6ef7; font-weight: 600; white-space: nowrap; }
-
-  /* =================== MOBILE TOPBAR =================== */
+  /* MOBILE TOPBAR */
   .mobile-topbar {
     display: none;
     position: fixed; top: 0; left: 0; right: 0;
@@ -135,11 +67,7 @@
     cursor: pointer; flex-shrink: 0;
     -webkit-tap-highlight-color: transparent;
   }
-  .hamburger span {
-    display: block; width: 18px; height: 1.5px;
-    background: var(--text); border-radius: 2px;
-    transition: all 0.25s ease;
-  }
+  .hamburger span { display: block; width: 18px; height: 1.5px; background: var(--text); border-radius: 2px; transition: all 0.25s ease; }
   .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
   .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
@@ -149,12 +77,7 @@
   .topbar-bar-wrap { width: 60px; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
   .topbar-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.6s ease; }
 
-  /* OVERLAY for mobile sidebar */
-  .sidebar-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6); z-index: 149;
-    backdrop-filter: blur(2px);
-  }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 149; backdrop-filter: blur(2px); }
   .sidebar-overlay.open { display: block; }
 
   /* SIDEBAR */
@@ -171,7 +94,6 @@
   .logo { padding: 0 24px 28px; border-bottom: 1px solid var(--border); }
   .logo-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--accent); letter-spacing: -0.5px; }
   .logo-sub { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-top: 2px; }
-
   .sidebar-xp { padding: 18px 24px; border-bottom: 1px solid var(--border); }
   .xp-label { font-size: 9px; color: var(--muted); letter-spacing: 2px; margin-bottom: 8px; }
   .xp-bar-bg { background: var(--surface2); border-radius: 2px; height: 6px; overflow: hidden; }
@@ -192,45 +114,54 @@
   }
   .nav-item:hover { background: var(--surface2); color: var(--text); }
   .nav-item.active { background: rgba(124,110,247,0.15); color: var(--accent); }
-  .nav-item.active::before {
-    content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
-    width: 3px; background: var(--accent); border-radius: 0 2px 2px 0;
-  }
+  .nav-item.active::before { content: ''; position: absolute; left: 0; top: 20%; bottom: 20%; width: 3px; background: var(--accent); border-radius: 0 2px 2px 0; }
   .nav-icon { font-size: 14px; width: 18px; text-align: center; }
   .nav-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 9px; padding: 1px 6px; border-radius: 99px; }
 
   /* MAIN */
   .main { margin-left: var(--sidebar-w); min-height: 100vh; padding: 32px 36px; position: relative; z-index: 1; }
-
-  /* PAGES */
   .page { display: none; }
   .page.active { display: block; animation: fadeUp 0.3s ease; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* HEADER */
   .page-header { margin-bottom: 32px; }
   .page-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -1px; line-height: 1.1; }
   .page-title span { color: var(--accent); font-style: italic; font-family: 'Instrument Serif', serif; }
   .page-sub { color: var(--muted); font-size: 12px; margin-top: 6px; }
 
-  /* CARDS */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
   .card-sub { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
 
-  /* GRID */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
   .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
 
-  /* STAT CARDS */
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
   .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; margin-bottom: 8px; }
   .stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; line-height: 1; }
   .stat-trend { font-size: 10px; margin-top: 4px; }
   .stat-trend.up { color: var(--accent3); }
   .stat-trend.down { color: var(--danger); }
+
+  /* CURRICULUM MODULES */
+  .curriculum-module { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
+  .curriculum-module:hover { border-color: rgba(124,110,247,0.4); }
+  .curriculum-module.completed { border-color: rgba(75,201,160,0.4); background: rgba(75,201,160,0.05); }
+  .curriculum-module.in-progress { border-color: rgba(124,110,247,0.4); background: rgba(124,110,247,0.05); }
+  .module-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0; }
+  .module-num { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 10px; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .module-num.done { background: rgba(75,201,160,0.2); border-color: var(--accent3); color: var(--accent3); }
+  .module-num.active { background: rgba(124,110,247,0.2); border-color: var(--accent); color: var(--accent); }
+  .module-title { font-size: 13px; font-weight: 500; flex: 1; }
+  .module-topics { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .curriculum-module.open .module-topics { display: block; }
+  .topic-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 11px; color: var(--muted); cursor: pointer; border-radius: 4px; padding: 5px 6px; }
+  .topic-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+  .topic-item.done { color: var(--accent3); }
+  .topic-item.done .topic-check { background: var(--accent3); border-color: var(--accent3); color: #000; }
+  .topic-check { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; }
 
   /* SKILL TREE */
   .skill-phase { margin-bottom: 28px; }
@@ -243,25 +174,21 @@
   .phase-prog { margin-left: auto; font-size: 11px; color: var(--muted); white-space: nowrap; }
   .phase-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-top: 6px; overflow: hidden; }
   .phase-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.6s ease; }
-
   .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-left: 44px; }
   .skill-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; }
   .skill-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
   .skill-chip.completed { border-color: rgba(75,201,160,0.4); background: rgba(75,201,160,0.06); }
   .skill-chip.in-progress { border-color: rgba(124,110,247,0.4); background: rgba(124,110,247,0.06); }
-  .skill-chip.locked { opacity: 0.45; cursor: not-allowed; }
   .skill-chip-name { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
   .skill-chip-tag { font-size: 9px; color: var(--muted); letter-spacing: 1px; }
   .skill-status { position: absolute; top: 8px; right: 8px; font-size: 12px; }
 
-  /* PROGRESS BARS */
   .progress-item { margin-bottom: 14px; }
   .progress-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; }
   .progress-pct { color: var(--accent); }
   .progress-bg { background: var(--surface2); border-radius: 2px; height: 5px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
 
-  /* CHECKLIST */
   .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
   .check-item:last-child { border-bottom: none; }
   .check-item:hover { background: rgba(255,255,255,0.02); padding-left: 4px; border-radius: 6px; }
@@ -271,13 +198,11 @@
   .check-text.done { text-decoration: line-through; color: var(--muted); }
   .check-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-  /* TABS */
   .tabs { display: flex; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 10px; margin-bottom: 20px; width: fit-content; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .tabs::-webkit-scrollbar { display: none; }
   .tab { padding: 7px 16px; border-radius: 7px; cursor: pointer; font-size: 11px; color: var(--muted); transition: all 0.15s; white-space: nowrap; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
   .tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
 
-  /* TAGS */
   .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; letter-spacing: 0.5px; }
   .tag.python { background: rgba(124,110,247,0.15); color: var(--accent); }
   .tag.ml { background: rgba(232,165,75,0.15); color: var(--accent2); }
@@ -285,7 +210,6 @@
   .tag.tools { background: rgba(240,112,112,0.15); color: var(--danger); }
   .tag.project { background: rgba(245,200,66,0.15); color: var(--gold); }
 
-  /* TIMELINE */
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 1px; background: var(--border); }
   .timeline-item { position: relative; margin-bottom: 20px; }
@@ -296,7 +220,6 @@
   .timeline-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
   .timeline-body { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
 
-  /* MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; align-items: flex-end; justify-content: center; backdrop-filter: blur(4px); }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; max-width: 500px; width: 90%; animation: fadeUp 0.2s ease; position: relative; margin-bottom: 40px; }
@@ -304,7 +227,6 @@
   .modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
   .modal-sub { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
 
-  /* FORM */
   .form-group { margin-bottom: 14px; }
   .form-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; display: block; }
   .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 12px; outline: none; transition: border-color 0.15s; -webkit-appearance: none; }
@@ -312,7 +234,6 @@
   select.form-input { cursor: pointer; }
   textarea.form-input { resize: vertical; min-height: 80px; }
 
-  /* BUTTON */
   .btn { padding: 9px 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; -webkit-tap-highlight-color: transparent; }
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-primary:hover { background: #6b5ee0; transform: translateY(-1px); }
@@ -321,7 +242,7 @@
   .btn-sm { padding: 6px 12px; font-size: 11px; }
   .btn-danger { background: rgba(240,112,112,0.15); color: var(--danger); border: 1px solid rgba(240,112,112,0.3); }
 
-  /* DASHBOARD SPECIFIC */
+  /* DASHBOARD */
   .welcome-banner { background: linear-gradient(135deg, rgba(124,110,247,0.15), rgba(232,165,75,0.08)); border: 1px solid rgba(124,110,247,0.25); border-radius: 14px; padding: 24px 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
   .welcome-banner::after { content: '⬡'; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 80px; color: rgba(124,110,247,0.1); }
   .welcome-name { font-family: 'Instrument Serif', serif; font-size: 28px; font-style: italic; }
@@ -330,7 +251,6 @@
   .welcome-streak { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; }
   .streak-fire { font-size: 18px; }
 
-  /* HEATMAP */
   .heatmap { display: flex; flex-wrap: wrap; gap: 3px; }
   .heat-cell { width: 11px; height: 11px; border-radius: 2px; background: var(--surface2); transition: all 0.1s; cursor: pointer; }
   .heat-cell:hover { transform: scale(1.3); }
@@ -339,7 +259,6 @@
   .heat-cell.h3 { background: rgba(124,110,247,0.7); }
   .heat-cell.h4 { background: var(--accent); }
 
-  /* PROJECT CARD */
   .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; transition: all 0.15s; }
   .project-card:hover { border-color: rgba(124,110,247,0.3); transform: translateY(-2px); }
   .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
@@ -351,22 +270,21 @@
   .project-desc { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
   .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
-  /* RESOURCES */
   .resource-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .resource-icon { font-size: 20px; width: 36px; text-align: center; flex-shrink: 0; }
   .resource-name { font-size: 13px; }
   .resource-type { font-size: 10px; color: var(--muted); }
   .resource-action { margin-left: auto; flex-shrink: 0; }
 
-  /* INTERVIEW */
-  .interview-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+  .interview-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; }
   .interview-card:hover { border-color: var(--accent); }
+  .interview-card.ai-card { background: rgba(124,110,247,0.04); }
+  .interview-card.ai-card:hover { background: rgba(124,110,247,0.08); }
   .interview-q { font-size: 13px; margin-bottom: 6px; }
   .interview-a { font-size: 11px; color: var(--muted); display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.7; }
   .interview-card.open .interview-a { display: block; }
   .interview-meta { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
 
-  /* GAP ANALYSIS */
   .gap-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; }
   .gap-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
   .gap-icon { font-size: 16px; }
@@ -377,15 +295,16 @@
   .gap-priority.low { background: rgba(75,201,160,0.15); color: var(--accent3); }
   .gap-desc { font-size: 11px; color: var(--muted); line-height: 1.6; }
 
-  /* SCROLLBAR */
+  /* CURRICULUM PAGE SPECIFIC */
+  .curriculum-phase-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+  .curriculum-phase-header:hover { border-color: rgba(124,110,247,0.3); }
+  .phase-progress-pill { margin-left: auto; font-size: 10px; color: var(--muted); background: var(--surface2); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
 
-  /* DIVIDER */
   .divider { height: 1px; background: var(--border); margin: 20px 0; }
-
-  /* FLEX UTILS */
   .flex { display: flex; }
   .flex-center { display: flex; align-items: center; }
   .gap-8 { gap: 8px; }
@@ -396,27 +315,22 @@
   .text-muted { color: var(--muted); }
   .text-accent { color: var(--accent); }
   .text-sm { font-size: 11px; }
-  .text-xs { font-size: 10px; }
   .font-bold { font-family: 'Syne', sans-serif; font-weight: 700; }
 
-  /* =================== MOBILE BOTTOM NAV =================== */
   .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: var(--surface); border-top: 1px solid var(--border); z-index: 200; align-items: center; justify-content: space-around; padding: 0 4px; padding-bottom: env(safe-area-inset-bottom); }
-  .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 10px; border-radius: 8px; cursor: pointer; transition: all 0.15s; min-width: 52px; -webkit-tap-highlight-color: transparent; }
-  .bottom-nav-item .bn-icon { font-size: 18px; }
+  .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 10px; border-radius: 8px; cursor: pointer; transition: all 0.15s; min-width: 48px; -webkit-tap-highlight-color: transparent; }
+  .bottom-nav-item .bn-icon { font-size: 17px; }
   .bottom-nav-item .bn-label { font-size: 9px; color: var(--muted); letter-spacing: 0.5px; }
   .bottom-nav-item.active .bn-label { color: var(--accent); }
   .bottom-nav-item.active .bn-icon { filter: drop-shadow(0 0 6px var(--accent)); }
 
-  /* =================== RESPONSIVE =================== */
   @media (max-width: 1200px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
-
   @media (max-width: 900px) {
     :root { --sidebar-w: 200px; }
     .main { padding: 24px 20px; }
     .grid-3 { grid-template-columns: 1fr 1fr; }
     .page-title { font-size: 26px; }
   }
-
   @media (max-width: 720px) {
     :root { --sidebar-w: 260px; }
     .mobile-topbar { display: flex; }
@@ -434,99 +348,27 @@
     .welcome-name { font-size: 20px; }
     .stat-num { font-size: 24px; }
     .skills-grid { grid-template-columns: 1fr 1fr; margin-left: 0; }
-    .phase-header { gap: 8px; }
-    .phase-name { font-size: 13px; }
     .modal-overlay { align-items: flex-end; }
     .modal { width: 100%; max-width: 100%; border-radius: 20px 20px 0 0; margin-bottom: 0; max-height: 90vh; overflow-y: auto; padding-bottom: 32px; }
     .heat-cell { width: 9px; height: 9px; }
-    .interview-q { font-size: 12px; }
-    .resource-item { flex-wrap: wrap; }
-    .resource-action { margin-left: 0; margin-top: 8px; width: 100%; }
-    .resource-action .btn { width: 100%; justify-content: center; }
-    .project-card:hover { transform: none; }
     .tabs { width: 100%; }
-    .gap-title { font-size: 12px; }
+    .project-card:hover { transform: none; }
   }
-
   @media (max-width: 380px) {
     .main { padding: 72px 12px 76px; }
     .grid-4 { grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat-card { padding: 14px; }
     .stat-num { font-size: 22px; }
-    .stat-label { font-size: 9px; }
     .skills-grid { grid-template-columns: 1fr; }
     .card { padding: 14px; }
-    .welcome-banner { padding: 14px; }
-    .welcome-name { font-size: 17px; }
   }
-
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .bottom-nav { padding-bottom: calc(env(safe-area-inset-bottom) + 4px); height: calc(60px + env(safe-area-inset-bottom)); }
     @media (max-width: 720px) { .main { padding-bottom: calc(80px + env(safe-area-inset-bottom)); } }
   }
-
-  /* =================== INSTALL BANNER =================== */
-  .install-banner {
-    display: none;
-    position: fixed;
-    bottom: 76px;
-    left: 12px; right: 12px;
-    background: linear-gradient(135deg, rgba(124,110,247,0.97), rgba(75,201,160,0.92));
-    border-radius: 14px;
-    padding: 14px 16px;
-    z-index: 400;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1);
-    backdrop-filter: blur(8px);
-  }
-  @media (min-width: 721px) { .install-banner { bottom: 24px; max-width: 380px; left: auto; right: 24px; } }
-  .install-banner.show { display: block; }
-  .install-banner-inner { display: flex; align-items: center; gap: 12px; }
-  .install-icon { font-size: 28px; flex-shrink: 0; }
-  .install-text { flex: 1; }
-  .install-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: #fff; }
-  .install-sub { font-size: 10px; color: rgba(255,255,255,0.75); margin-top: 2px; }
-  .install-actions { display: flex; gap: 8px; margin-top: 10px; }
-  .install-btn { padding: 7px 16px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; cursor: pointer; border: none; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
-  .install-btn-yes { background: #fff; color: #7c6ef7; font-weight: 600; }
-  .install-btn-yes:hover { background: #f0eeff; }
-  .install-btn-no { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
-
-  /* iOS Install Instructions */
-  .ios-install-banner {
-    display: none;
-    position: fixed;
-    bottom: 76px;
-    left: 12px; right: 12px;
-    background: rgba(18,18,26,0.97);
-    border: 1px solid var(--accent);
-    border-radius: 14px;
-    padding: 16px;
-    z-index: 400;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-    animation: slideUp 0.35s ease;
-    backdrop-filter: blur(12px);
-  }
-  @media (min-width: 721px) { .ios-install-banner { bottom: 24px; max-width: 380px; left: auto; right: 24px; } }
-  .ios-install-banner.show { display: block; }
-  .ios-steps { font-size: 11px; color: var(--text); line-height: 2; margin-top: 10px; }
-  .ios-steps span { color: var(--accent2); }
-  .ios-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; }
 </style>
 </head>
 <body>
-
-<!-- OFFLINE BANNER -->
-<div class="offline-banner" id="offline-banner">⚠ You're offline — DS Quest works fully offline. Your data is safe.</div>
-
-<!-- UPDATE BANNER -->
-<div class="update-banner" id="update-banner">
-  <div class="update-banner-text">
-    <div class="update-banner-title">Update available ✦</div>
-    <div class="update-banner-sub">A new version of DS Quest is ready</div>
-  </div>
-  <button class="update-btn" onclick="applyUpdate()">Reload</button>
-</div>
 
 <!-- MOBILE TOPBAR -->
 <div class="mobile-topbar" id="mobile-topbar">
@@ -542,7 +384,6 @@
   </div>
 </div>
 
-<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- SIDEBAR -->
@@ -569,11 +410,11 @@
   <nav>
     <div class="nav-section">NAVIGATE</div>
     <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">⬡</span> Dashboard</div>
-    <div class="nav-item" onclick="showPage('roadmap',this)"><span class="nav-icon">🗺</span> Roadmap</div>
-    <div class="nav-item" onclick="showPage('skills',this)"><span class="nav-icon">⚡</span> Skills</div>
+    <div class="nav-item" onclick="showPage('curriculum',this)"><span class="nav-icon">📋</span> Curriculum<span class="nav-badge">26</span></div>
+    <div class="nav-item" onclick="showPage('roadmap',this)"><span class="nav-icon">🗺</span> Skill Roadmap</div>
     <div class="nav-item" onclick="showPage('projects',this)"><span class="nav-icon">🔬</span> Projects</div>
     <div class="nav-section">PREP</div>
-    <div class="nav-item" onclick="showPage('gaps',this)"><span class="nav-icon">🎯</span> Gap Analysis<span class="nav-badge" id="gap-badge">5</span></div>
+    <div class="nav-item" onclick="showPage('gaps',this)"><span class="nav-icon">🎯</span> Gap Analysis<span class="nav-badge" id="gap-badge">7</span></div>
     <div class="nav-item" onclick="showPage('interview',this)"><span class="nav-icon">💬</span> Interview Prep</div>
     <div class="nav-item" onclick="showPage('resources',this)"><span class="nav-icon">📚</span> Resources</div>
     <div class="nav-section">LOG</div>
@@ -591,7 +432,7 @@
   <div id="page-dashboard" class="page active">
     <div class="welcome-banner">
       <div class="welcome-name">Welcome back, <span>Data Scientist</span> ✦</div>
-      <div class="welcome-sub">Your path to becoming a 2026-ready Data Scientist</div>
+      <div class="welcome-sub">Your path to becoming a 2026-ready Data Scientist — 26 modules, 200+ topics</div>
       <div class="welcome-streak">
         <span class="streak-fire">🔥</span>
         <span id="streak-count">0 day streak</span>
@@ -600,10 +441,10 @@
       </div>
     </div>
     <div class="grid-4" style="margin-bottom:20px">
-      <div class="stat-card"><div class="stat-label">SKILLS DONE</div><div class="stat-num text-accent" id="stat-skills-done">0</div><div class="stat-trend up">of <span id="stat-skills-total">0</span> total</div></div>
-      <div class="stat-card"><div class="stat-label">PROJECTS</div><div class="stat-num" style="color:var(--accent2)" id="stat-projects">0</div><div class="stat-trend up">in portfolio</div></div>
-      <div class="stat-card"><div class="stat-label">TOPICS LOGGED</div><div class="stat-num" style="color:var(--accent3)" id="stat-logs">0</div><div class="stat-trend">study sessions</div></div>
-      <div class="stat-card"><div class="stat-label">GAPS TO FIX</div><div class="stat-num" style="color:var(--danger)" id="stat-gaps">5</div><div class="stat-trend down">focus areas</div></div>
+      <div class="stat-card"><div class="stat-label">TOPICS DONE</div><div class="stat-num text-accent" id="stat-topics-done">0</div><div class="stat-trend up">of <span id="stat-topics-total">0</span> total</div></div>
+      <div class="stat-card"><div class="stat-label">MODULES</div><div class="stat-num" style="color:var(--accent2)" id="stat-modules-done">0</div><div class="stat-trend up">of 26 completed</div></div>
+      <div class="stat-card"><div class="stat-label">STUDY LOGS</div><div class="stat-num" style="color:var(--accent3)" id="stat-logs">0</div><div class="stat-trend">sessions logged</div></div>
+      <div class="stat-card"><div class="stat-label">GAPS TO FIX</div><div class="stat-num" style="color:var(--danger)" id="stat-gaps">7</div><div class="stat-trend down">focus areas</div></div>
     </div>
     <div class="grid-2" style="margin-bottom:20px">
       <div class="card">
@@ -614,61 +455,55 @@
       </div>
       <div class="card">
         <div class="card-title">🎯 Today's Focus</div>
-        <div class="card-sub">Recommended study targets</div>
+        <div class="card-sub">Next topics to tackle</div>
         <div id="todays-focus"></div>
         <div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="openModal('log-modal')">+ Log Today's Study</button></div>
       </div>
     </div>
     <div class="grid-2">
-      <div class="card"><div class="card-title">📈 Phase Progress</div><div class="card-sub">Overall roadmap completion</div><div id="phase-progress-overview"></div></div>
+      <div class="card"><div class="card-title">📈 Curriculum Progress</div><div class="card-sub">By module group</div><div id="phase-progress-overview"></div></div>
       <div class="card"><div class="card-title">🏆 Recent Achievements</div><div class="card-sub">Your milestones</div><div id="achievements-list"></div></div>
     </div>
   </div>
 
-  <!-- ROADMAP -->
+  <!-- CURRICULUM (NEW from PDF) -->
+  <div id="page-curriculum" class="page">
+    <div class="page-header">
+      <div class="page-title">Full <span>Curriculum</span></div>
+      <div class="page-sub">26 modules · 200+ topics from your course checklist — tap a module to expand and track topics</div>
+    </div>
+    <div class="tabs" id="curriculum-tabs">
+      <div class="tab active" onclick="switchCurriculumTab(0,this)">All</div>
+      <div class="tab" onclick="switchCurriculumTab(1,this)">Python & Data</div>
+      <div class="tab" onclick="switchCurriculumTab(2,this)">ML & Stats</div>
+      <div class="tab" onclick="switchCurriculumTab(3,this)">Deep Learning</div>
+      <div class="tab" onclick="switchCurriculumTab(4,this)">GenAI & MLOps</div>
+    </div>
+    <div id="curriculum-content"></div>
+  </div>
+
+  <!-- ROADMAP (enhanced) -->
   <div id="page-roadmap" class="page">
     <div class="page-header">
-      <div class="page-title">2026 Data Science <span>Roadmap</span></div>
-      <div class="page-sub">Complete path from beginner to interview-ready</div>
+      <div class="page-title">Skill <span>Roadmap</span></div>
+      <div class="page-sub">High-level skill checkpoints — tap to cycle: Not Started → In Progress → Done</div>
     </div>
     <div class="tabs" id="roadmap-tabs">
       <div class="tab active" onclick="switchTab('roadmap',0,this)">All Phases</div>
       <div class="tab" onclick="switchTab('roadmap',1,this)">Foundation</div>
       <div class="tab" onclick="switchTab('roadmap',2,this)">Core ML</div>
       <div class="tab" onclick="switchTab('roadmap',3,this)">Advanced</div>
-      <div class="tab" onclick="switchTab('roadmap',4,this)">Production</div>
+      <div class="tab" onclick="switchTab('roadmap',4,this)">GenAI & Agents</div>
+      <div class="tab" onclick="switchTab('roadmap',5,this)">MLOps & Ops</div>
     </div>
     <div id="roadmap-content"></div>
-  </div>
-
-  <!-- SKILLS -->
-  <div id="page-skills" class="page">
-    <div class="page-header">
-      <div class="page-title">Skill <span>Tracker</span></div>
-      <div class="page-sub">Mark skills as you learn them — builds your XP</div>
-    </div>
-    <div class="grid-2">
-      <div class="card"><div class="card-title">By Domain</div><div class="card-sub">Completion across areas</div><div id="skills-by-domain"></div></div>
-      <div class="card">
-        <div class="card-title">Skill Legend</div>
-        <div class="card-sub">Track status</div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:12px">
-          <div class="flex-center gap-8"><div class="check-box checked">✓</div> Completed</div>
-          <div class="flex-center gap-8"><div class="check-box" style="border-color:var(--accent);background:rgba(124,110,247,0.1)">→</div> In Progress</div>
-          <div class="flex-center gap-8"><div class="check-box"></div> Not Started</div>
-        </div>
-        <div class="divider"></div>
-        <div style="font-size:11px;color:var(--muted)">Tap any skill to toggle status. Each completed skill earns XP!</div>
-      </div>
-    </div>
-    <div style="margin-top:20px" id="skills-full-list"></div>
   </div>
 
   <!-- PROJECTS -->
   <div id="page-projects" class="page">
     <div class="page-header">
       <div class="page-title">Project <span>Portfolio</span></div>
-      <div class="page-sub">Build these to prove your skills to employers</div>
+      <div class="page-sub">Build these to prove your skills — includes end-to-end projects from the curriculum</div>
     </div>
     <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
       <button class="btn btn-primary" onclick="openModal('project-modal')">+ Add Project</button>
@@ -682,22 +517,114 @@
       <div class="page-title">Gap <span>Analysis</span></div>
       <div class="page-sub">Know exactly what to fix before your interviews</div>
     </div>
-    <div class="card" style="margin-bottom:16px"><div class="card-title">📋 How this works</div><div class="card-sub">Based on your skill completion, we identify the most critical gaps. High priority gaps should be addressed first.</div></div>
+    <div class="card" style="margin-bottom:16px"><div class="card-title">📋 How this works</div><div class="card-sub">Based on curriculum coverage and market demands, these are the most critical skill gaps. Address HIGH priority first.</div></div>
     <div id="gaps-content"></div>
   </div>
 
-  <!-- INTERVIEW PREP -->
+  <!-- INTERVIEW PREP (Gemini AI Powered) -->
   <div id="page-interview" class="page">
     <div class="page-header">
       <div class="page-title">Interview <span>Prep</span></div>
-      <div class="page-sub">Tap each question to reveal the model answer</div>
+      <div class="page-sub">AI-powered Q&A generated live by Gemini 2.5 Flash · Tap any question to reveal the answer</div>
     </div>
-    <div class="tabs" id="interview-tabs">
+
+    <!-- API KEY SETUP BANNER -->
+    <div id="gemini-setup-banner" class="card" style="margin-bottom:20px;border-color:rgba(245,200,66,0.3);background:rgba(245,200,66,0.05);">
+      <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;">
+        <div style="font-size:28px;flex-shrink:0;">✦</div>
+        <div style="flex:1;min-width:200px;">
+          <div class="card-title" style="color:var(--gold);">Gemini AI Interview Generator</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6;">
+            Enter your Gemini API key to generate fresh, personalised interview questions with expert answers — powered by Gemini 2.5 Flash.
+            Get a free API key at <a href="https://aistudio.google.com" target="_blank" style="color:var(--accent);">aistudio.google.com</a>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input id="gemini-api-key" class="form-input" type="password" placeholder="AIza..." style="flex:1;min-width:180px;max-width:360px;" oninput="onApiKeyInput()">
+            <button class="btn btn-primary btn-sm" onclick="saveApiKey()">Save Key</button>
+            <button class="btn btn-ghost btn-sm" id="clear-key-btn" onclick="clearApiKey()" style="display:none">Clear</button>
+          </div>
+          <div id="key-status" style="font-size:10px;margin-top:6px;color:var(--muted);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOPIC + DIFFICULTY CONTROLS -->
+    <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px;">
+      <div style="flex:1;min-width:160px;">
+        <div class="form-label">TOPIC / CATEGORY</div>
+        <select class="form-input" id="ai-topic">
+          <option value="Machine Learning Fundamentals">Machine Learning Fundamentals</option>
+          <option value="Statistics & Probability">Statistics & Probability</option>
+          <option value="Python for Data Science">Python for Data Science</option>
+          <option value="SQL & Databases">SQL & Databases</option>
+          <option value="Deep Learning & Neural Networks">Deep Learning & Neural Networks</option>
+          <option value="NLP & Text Processing">NLP & Text Processing</option>
+          <option value="Feature Engineering & EDA">Feature Engineering & EDA</option>
+          <option value="Ensemble Methods (XGBoost, Random Forest)">Ensemble Methods (XGBoost, Random Forest)</option>
+          <option value="Generative AI & LLMs">Generative AI & LLMs</option>
+          <option value="RAG & Vector Databases">RAG & Vector Databases</option>
+          <option value="LangChain & Agentic AI">LangChain & Agentic AI</option>
+          <option value="MLOps & Model Deployment">MLOps & Model Deployment</option>
+          <option value="LLMOps & Production LLMs">LLMOps & Production LLMs</option>
+          <option value="ML System Design">ML System Design</option>
+          <option value="A/B Testing & Experimentation">A/B Testing & Experimentation</option>
+        </select>
+      </div>
+      <div style="min-width:120px;">
+        <div class="form-label">DIFFICULTY</div>
+        <select class="form-input" id="ai-difficulty">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate" selected>Intermediate</option>
+          <option value="advanced">Advanced</option>
+          <option value="mixed">Mixed</option>
+        </select>
+      </div>
+      <div style="min-width:90px;">
+        <div class="form-label">COUNT</div>
+        <select class="form-input" id="ai-count">
+          <option value="3">3 Qs</option>
+          <option value="5" selected>5 Qs</option>
+          <option value="8">8 Qs</option>
+          <option value="10">10 Qs</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="generate-btn" onclick="generateQuestions()" style="flex-shrink:0;white-space:nowrap;">
+        <span id="generate-btn-icon">✦</span> Generate
+      </button>
+    </div>
+
+    <!-- CUSTOM TOPIC INPUT -->
+    <div style="margin-bottom:20px;">
+      <div class="form-label">OR ASK SOMETHING SPECIFIC (OPTIONAL)</div>
+      <div style="display:flex;gap:8px;">
+        <input class="form-input" id="ai-custom" placeholder="e.g. Explain RLHF in the context of fine-tuning LLMs" style="flex:1;">
+        <button class="btn btn-ghost btn-sm" onclick="generateCustom()" style="white-space:nowrap;flex-shrink:0;">Ask Gemini ✦</button>
+      </div>
+    </div>
+
+    <!-- GENERATED QUESTIONS AREA -->
+    <div id="ai-interview-content">
+      <div style="text-align:center;padding:48px 20px;color:var(--muted);">
+        <div style="font-size:40px;margin-bottom:12px;">✦</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:6px;">AI-Powered Questions Await</div>
+        <div style="font-size:12px;">Enter your Gemini API key above, select a topic, and hit Generate.</div>
+      </div>
+    </div>
+
+    <!-- DIVIDER + STATIC QUESTIONS -->
+    <div style="display:flex;align-items:center;gap:12px;margin:32px 0 16px;">
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;white-space:nowrap;">STATIC REFERENCE BANK</div>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Pre-written Q&A for offline reference — no API key needed.</div>
+    <div class="tabs" id="interview-tabs" style="margin-bottom:16px;">
       <div class="tab active" onclick="switchTab('interview',0,this)">ML Concepts</div>
       <div class="tab" onclick="switchTab('interview',1,this)">Statistics</div>
       <div class="tab" onclick="switchTab('interview',2,this)">Python/SQL</div>
       <div class="tab" onclick="switchTab('interview',3,this)">Case Studies</div>
       <div class="tab" onclick="switchTab('interview',4,this)">LLM/GenAI ✦</div>
+      <div class="tab" onclick="switchTab('interview',5,this)">MLOps ✦</div>
     </div>
     <div id="interview-content"></div>
   </div>
@@ -706,13 +633,14 @@
   <div id="page-resources" class="page">
     <div class="page-header">
       <div class="page-title">2026 <span>Resources</span></div>
-      <div class="page-sub">Curated, up-to-date learning materials</div>
+      <div class="page-sub">Curated learning materials aligned with the curriculum</div>
     </div>
     <div class="tabs">
       <div class="tab active" onclick="switchTab('resources',0,this)">Courses</div>
       <div class="tab" onclick="switchTab('resources',1,this)">Books</div>
       <div class="tab" onclick="switchTab('resources',2,this)">Practice</div>
       <div class="tab" onclick="switchTab('resources',3,this)">YouTube</div>
+      <div class="tab" onclick="switchTab('resources',4,this)">Tools & Libs</div>
     </div>
     <div id="resources-content"></div>
   </div>
@@ -737,8 +665,8 @@
     </div>
     <div class="grid-4" style="margin-bottom:20px" id="stats-cards"></div>
     <div class="grid-2">
-      <div class="card"><div class="card-title">🌐 Skill Web</div><div class="card-sub">Completion by domain</div><div id="radar-chart" style="padding:10px 0"></div></div>
-      <div class="card"><div class="card-title">📖 Study Log Summary</div><div class="card-sub">All sessions</div><div id="study-log-summary"></div></div>
+      <div class="card"><div class="card-title">📊 Progress by Phase</div><div class="card-sub">Skill completion by domain</div><div id="radar-chart" style="padding:10px 0"></div></div>
+      <div class="card"><div class="card-title">📖 Study Log Summary</div><div class="card-sub">All sessions by category</div><div id="study-log-summary"></div></div>
     </div>
   </div>
 
@@ -747,8 +675,8 @@
 <!-- BOTTOM NAV -->
 <div class="bottom-nav" id="bottom-nav">
   <div class="bottom-nav-item active" id="bn-dashboard" onclick="showPageMobile('dashboard')"><span class="bn-icon">⬡</span><span class="bn-label">Home</span></div>
+  <div class="bottom-nav-item" id="bn-curriculum" onclick="showPageMobile('curriculum')"><span class="bn-icon">📋</span><span class="bn-label">Topics</span></div>
   <div class="bottom-nav-item" id="bn-roadmap" onclick="showPageMobile('roadmap')"><span class="bn-icon">🗺</span><span class="bn-label">Roadmap</span></div>
-  <div class="bottom-nav-item" id="bn-skills" onclick="showPageMobile('skills')"><span class="bn-icon">⚡</span><span class="bn-label">Skills</span></div>
   <div class="bottom-nav-item" id="bn-journal" onclick="openModal('log-modal')"><span class="bn-icon">➕</span><span class="bn-label">Log</span></div>
   <div class="bottom-nav-item" id="bn-stats" onclick="showPageMobile('stats')"><span class="bn-icon">📊</span><span class="bn-label">Stats</span></div>
 </div>
@@ -763,9 +691,15 @@
     <div class="form-group">
       <label class="form-label">CATEGORY</label>
       <select class="form-input" id="log-category">
-        <option>Python</option><option>Mathematics</option><option>Machine Learning</option>
-        <option>Deep Learning</option><option>Statistics</option><option>SQL / Databases</option>
-        <option>MLOps / Tools</option><option>GenAI / LLMs</option><option>Projects</option><option>Interview Prep</option>
+        <option>Python Foundations</option><option>Advanced Python</option><option>NumPy</option>
+        <option>Pandas</option><option>Data Visualization</option><option>SQL & Databases</option>
+        <option>Statistics</option><option>Advanced Stats</option><option>EDA</option>
+        <option>Feature Engineering</option><option>Machine Learning</option><option>Ensemble ML</option>
+        <option>NLP</option><option>Streamlit</option><option>Deep Learning</option>
+        <option>Advanced DL / NLP</option><option>MLOps</option><option>Generative AI</option>
+        <option>Vector Databases</option><option>LangChain & RAG</option><option>Agentic AI</option>
+        <option>MCP</option><option>LLMOps</option><option>Multi-Agent Systems</option>
+        <option>AgentOps</option><option>Projects</option><option>Interview Prep</option>
       </select>
     </div>
     <div class="form-group"><label class="form-label">HOURS STUDIED</label><input class="form-input" id="log-hours" type="number" min="0.5" max="12" step="0.5" value="1" inputmode="decimal"></div>
@@ -798,208 +732,310 @@
   </div>
 </div>
 
-<!-- PWA INSTALL BANNER (Android/Desktop) -->
-<div class="install-banner" id="install-banner">
-  <div class="install-banner-inner">
-    <div class="install-icon">⬡</div>
-    <div class="install-text">
-      <div class="install-title">Install DS Quest</div>
-      <div class="install-sub">Add to home screen for the full app experience</div>
-    </div>
-  </div>
-  <div class="install-actions">
-    <button class="install-btn install-btn-yes" id="install-btn-yes">Install App</button>
-    <button class="install-btn install-btn-no" onclick="dismissInstall()">Not now</button>
-  </div>
-</div>
-
-<!-- iOS INSTALL INSTRUCTIONS BANNER -->
-<div class="ios-install-banner" id="ios-install-banner">
-  <button class="ios-close" onclick="dismissIOSInstall()">✕</button>
-  <div class="install-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">⬡ Install DS Quest</div>
-  <div class="ios-steps">
-    1. Tap <span>Share</span> (□↑) at the bottom of Safari<br>
-    2. Scroll down and tap <span>"Add to Home Screen"</span><br>
-    3. Tap <span>"Add"</span> — done! Full offline app ✦
-  </div>
-</div>
-
 <script>
-// ===================== DATA =====================
+// ===================== FULL CURRICULUM DATA (from PDF) =====================
+const CURRICULUM = [
+  {
+    id:'mod1', num:'01', name:'Python Foundations', group:1, color:'#7c6ef7', xpPer:10,
+    topics:['Introduction to Python & comparison with other languages','Python objects: numbers, booleans, strings','Container objects & mutability','Operators (arithmetic, bitwise, comparison, assignment, precedence)','Conditional statements (if / elif / else)','Loops (for, while, break, continue, range)','Strings (methods, split, join, formatting)','Data structures (list, tuple, set, dict)','List & dictionary comprehensions','Dictionary view objects','Functions & parameter passing','Iterators & generators','Lambda functions','Map & functional programming']
+  },
+  {
+    id:'mod2', num:'02', name:'Advanced Python Programming', group:1, color:'#7c6ef7', xpPer:15,
+    topics:['OOP fundamentals & class creation','Inheritance, polymorphism, encapsulation, abstraction','Decorators, class methods, static methods','Magic / dunder methods','File handling (read/write)','Buffered I/O','File handling utilities','Modules & imports','Exception handling & custom exceptions']
+  },
+  {
+    id:'mod3', num:'03', name:'Numerical Computing with NumPy', group:1, color:'#4bc9a0', xpPer:10,
+    topics:['NdArray fundamentals','Data types & array attributes','Array creation techniques','Range-based arrays','Indexing & slicing','Broadcasting & iteration','Array manipulation','Mathematical operations','Statistical functions','Sorting, searching, counting','Binary & string operations','Matrix operations','Copy vs view behavior']
+  },
+  {
+    id:'mod4', num:'04', name:'Data Analysis with Pandas', group:1, color:'#4bc9a0', xpPer:12,
+    topics:['Series & DataFrame structures','Reindexing & core functionality','Iteration & sorting','Data selection & indexing','Text data handling','Date & time processing','Timedelta & categorical data','Descriptive statistics','Built-in visualization']
+  },
+  {
+    id:'mod5', num:'05', name:'Data Visualization (Matplotlib & Seaborn)', group:1, color:'#e8a54b', xpPer:10,
+    topics:['Matplotlib fundamentals','Plot creation (charts, figures)','Styling & customization','Seaborn basics','Statistical plots (hist, pairplot, heatmap)','Visual storytelling & communication']
+  },
+  {
+    id:'mod6', num:'06', name:'Working with Databases (SQL & NoSQL)', group:1, color:'#e8a54b', xpPer:15,
+    topics:['SQL fundamentals','Primary & foreign keys','Joins & unions','Supabase + PostgreSQL setup','Query execution','MongoDB fundamentals','Database & collection creation','CRUD operations','Sorting & filtering','Dropping collections']
+  },
+  {
+    id:'mod7', num:'07', name:'Foundations of Statistics', group:2, color:'#f5c842', xpPer:12,
+    topics:['Statistical terminology','Descriptive vs inferential stats','Data types & measurement levels','Mean, median, mode','Variance & standard deviation','Skewness & kurtosis','Covariance & correlation','Random variables','Probability fundamentals','PDF, PMF, CDF','Distributions (Binomial, Poisson, Normal, etc.)','Z-statistics','Central Limit Theorem','Confidence intervals']
+  },
+  {
+    id:'mod8', num:'08', name:'Advanced Statistical Analysis', group:2, color:'#f5c842', xpPer:15,
+    topics:['Hypothesis testing framework','P-values & significance','Confidence levels','Bayes theorem','Chi-square distribution','Goodness-of-fit tests','Chi-square tests in Python']
+  },
+  {
+    id:'mod9', num:'09', name:'Exploratory Data Analysis (EDA)', group:2, color:'#4bc9a0', xpPer:12,
+    topics:['Purpose of EDA','Pattern visualization','Trend & anomaly detection','Sentiment analysis project','Wine quality analysis','Stock & commodity forecasting','Feature selection (forward/backward)','Correlation & covariance analysis']
+  },
+  {
+    id:'mod10', num:'10', name:'Feature Engineering', group:2, color:'#4bc9a0', xpPer:15,
+    topics:['Missing value handling','Imbalanced data techniques','Outlier treatment','Feature scaling','Categorical encoding']
+  },
+  {
+    id:'mod11', num:'11', name:'Machine Learning Fundamentals', group:2, color:'#7c6ef7', xpPer:15,
+    topics:['AI vs ML vs DL vs DS','Learning paradigms','Linear regression','Error metrics','Gradient descent','Ridge & Lasso','Logistic regression','Classification metrics','SVM (classifier & regressor)','Naive Bayes','KNN','Decision Trees']
+  },
+  {
+    id:'mod12', num:'12', name:'Ensemble & Advanced ML', group:2, color:'#7c6ef7', xpPer:15,
+    topics:['Bagging & boosting','Random Forest','Out-of-bag evaluation','Gradient Boosting','XGBoost','Clustering overview','K-Means']
+  },
+  {
+    id:'mod13', num:'13', name:'Streamlit for Data Apps', group:2, color:'#e8a54b', xpPer:10,
+    topics:['Streamlit fundamentals','Interactive widgets','Session state','Async & await usage','Dashboard development']
+  },
+  {
+    id:'mod14', num:'14', name:'NLP for Machine Learning', group:3, color:'#c084fc', xpPer:15,
+    topics:['NLP overview & use cases','Text preprocessing','POS tagging','Named Entity Recognition','One-hot encoding','N-grams & Bag of Words','TF-IDF','Word embeddings','Word2Vec']
+  },
+  {
+    id:'mod15', num:'15', name:'Deep Learning Foundations', group:3, color:'#c084fc', xpPer:15,
+    topics:['DL overview','Perceptron','Neural networks','Forward & backward propagation','Chain rule','Vanishing/exploding gradients','Activation functions','Loss functions','Optimizers','Weight initialization','Dropout','Batch normalization','Keras','PyTorch']
+  },
+  {
+    id:'mod16', num:'16', name:'Advanced Deep Learning for NLP', group:3, color:'#f07070', xpPer:20,
+    topics:['RNNs','LSTM','GRU','Attention mechanism','Encoder-decoder','Self-attention','Transformers','BERT','GPT models']
+  },
+  {
+    id:'mod17', num:'17', name:'MLOps (Machine Learning Operations)', group:4, color:'#f07070', xpPer:20,
+    topics:['MLOps fundamentals & lifecycle','Data versioning concepts','Model versioning & model registry','Experiment tracking','MLflow (tracking, artifacts, registry)','DVC (data & model versioning)','Feature stores (concepts – Feast)','Training vs inference pipelines','Pipeline orchestration (Airflow / Prefect basics)','Model evaluation & validation pipelines','Model drift & data drift detection','Monitoring metrics (accuracy, latency, throughput)','Logging & observability for ML systems','CI/CD for ML pipelines','Docker for ML workloads','Kubernetes basics for ML deployment','Cloud ML workflow (AWS S3, EC2, IAM)']
+  },
+  {
+    id:'mod18', num:'18', name:'Generative AI', group:4, color:'#f5c842', xpPer:15,
+    topics:['Generative AI fundamentals','Model intuition','Generative vs discriminative','Recent advancements','Applications','End-to-end GenAI lifecycle']
+  },
+  {
+    id:'mod19', num:'19', name:'Vector Databases', group:4, color:'#f5c842', xpPer:15,
+    topics:['Embeddings & similarity search','SQL vs NoSQL vs Vector DBs','Vector DB architecture','In-memory vs cloud','ChromaDB','FAISS','Quadrant','Pinecone','LanceDB','MongoDB/Cassandra vector search']
+  },
+  {
+    id:'mod20', num:'20', name:'LangChain & RAG', group:4, color:'#4bc9a0', xpPer:20,
+    topics:['LangChain fundamentals','Data & API connectors','Chat models','Tools & toolkits','Prompt templating','Chains, LCEL, Runnables','Synthetic data generation','Memory','Agents','LangSmith','LangServe']
+  },
+  {
+    id:'mod21', num:'21', name:'Agentic AI & LangGraph', group:4, color:'#4bc9a0', xpPer:20,
+    topics:['Agent concepts','Multi-agent systems','LangGraph basics','State & memory','Graph construction','Human-in-the-loop systems','Streaming & debugging','Agentic RAG','Self-RAG','Deployment']
+  },
+  {
+    id:'mod22', num:'22', name:'Model Context Protocol (MCP)', group:4, color:'#7c6ef7', xpPer:20,
+    topics:['MCP fundamentals','Core components','Communication flow','Claude Desktop integration','Cursor IDE integration','MCP servers with LangChain','Docker MCP toolkit']
+  },
+  {
+    id:'mod23', num:'23', name:'LLMOps', group:4, color:'#7c6ef7', xpPer:20,
+    topics:['LLMOps vs traditional MLOps','LLM lifecycle (prompt → eval → deploy → monitor)','Prompt engineering for production','Prompt templates & prompt versioning','LLM evaluation strategies','Hallucination detection & mitigation','Guardrails & safety layers','Fine-tuning vs LoRA vs adapters','Model routing & fallback strategies','Token usage & cost monitoring','Latency optimization for LLMs','Streaming responses','Logging prompts, responses & metadata','Versioned RAG pipelines','CI/CD for LLM applications','Production deployment (FastAPI + Docker)']
+  },
+  {
+    id:'mod24', num:'24', name:'Multi-Agent Research Systems', group:4, color:'#e8a54b', xpPer:25,
+    topics:['Agent architecture','Specialized agents','Memory & communication','Prompt engineering','Human feedback loops','External APIs (arXiv, search)','LangGraph workflows','RAG integration','FastAPI backend','Visualization UI','CI/CD','Docker & AWS EC2']
+  },
+  {
+    id:'mod25', num:'25', name:'AgentOps', group:4, color:'#e8a54b', xpPer:25,
+    topics:['Agent lifecycle management','Agent versioning','Agent observability (logs, traces, metrics)','Memory persistence strategies','Debugging agent workflows','Failure handling & retries','Scaling agents & concurrency handling','Secure tool access for agents','Cost & performance monitoring','CI/CD for agent-based systems','Production deployment of agent pipelines']
+  },
+  {
+    id:'mod26', num:'26', name:'End-to-End Projects', group:4, color:'#f07070', xpPer:50,
+    topics:['ML project with full MLOps pipeline','RAG system with LLMOps monitoring','Multi-agent research assistant (AgentOps)','Agentic RAG system using LangGraph','Cloud deployment on AWS','CI/CD with GitHub Actions']
+  },
+];
+
+// Skill Roadmap (summary-level skills mapped to curriculum)
 const ROADMAP = [
   {
-    id:'foundation',phase:'01',name:'Foundation',color:'#4bc9a0',
-    desc:'Build the essential programming and math base',
+    id:'foundation', phase:'01', name:'Python & Data Foundation', color:'#4bc9a0',
+    desc:'Modules 1-6: Python, NumPy, Pandas, Visualization, SQL',
     skills:[
-      {id:'s1',name:'Python Basics',tag:'PYTHON',xp:100},{id:'s2',name:'NumPy & Arrays',tag:'PYTHON',xp:80},
-      {id:'s3',name:'Pandas DataFrames',tag:'PYTHON',xp:100},{id:'s4',name:'Matplotlib / Seaborn',tag:'PYTHON',xp:80},
-      {id:'s5',name:'Linear Algebra',tag:'MATH',xp:120},{id:'s6',name:'Calculus & Derivatives',tag:'MATH',xp:120},
-      {id:'s7',name:'Probability Theory',tag:'MATH',xp:120},{id:'s8',name:'Descriptive Statistics',tag:'MATH',xp:80},
-      {id:'s9',name:'SQL Basics',tag:'SQL',xp:100},{id:'s10',name:'Advanced SQL',tag:'SQL',xp:120},
+      {id:'s1',name:'Python Basics',tag:'PYTHON',xp:100},{id:'s2',name:'OOP & Advanced Python',tag:'PYTHON',xp:120},
+      {id:'s3',name:'NumPy Arrays',tag:'PYTHON',xp:80},{id:'s4',name:'Pandas DataFrames',tag:'PYTHON',xp:100},
+      {id:'s5',name:'Matplotlib / Seaborn',tag:'PYTHON',xp:80},{id:'s6',name:'SQL Basics',tag:'SQL',xp:100},
+      {id:'s7',name:'Advanced SQL & NoSQL',tag:'SQL',xp:120},
     ]
   },
   {
-    id:'eda-ml',phase:'02',name:'EDA & Core ML',color:'#7c6ef7',
-    desc:'Explore data and build classic ML models',
+    id:'stats-ml', phase:'02', name:'Stats, EDA & Core ML', color:'#7c6ef7',
+    desc:'Modules 7-13: Statistics, EDA, Feature Eng, ML algorithms',
     skills:[
-      {id:'s11',name:'EDA Pipeline',tag:'ML',xp:100},{id:'s12',name:'Feature Engineering',tag:'ML',xp:120},
-      {id:'s13',name:'Feature Selection',tag:'ML',xp:100},{id:'s14',name:'Linear Regression',tag:'ML',xp:80},
-      {id:'s15',name:'Logistic Regression',tag:'ML',xp:80},{id:'s16',name:'Decision Trees',tag:'ML',xp:80},
-      {id:'s17',name:'Random Forests',tag:'ML',xp:100},{id:'s18',name:'XGBoost / LightGBM',tag:'ML',xp:120},
-      {id:'s19',name:'SVM & KNN',tag:'ML',xp:80},{id:'s20',name:'Clustering (K-Means)',tag:'ML',xp:80},
-      {id:'s21',name:'PCA & Dimensionality',tag:'ML',xp:100},{id:'s22',name:'Cross Validation',tag:'ML',xp:100},
-      {id:'s23',name:'Hyperparameter Tuning',tag:'ML',xp:100},
+      {id:'s8',name:'Descriptive Statistics',tag:'MATH',xp:80},{id:'s9',name:'Probability & Distributions',tag:'MATH',xp:120},
+      {id:'s10',name:'Hypothesis Testing',tag:'MATH',xp:120},{id:'s11',name:'EDA Pipeline',tag:'ML',xp:100},
+      {id:'s12',name:'Feature Engineering',tag:'ML',xp:120},{id:'s13',name:'Linear / Logistic Regression',tag:'ML',xp:80},
+      {id:'s14',name:'Decision Trees & SVM',tag:'ML',xp:80},{id:'s15',name:'XGBoost / Random Forests',tag:'ML',xp:120},
+      {id:'s16',name:'Clustering & Unsupervised',tag:'ML',xp:100},{id:'s17',name:'Streamlit Apps',tag:'TOOLS',xp:80},
     ]
   },
   {
-    id:'deep-learning',phase:'03',name:'Deep Learning',color:'#e8a54b',
-    desc:'Neural networks, CNNs, RNNs and modern architectures',
+    id:'deep-learning', phase:'03', name:'Deep Learning & NLP', color:'#e8a54b',
+    desc:'Modules 14-16: NLP, Neural Networks, Transformers',
     skills:[
-      {id:'s24',name:'Neural Networks Basics',tag:'DL',xp:120},{id:'s25',name:'Backpropagation',tag:'DL',xp:120},
-      {id:'s26',name:'PyTorch / TensorFlow',tag:'DL',xp:150},{id:'s27',name:'CNNs for Vision',tag:'DL',xp:120},
-      {id:'s28',name:'RNNs / LSTMs',tag:'DL',xp:120},{id:'s29',name:'Transformers & Attention',tag:'DL',xp:150},
-      {id:'s30',name:'Transfer Learning',tag:'DL',xp:120},{id:'s31',name:'Regularization Techniques',tag:'DL',xp:100},
+      {id:'s18',name:'NLP Fundamentals',tag:'DL',xp:120},{id:'s19',name:'Neural Networks',tag:'DL',xp:120},
+      {id:'s20',name:'Backpropagation & Optimizers',tag:'DL',xp:120},{id:'s21',name:'PyTorch / Keras',tag:'DL',xp:150},
+      {id:'s22',name:'RNNs & LSTMs',tag:'DL',xp:120},{id:'s23',name:'Transformers & Attention',tag:'DL',xp:150},
+      {id:'s24',name:'BERT & GPT models',tag:'DL',xp:150},
     ]
   },
   {
-    id:'genai',phase:'04',name:'GenAI & LLMs ✦',color:'#f5c842',
-    desc:'The 2026 essential: LLMs, RAG, agents and prompt engineering',
+    id:'genai-agents', phase:'04', name:'GenAI, RAG & Agents ✦', color:'#f5c842',
+    desc:'Modules 18-25: GenAI, Vector DBs, LangChain, Agents, MCP, LLMOps',
     skills:[
-      {id:'s32',name:'Prompt Engineering',tag:'GENAI',xp:100},{id:'s33',name:'LLM API Integration',tag:'GENAI',xp:120},
-      {id:'s34',name:'RAG (Retrieval Augmented)',tag:'GENAI',xp:150},{id:'s35',name:'Vector Databases',tag:'GENAI',xp:120},
-      {id:'s36',name:'LangChain / LlamaIndex',tag:'GENAI',xp:120},{id:'s37',name:'Fine-tuning LLMs',tag:'GENAI',xp:150},
-      {id:'s38',name:'AI Agents',tag:'GENAI',xp:150},{id:'s39',name:'Evaluation of LLMs',tag:'GENAI',xp:100},
+      {id:'s25',name:'Generative AI Fundamentals',tag:'GENAI',xp:100},{id:'s26',name:'Vector Databases',tag:'GENAI',xp:120},
+      {id:'s27',name:'Prompt Engineering',tag:'GENAI',xp:100},{id:'s28',name:'LangChain & RAG',tag:'GENAI',xp:150},
+      {id:'s29',name:'LangGraph & Agents',tag:'GENAI',xp:150},{id:'s30',name:'Model Context Protocol',tag:'GENAI',xp:120},
+      {id:'s31',name:'LLMOps & Monitoring',tag:'GENAI',xp:150},{id:'s32',name:'Multi-Agent Systems',tag:'GENAI',xp:150},
     ]
   },
   {
-    id:'mlops',phase:'05',name:'MLOps & Production',color:'#f07070',
-    desc:'Deploy, monitor, and maintain ML systems at scale',
+    id:'mlops-prod', phase:'05', name:'MLOps & Production', color:'#f07070',
+    desc:'Module 17 + Module 26: MLOps, Docker, Cloud, CI/CD, End-to-End Projects',
     skills:[
-      {id:'s40',name:'Git & Version Control',tag:'MLOPS',xp:80},{id:'s41',name:'Docker & Containers',tag:'MLOPS',xp:120},
-      {id:'s42',name:'MLflow / Experiment Tracking',tag:'MLOPS',xp:120},{id:'s43',name:'FastAPI / Flask Serving',tag:'MLOPS',xp:100},
-      {id:'s44',name:'Cloud Platforms (AWS/GCP)',tag:'MLOPS',xp:150},{id:'s45',name:'CI/CD for ML',tag:'MLOPS',xp:120},
-      {id:'s46',name:'Data Pipelines / Airflow',tag:'MLOPS',xp:120},{id:'s47',name:'Model Monitoring',tag:'MLOPS',xp:100},
-      {id:'s48',name:'Spark / Big Data',tag:'MLOPS',xp:120},
+      {id:'s33',name:'Experiment Tracking (MLflow)',tag:'MLOPS',xp:120},{id:'s34',name:'Data & Model Versioning (DVC)',tag:'MLOPS',xp:120},
+      {id:'s35',name:'Docker & Kubernetes',tag:'MLOPS',xp:150},{id:'s36',name:'CI/CD for ML',tag:'MLOPS',xp:120},
+      {id:'s37',name:'Cloud ML (AWS/GCP)',tag:'MLOPS',xp:150},{id:'s38',name:'Model Drift Detection',tag:'MLOPS',xp:100},
+      {id:'s39',name:'AgentOps',tag:'MLOPS',xp:150},{id:'s40',name:'End-to-End Projects',tag:'MLOPS',xp:200},
     ]
   },
-  {
-    id:'interview-prep',phase:'06',name:'Interview Ready',color:'#c084fc',
-    desc:'Final prep to land that DS role',
-    skills:[
-      {id:'s49',name:'ML System Design',tag:'PREP',xp:150},{id:'s50',name:'Statistics Interview Q',tag:'PREP',xp:100},
-      {id:'s51',name:'Case Studies',tag:'PREP',xp:120},{id:'s52',name:'LeetCode (Medium SQL)',tag:'PREP',xp:100},
-      {id:'s53',name:'Take-home Challenges',tag:'PREP',xp:150},{id:'s54',name:'Behavioral (STAR method)',tag:'PREP',xp:80},
-    ]
-  }
 ];
 
 const INTERVIEW_QS = {
   0:[
     {q:'Explain Bias-Variance tradeoff with an example',diff:'CORE',a:'Bias is error from wrong assumptions (underfitting), variance is error from sensitivity to fluctuations (overfitting). A high-bias model (linear regression on non-linear data) consistently misses patterns. A high-variance model (deep decision tree) fits training data perfectly but fails on new data. The goal: find the sweet spot. Cross-validation helps. Regularization (Ridge/Lasso) reduces variance. Better features reduce bias.'},
     {q:'What is the curse of dimensionality?',diff:'CORE',a:'As dimensions increase, data becomes sparse — points become equidistant and distance metrics lose meaning. To maintain statistical significance, you need exponentially more data per added feature. Solutions: dimensionality reduction (PCA, UMAP), feature selection, regularization.'},
-    {q:'Explain how XGBoost works under the hood',diff:'ADVANCED',a:'XGBoost builds an ensemble of weak learners (shallow trees) sequentially. Each new tree corrects residuals of the previous ensemble. It uses second-order Taylor expansion of the loss for a more exact gradient, adds L1/L2 regularization on tree weights, uses column subsampling, and has efficient parallel tree building with weighted quantile sketch for split finding.'},
-    {q:'What is gradient descent and its variants?',diff:'CORE',a:'Gradient descent minimizes a loss function by iteratively moving in the direction of the steepest descent (negative gradient). Variants: (1) Batch GD — uses all data, stable but slow. (2) SGD — uses 1 sample, noisy but fast. (3) Mini-batch GD — balance of both. Optimizers: Momentum adds velocity, AdaGrad adapts learning rates per parameter, Adam combines momentum + adaptive rates and is the 2026 default.'},
+    {q:'Explain how XGBoost works under the hood',diff:'ADVANCED',a:'XGBoost builds an ensemble of weak learners (shallow trees) sequentially. Each new tree corrects residuals of the previous ensemble. It uses second-order Taylor expansion of the loss for a more exact gradient, adds L1/L2 regularization on tree weights, uses column subsampling, and has efficient parallel tree building.'},
+    {q:'What is gradient descent and its variants?',diff:'CORE',a:'Gradient descent minimizes a loss function by iteratively moving in the direction of the steepest descent. Variants: (1) Batch GD — uses all data, stable but slow. (2) SGD — uses 1 sample, noisy but fast. (3) Mini-batch GD — balance of both. Optimizers: Momentum adds velocity, AdaGrad adapts learning rates, Adam combines momentum + adaptive rates and is the 2026 default.'},
     {q:'How do you handle imbalanced datasets?',diff:'CORE',a:'Sampling: SMOTE oversamples minority class synthetically, undersampling reduces majority. Algorithm-level: class_weight parameter, focal loss. Threshold tuning: lower decision threshold for minority class. Evaluation: use F1, AUC-ROC, precision-recall curves — NOT accuracy.'},
-    {q:'What is a Transformer and why did it replace RNNs?',diff:'ADVANCED',a:'Transformers use self-attention to relate all tokens to each other simultaneously, eliminating sequential computation. RNNs suffer from vanishing gradients and cannot parallelize. Transformers scale better, capture long-range dependencies, and are the backbone of GPT, BERT, etc. Key components: multi-head attention, positional encoding, feed-forward layers.'},
+    {q:'What is a Transformer and why did it replace RNNs?',diff:'ADVANCED',a:'Transformers use self-attention to relate all tokens simultaneously, eliminating sequential computation. RNNs suffer from vanishing gradients and cannot parallelize. Transformers scale better, capture long-range dependencies, and are the backbone of GPT, BERT, etc. Key components: multi-head attention, positional encoding, feed-forward layers.'},
+    {q:'Explain the difference between bagging and boosting',diff:'CORE',a:'Bagging (Bootstrap Aggregating): trains multiple models in parallel on random subsets, aggregates by voting/averaging. Reduces variance. Random Forest is the canonical example. Boosting: trains models sequentially, each correcting errors of the previous. Reduces bias. XGBoost/LightGBM are canonical examples. Boosting generally achieves higher accuracy but is more prone to overfitting noisy data.'},
   ],
   1:[
     {q:'What is p-value and why is 0.05 arbitrary?',diff:'CORE',a:"P-value is the probability of observing results at least as extreme as your data, assuming H0 is true. 0.05 was chosen by Fisher as a convenient threshold, not derived statistically. In modern DS: report effect size + confidence intervals, not just p-values. A p=0.049 and p=0.051 are practically identical."},
     {q:'Explain Central Limit Theorem in practical terms',diff:'CORE',a:'As sample size grows (usually n≥30), the sampling distribution of the mean approaches a normal distribution, regardless of the underlying population distribution. Practical use: even if your data is skewed, you can use parametric tests on sample means. Foundation of A/B testing and confidence intervals.'},
-    {q:"What is the difference between Type I and Type II error?",diff:'CORE',a:"Type I (false positive): rejecting H0 when it's actually true. Controlled by α (significance level). Type II (false negative): failing to reject H0 when it's false. Controlled by β; power = 1-β. In medicine: false cancer diagnosis (Type I) vs. missing actual cancer (Type II). Context determines which is more costly."},
-    {q:'How do you design an A/B test correctly?',diff:'ADVANCED',a:'Define hypothesis and success metric. Calculate required sample size using power analysis (80% power, α=0.05). Randomize assignment. Run for full business cycles (avoid peeking). Check for novelty effects and network effects. Analyze with correct test (t-test, Mann-Whitney, Chi-square). Consider multiple testing correction (Bonferroni) if testing many variants.'},
+    {q:"What is the difference between Type I and Type II error?",diff:'CORE',a:"Type I (false positive): rejecting H0 when it's actually true. Controlled by α. Type II (false negative): failing to reject H0 when it's false. Controlled by β; power = 1-β. Context determines which is more costly — in medicine, missing actual cancer (Type II) is usually worse."},
+    {q:'Explain Bayes Theorem with a real-world example',diff:'CORE',a:"P(A|B) = P(B|A) × P(A) / P(B). Example: A disease affects 1% of people. Test is 99% accurate. If you test positive, what's the chance you have the disease? P(disease|positive) = (0.99 × 0.01) / [(0.99 × 0.01) + (0.01 × 0.99)] ≈ 50%. Counterintuitive: false positives dominate when base rate is low. Critical for Naive Bayes classifiers and spam filters."},
+    {q:'How do you design an A/B test correctly?',diff:'ADVANCED',a:'Define hypothesis and success metric. Calculate required sample size using power analysis (80% power, α=0.05). Randomize assignment. Run for full business cycles (avoid peeking). Check for novelty effects. Analyze with correct test (t-test, Mann-Whitney, Chi-square). Consider multiple testing correction (Bonferroni) if testing many variants.'},
+    {q:'What is the Chi-square test and when do you use it?',diff:'CORE',a:'Chi-square tests whether observed frequencies differ from expected. (1) Goodness-of-fit: does a single variable follow a hypothesized distribution? (2) Test of independence: are two categorical variables related? Example: does gender affect product preference? If p < 0.05, they are not independent. Assumptions: expected frequency ≥ 5 in each cell, independent observations.'},
   ],
   2:[
-    {q:'Write SQL to find the second highest salary in a table',diff:'CORE',a:"SELECT MAX(salary) FROM employees WHERE salary < (SELECT MAX(salary) FROM employees); — OR — SELECT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1; — OR using DENSE_RANK(): SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rk FROM employees) t WHERE rk = 2;"},
-    {q:'Explain the difference between list, tuple, and set in Python',diff:'CORE',a:"List: ordered, mutable, allows duplicates — [1,2,3]. Tuple: ordered, immutable, allows duplicates — (1,2,3). Set: unordered, mutable, no duplicates — {1,2,3}. Dict: key-value pairs, ordered (Python 3.7+). Use tuple when data shouldn't change (coordinates). Use set for O(1) lookups and deduplication."},
+    {q:'Write SQL to find the second highest salary in a table',diff:'CORE',a:"SELECT MAX(salary) FROM employees WHERE salary < (SELECT MAX(salary) FROM employees); OR using DENSE_RANK(): SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rk FROM employees) t WHERE rk = 2;"},
     {q:'What are Python decorators and when would you use them in DS?',diff:'ADVANCED',a:'Decorators are functions that wrap other functions to add behavior without modifying the original. In DS: @timer to benchmark model training, @cache to memoize expensive feature computations, @log_inputs to track experiment parameters, @validate_df to check DataFrame schema before pipeline steps.'},
-    {q:'What is a window function in SQL?',diff:'ADVANCED',a:'Window functions perform calculations across a set of rows related to the current row, without collapsing them (unlike GROUP BY). Examples: ROW_NUMBER(), RANK(), DENSE_RANK(), LAG(), LEAD(), SUM() OVER (PARTITION BY). Critical for: running totals, comparing current row to previous, ranking within groups. Essential for DS SQL interviews.'},
+    {q:'What is a window function in SQL?',diff:'ADVANCED',a:'Window functions perform calculations across rows related to the current row, without collapsing them (unlike GROUP BY). Examples: ROW_NUMBER(), RANK(), LAG(), LEAD(), SUM() OVER (PARTITION BY). Critical for: running totals, comparing current row to previous, ranking within groups.'},
+    {q:'Explain generators in Python and why they are useful for ML',diff:'ADVANCED',a:"Generators produce values lazily using yield, not storing the full sequence in memory. In ML: (1) Custom data pipelines for large datasets that don't fit in RAM. (2) Infinite data augmentation streams. (3) Batch generators for model training. Example: def batch_generator(X, batch_size): for i in range(0, len(X), batch_size): yield X[i:i+batch_size]"},
+    {q:'Explain the difference between list, tuple, set, and dict in Python',diff:'CORE',a:"List: ordered, mutable, allows duplicates. Tuple: ordered, immutable, allows duplicates — use when data shouldn't change (coordinates). Set: unordered, mutable, no duplicates — O(1) lookups. Dict: key-value pairs, ordered (Python 3.7+). For DS: use tuples for column schemas, sets for deduplication, dicts for feature mappings."},
   ],
   3:[
-    {q:'Design a recommendation system for an e-commerce platform',diff:'SYSTEM',a:'Approach: Hybrid of collaborative filtering + content-based. (1) Collaborative: user-item matrix with ALS or neural CF (NCF). (2) Content: item embeddings from product descriptions. (3) Two-stage: candidate generation (fast ANN search via FAISS) + ranking (GBDT or DNN). Cold start: use content + popularity. Infrastructure: feature store, A/B testing, real-time inference. Metrics: CTR, conversion, revenue per user, diversity.'},
-    {q:'How would you detect fraud in real-time at a payment company?',diff:'SYSTEM',a:'(1) Feature engineering: velocity features (5 transactions in 10 min), device fingerprinting, location distance, merchant category. (2) Models: ensemble of GBDT + rule-based + anomaly detection. (3) Real-time scoring: model served in <50ms via streaming (Kafka + Flink). (4) Feedback loop: label confirmed fraud, retrain weekly. (5) Metrics: precision (minimize false blocks), recall (catch fraud), cost-weighted.'},
-    {q:'A model that was 95% accurate in testing has 60% accuracy in production. What do you investigate?',diff:'CORE',a:'Likely causes: (1) Data leakage in training — target encoded future info. (2) Distribution shift — production data differs from training data. (3) Overfitting — model memorized training set. (4) Label mismatch — how labels were collected differs. Investigation: compare feature distributions (PSI), check if predictions match expected base rates, shadow model testing, time-based validation split.'},
+    {q:'Design a recommendation system for an e-commerce platform',diff:'SYSTEM',a:'Hybrid of collaborative filtering + content-based. (1) Collaborative: user-item matrix with ALS or neural CF. (2) Content: item embeddings from product descriptions. (3) Two-stage: candidate generation (fast ANN search via FAISS) + ranking (GBDT or DNN). Cold start: use content + popularity. Infrastructure: feature store, A/B testing, real-time inference. Metrics: CTR, conversion, revenue per user, diversity.'},
+    {q:'How would you detect fraud in real-time at a payment company?',diff:'SYSTEM',a:'(1) Feature engineering: velocity features, device fingerprinting, location distance. (2) Models: ensemble of GBDT + rule-based + anomaly detection. (3) Real-time scoring in <50ms via streaming (Kafka + Flink). (4) Feedback loop: label confirmed fraud, retrain weekly. (5) Metrics: precision (minimize false blocks), recall (catch fraud), cost-weighted.'},
+    {q:'A model that was 95% accurate in testing has 60% accuracy in production. What do you investigate?',diff:'CORE',a:'Likely causes: (1) Data leakage in training — target encoded future info. (2) Distribution shift — production data differs. (3) Overfitting — model memorized training set. (4) Label mismatch. Investigation: compare feature distributions (PSI), check base rate predictions, shadow model testing, time-based validation split.'},
+    {q:'Design an ML pipeline with full MLOps for a churn prediction system',diff:'SYSTEM',a:'(1) Data: ingest from warehouse, validate with Great Expectations, version with DVC. (2) Features: compute in feature store (Feast), backfill historical. (3) Training: track with MLflow, register best model. (4) Deployment: FastAPI + Docker, staged rollout. (5) Monitoring: data drift (Evidently), performance degradation alerts, automatic retraining trigger. (6) CI/CD: GitHub Actions, automated tests, canary deployments.'},
   ],
   4:[
-    {q:'What is RAG (Retrieval-Augmented Generation) and when would you use it?',diff:'2026',a:"RAG combines LLMs with a retrieval step to ground responses in external knowledge. Flow: query → embed query → vector search in knowledge base → retrieve top-k chunks → inject into LLM prompt → generate response. Use when: LLM's training data is outdated, domain-specific knowledge is required, hallucination reduction is critical (legal, medical). Vs fine-tuning: RAG is better for frequently changing knowledge; fine-tuning is better for style/format changes."},
-    {q:'Explain the difference between fine-tuning, PEFT, and LoRA',diff:'2026',a:'Full fine-tuning: update all weights — expensive, requires much data. PEFT (Parameter-Efficient Fine-Tuning): update only a small subset of parameters. LoRA (Low-Rank Adaptation): freeze base model, inject trainable rank-decomposition matrices into attention layers. Reduces trainable params by 99%+ while achieving near-full fine-tune performance. QLoRA adds 4-bit quantization, enabling fine-tuning large models on consumer GPUs.'},
-    {q:'What are AI Agents and how do they differ from chatbots?',diff:'2026',a:'Agents have agency — they can take actions, use tools, and operate in loops until a goal is achieved. Key components: LLM as the reasoning engine, tools (web search, code execution, APIs), memory (short-term via context, long-term via vector DB), planning (ReAct, CoT). Unlike chatbots (stateless Q&A), agents persist state and decompose complex tasks autonomously. Frameworks: LangGraph, AutoGen, CrewAI.'},
-    {q:'How do you evaluate an LLM-based system in production?',diff:'2026',a:'Automated metrics: RAGAS for RAG (faithfulness, relevance, context recall), BERTScore, perplexity. LLM-as-judge: use a stronger model to grade outputs. Human eval: gold-standard but expensive. Production signals: user thumbs-up/down, task completion rate, conversation length, escalation rate. Don\'t rely only on benchmarks like MMLU — build domain-specific evals for your use case.'},
-    {q:'What are vector databases and which would you recommend in 2026?',diff:'2026',a:'Vector databases store and efficiently search high-dimensional embeddings using approximate nearest neighbor (ANN) algorithms (HNSW, IVF). Key options: Pinecone (managed, easy setup), Weaviate (open-source, GraphQL), Chroma (lightweight, local dev), pgvector (Postgres extension — great for existing infra), Qdrant (Rust-based, fast). For 2026 production: pgvector for small-medium scale, Qdrant/Weaviate for scale.'},
+    {q:'What is RAG (Retrieval-Augmented Generation) and when would you use it?',diff:'2026',a:"RAG combines LLMs with a retrieval step to ground responses in external knowledge. Flow: query → embed query → vector search in knowledge base → retrieve top-k chunks → inject into LLM prompt → generate response. Use when: LLM training data is outdated, domain-specific knowledge is required, hallucination reduction is critical. Vs fine-tuning: RAG is better for frequently changing knowledge."},
+    {q:'Explain the difference between fine-tuning, PEFT, and LoRA',diff:'2026',a:'Full fine-tuning: update all weights — expensive. PEFT: update only a small subset of parameters. LoRA (Low-Rank Adaptation): freeze base model, inject trainable rank-decomposition matrices into attention layers. Reduces trainable params by 99%+ while achieving near-full fine-tune performance. QLoRA adds 4-bit quantization, enabling fine-tuning large models on consumer GPUs.'},
+    {q:'What are AI Agents and how do they differ from chatbots?',diff:'2026',a:'Agents have agency — they can take actions, use tools, and operate in loops until a goal is achieved. Key components: LLM as reasoning engine, tools (web search, code execution, APIs), memory (short-term via context, long-term via vector DB), planning (ReAct, CoT). Frameworks: LangGraph, AutoGen, CrewAI. Unlike chatbots (stateless Q&A), agents persist state and decompose complex tasks.'},
+    {q:'What is Model Context Protocol (MCP) and why does it matter?',diff:'2026',a:'MCP is an open standard (by Anthropic) that allows LLM applications to connect to external data sources and tools via a unified protocol. Think of it as USB-C for AI — instead of custom integrations per tool, MCP provides a standard interface. Components: MCP servers (expose tools/data), MCP clients (LLM apps like Claude Desktop, Cursor). Enables: file system access, database queries, API calls, all from within LLM context.'},
+    {q:'How do you evaluate an LLM-based RAG system in production?',diff:'2026',a:'Automated metrics: RAGAS framework (faithfulness, answer relevance, context recall, context precision). LLM-as-judge: use a stronger model to grade outputs. Production signals: user thumbs-up/down, task completion rate. Offline eval: golden Q&A dataset from domain experts. Monitor: retrieval quality, generation quality, latency, token cost separately.'},
+    {q:'What are vector databases and which would you recommend in 2026?',diff:'2026',a:'Vector databases store and efficiently search high-dimensional embeddings using approximate nearest neighbor (ANN) algorithms (HNSW, IVF). Options: ChromaDB (lightweight, local dev), FAISS (library, best performance), Pinecone (managed), Qdrant (Rust-based, production), pgvector (Postgres extension). For 2026: ChromaDB or FAISS for learning/prototyping; Qdrant or pgvector for production.'},
+  ],
+  5:[
+    {q:'What is the difference between MLOps and LLMOps?',diff:'MLOPS',a:'MLOps handles the lifecycle of traditional ML models: data versioning, experiment tracking, model registry, serving, drift detection. LLMOps extends this for LLMs: adds prompt versioning, hallucination monitoring, token cost tracking, safety/guardrail layers, and evaluation using LLM-as-judge. Key additions in LLMOps: prompt templates are versioned artifacts, eval is harder (open-ended outputs), and latency/cost are first-class metrics.'},
+    {q:'Explain Docker and why it is critical for ML deployment',diff:'MLOPS',a:'Docker packages your model, code, and dependencies into a container — an isolated, reproducible environment. Without it: "works on my machine" problems are common. With it: exact same environment in dev, staging, and production. In ML: containerize your FastAPI serving endpoint, include model artifacts, pin library versions. Kubernetes orchestrates multiple containers at scale.'},
+    {q:'What is MLflow and what problems does it solve?',diff:'MLOPS',a:'MLflow is an open-source platform for ML lifecycle management. It solves: (1) Tracking: log parameters, metrics, artifacts across experiments. (2) Projects: reproducible code packaging. (3) Models: standard format for model serialization. (4) Registry: versioned model store with staging/production/archived stages. Without MLflow: experiments are ad-hoc, results are lost, model provenance is unclear.'},
+    {q:'What is data drift and how do you detect and handle it?',diff:'MLOPS',a:'Data drift: the statistical properties of input features change over time, degrading model performance. Types: covariate shift (feature distribution changes), label shift (target distribution changes), concept drift (relationship between features and target changes). Detection: Population Stability Index (PSI), Kolmogorov-Smirnov test, Jensen-Shannon divergence. Tools: Evidently AI, Whylogs. Response: alert + trigger retraining pipeline.'},
+    {q:'Walk me through setting up a CI/CD pipeline for an ML project',diff:'MLOPS',a:'Using GitHub Actions: (1) On PR: run unit tests (pytest), data validation tests, lint. (2) On merge to main: run integration tests, retrain model if data changed (DVC), evaluate against baseline, if improved → push to model registry. (3) On release tag: build Docker image, push to ECR, deploy to ECS/Kubernetes. Key tools: GitHub Actions, DVC, MLflow, Docker, pytest, Great Expectations.'},
   ]
 };
 
 const RESOURCES = {
   0:[
-    {icon:'🎓',name:'Fast.ai Practical Deep Learning',type:'FREE COURSE',desc:'Top-down approach, best for practical learners',url:'https://fast.ai'},
-    {icon:'🎓',name:'Andrew Ng ML Specialization (Coursera)',type:'COURSE',desc:'Updated 2024 version with modern content',url:'#'},
-    {icon:'🎓',name:'DeepLearning.AI MLOps Specialization',type:'COURSE',desc:'Production ML from Day 1',url:'#'},
-    {icon:'🎓',name:'Kaggle Learn (Free)',type:'FREE COURSE',desc:'Pandas, SQL, ML, Deep Learning — all free',url:'https://kaggle.com/learn'},
-    {icon:'🎓',name:'CS229 Stanford (YouTube)',type:'FREE COURSE',desc:'Rigorous ML foundations',url:'#'},
-    {icon:'🎓',name:'LLM Engineering (Maven)',type:'COURSE',desc:'2026 must: RAG, agents, evals',url:'#'},
+    {icon:'🎓',name:'Fast.ai Practical Deep Learning',type:'FREE COURSE',desc:'Best top-down DL course — covers PyTorch, Transformers',url:'https://fast.ai'},
+    {icon:'🎓',name:'Andrew Ng ML Specialization (Coursera)',type:'COURSE',desc:'Updated 2024 — covers Modules 7-12 of curriculum',url:'#'},
+    {icon:'🎓',name:'DeepLearning.AI MLOps Specialization',type:'COURSE',desc:'Covers Module 17 — Production ML from Day 1',url:'#'},
+    {icon:'🎓',name:'Kaggle Learn (Free)',type:'FREE COURSE',desc:'Pandas, SQL, ML, Deep Learning — Modules 1-12',url:'https://kaggle.com/learn'},
+    {icon:'🎓',name:'CS229 Stanford (YouTube)',type:'FREE COURSE',desc:'Rigorous ML/Stats foundations — Modules 7-12',url:'#'},
+    {icon:'🎓',name:'LLM Engineering (Maven)',type:'COURSE',desc:'2026 must: RAG, agents, LLMOps — Modules 18-25',url:'#'},
+    {icon:'🎓',name:'LangChain Academy',type:'FREE COURSE',desc:'Official LangChain & LangGraph courses — Module 20-21',url:'https://academy.langchain.com'},
   ],
   1:[
-    {icon:'📗',name:'Hands-On ML with Scikit-Learn (Géron)',type:'BOOK',desc:'3rd edition — 2024 updated, most practical ML book'},
-    {icon:'📗',name:'Deep Learning (Goodfellow et al)',type:'BOOK',desc:'The theoretical bible'},
+    {icon:'📗',name:'Hands-On ML with Scikit-Learn (Géron)',type:'BOOK',desc:'3rd edition — Modules 9-12, most practical ML book'},
+    {icon:'📗',name:'Deep Learning (Goodfellow et al)',type:'BOOK',desc:'Theory bible — Modules 15-16'},
+    {icon:'📗',name:'Designing ML Systems (Chip Huyen)',type:'BOOK',desc:'Must-read for Module 17 — production ML'},
+    {icon:'📗',name:'Python for Data Analysis (McKinney)',type:'BOOK',desc:'Pandas author — definitive reference for Modules 3-4'},
+    {icon:'📗',name:'Build LLM Apps from Scratch (Raschka)',type:'BOOK',desc:'LLM internals — Modules 18, 23'},
     {icon:'📗',name:'The Hundred-Page ML Book',type:'BOOK',desc:'Great for revision & interview prep'},
-    {icon:'📗',name:'Python for Data Analysis (McKinney)',type:'BOOK',desc:'Pandas author — definitive reference'},
-    {icon:'📗',name:'Designing ML Systems (Chip Huyen)',type:'BOOK',desc:'2026 must-read for production ML'},
-    {icon:'📗',name:'Build LLM Apps from Scratch',type:'BOOK',desc:'Sebastian Raschka — LLM internals'},
+    {icon:'📗',name:'LangChain & LangGraph Docs',type:'DOCS',desc:'Official docs for Modules 20-21 — always up to date',url:'https://docs.langchain.com'},
   ],
   2:[
-    {icon:'💻',name:'LeetCode SQL 50',type:'PRACTICE',desc:'The essential SQL problem set for DS interviews'},
-    {icon:'💻',name:'Kaggle Competitions',type:'PRACTICE',desc:'Tabular competitions → portfolio gold'},
+    {icon:'💻',name:'LeetCode SQL 50',type:'PRACTICE',desc:'Essential SQL problem set — Module 6'},
+    {icon:'💻',name:'Kaggle Competitions',type:'PRACTICE',desc:'Tabular competitions → Modules 9-12 in practice'},
     {icon:'💻',name:'StrataScratch',type:'PRACTICE',desc:'Real DS interview questions from top companies'},
-    {icon:'💻',name:'DataLemur',type:'PRACTICE',desc:'SQL interview questions — great UI'},
-    {icon:'💻',name:'DrivenData',type:'PRACTICE',desc:'Social good ML competitions'},
-    {icon:'💻',name:'Hugging Face Spaces',type:'PRACTICE',desc:'Deploy and explore real models'},
+    {icon:'💻',name:'DataLemur',type:'PRACTICE',desc:'SQL interview questions — great for Module 6 deep dive'},
+    {icon:'💻',name:'Hugging Face Spaces',type:'PRACTICE',desc:'Explore real models — Modules 14-16, 18'},
+    {icon:'💻',name:'LangChain Templates',type:'PRACTICE',desc:'Ready-made RAG/agent templates — Modules 20-21',url:'https://github.com/langchain-ai/langchain'},
   ],
   3:[
-    {icon:'▶️',name:'3Blue1Brown — Neural Networks',type:'YOUTUBE',desc:'Best visual intuition for DL math'},
-    {icon:'▶️',name:'Andrej Karpathy — Zero to Hero',type:'YOUTUBE',desc:'Build GPT from scratch — legendary series'},
-    {icon:'▶️',name:'Yannic Kilcher — Paper Reviews',type:'YOUTUBE',desc:'Stay current with SOTA research'},
-    {icon:'▶️',name:'Sentdex',type:'YOUTUBE',desc:'Practical Python & ML tutorials'},
-    {icon:'▶️',name:'StatQuest with Josh Starmer',type:'YOUTUBE',desc:'Best statistics explainers on YouTube'},
-    {icon:'▶️',name:'AI Jason',type:'YOUTUBE',desc:'LLM agents and RAG systems 2025/2026'},
+    {icon:'▶️',name:'3Blue1Brown — Neural Networks',type:'YOUTUBE',desc:'Best visual intuition for Modules 15-16'},
+    {icon:'▶️',name:'Andrej Karpathy — Zero to Hero',type:'YOUTUBE',desc:'Build GPT from scratch — legendary for Modules 15-16'},
+    {icon:'▶️',name:'Yannic Kilcher — Paper Reviews',type:'YOUTUBE',desc:'Stay current with SOTA'},
+    {icon:'▶️',name:'StatQuest with Josh Starmer',type:'YOUTUBE',desc:'Best stats explainers — Modules 7-8'},
+    {icon:'▶️',name:'AI Jason',type:'YOUTUBE',desc:'LLM agents and RAG systems — Modules 20-21'},
+    {icon:'▶️',name:'TechWithTim — Python',type:'YOUTUBE',desc:'Clean Python tutorials — Modules 1-2'},
+  ],
+  4:[
+    {icon:'🔧',name:'MLflow',type:'TOOL',desc:'Experiment tracking & model registry — Module 17',url:'https://mlflow.org'},
+    {icon:'🔧',name:'DVC',type:'TOOL',desc:'Data & model versioning — Module 17',url:'https://dvc.org'},
+    {icon:'🔧',name:'LangSmith',type:'TOOL',desc:'LLM observability & tracing — Module 20, 23',url:'https://smith.langchain.com'},
+    {icon:'🔧',name:'Evidently AI',type:'TOOL',desc:'Data drift & model monitoring — Module 17',url:'https://evidentlyai.com'},
+    {icon:'🔧',name:'Streamlit',type:'TOOL',desc:'Build data apps fast — Module 13',url:'https://streamlit.io'},
+    {icon:'🔧',name:'ChromaDB',type:'TOOL',desc:'Easy local vector database — Module 19',url:'https://chromadb.com'},
+    {icon:'🔧',name:'Weights & Biases',type:'TOOL',desc:'Advanced experiment tracking alternative',url:'https://wandb.ai'},
   ]
 };
 
 const DEFAULT_PROJECTS = [
-  {id:'p1',name:'EDA & Visualization Dashboard',desc:'Full exploratory analysis of a public dataset with Plotly Dash.',status:'idea',tags:['Python','Pandas','Plotly','EDA']},
-  {id:'p2',name:'End-to-End ML Pipeline',desc:'Customer churn predictor with feature engineering, model comparison, and MLflow tracking.',status:'idea',tags:['Scikit-learn','MLflow','XGBoost']},
-  {id:'p3',name:'NLP Text Classifier',desc:'Sentiment analysis using fine-tuned BERT. Deployed via FastAPI.',status:'idea',tags:['Transformers','HuggingFace','FastAPI']},
-  {id:'p4',name:'RAG Application',desc:'Chat with your own documents using RAG, LangChain, and a vector database.',status:'idea',tags:['LangChain','RAG','OpenAI','ChromaDB']},
-  {id:'p5',name:'SQL Analytics Project',desc:'Complex business analytics using window functions, CTEs, and visualization.',status:'idea',tags:['SQL','PostgreSQL','Analytics']},
-  {id:'p6',name:'Kaggle Top 20% Finish',desc:'Enter a tabular Kaggle competition and finish in top 20%.',status:'idea',tags:['Kaggle','XGBoost','Feature Eng']},
+  {id:'p1',name:'EDA & Visualization Dashboard',desc:'Full exploratory analysis of a public dataset (wine quality or stock data) with Plotly/Streamlit. Covers Module 9 & 13.',status:'idea',tags:['Python','Pandas','Streamlit','EDA','Module 9']},
+  {id:'p2',name:'End-to-End ML Pipeline',desc:'Customer churn predictor: feature engineering, model comparison (XGBoost vs RF), MLflow tracking, Docker deployment. Covers Modules 10-12, 17.',status:'idea',tags:['Scikit-learn','MLflow','XGBoost','Docker','Module 17']},
+  {id:'p3',name:'NLP Text Classifier',desc:'Sentiment analysis using fine-tuned BERT. Deployed via FastAPI. Covers Modules 14-16.',status:'idea',tags:['Transformers','HuggingFace','FastAPI','Module 16']},
+  {id:'p4',name:'RAG Application',desc:'Chat with your own documents using RAG, LangChain, ChromaDB, and LangSmith monitoring. Core Module 20 project.',status:'idea',tags:['LangChain','RAG','ChromaDB','LangSmith','Module 20']},
+  {id:'p5',name:'Agentic RAG with LangGraph',desc:'Build an agentic RAG system with self-correction using LangGraph. Deploy on AWS. Module 21 & 26 capstone.',status:'idea',tags:['LangGraph','Agents','RAG','AWS','Module 21']},
+  {id:'p6',name:'Multi-Agent Research Assistant',desc:'Build a multi-agent system with AgentOps monitoring, arXiv integration, FastAPI backend. Module 24-25 capstone.',status:'idea',tags:['Multi-Agent','AgentOps','FastAPI','LangGraph','Module 24']},
+  {id:'p7',name:'SQL Analytics Project',desc:'Complex business analytics using window functions, CTEs, and visualization. Module 6 deep dive.',status:'idea',tags:['SQL','PostgreSQL','Analytics','Module 6']},
+  {id:'p8',name:'MLOps Pipeline with Monitoring',desc:'Full ML system with DVC, MLflow, drift detection (Evidently), CI/CD with GitHub Actions. Module 17 capstone.',status:'idea',tags:['MLflow','DVC','Evidently','GitHub Actions','Module 17']},
 ];
 
 const GAPS = [
-  {icon:'🤖',title:'GenAI & LLM Skills',priority:'high',desc:'2026 DS roles increasingly require RAG, prompt engineering, and LLM evaluation. Build at least one RAG project.'},
-  {icon:'📦',title:'MLOps & Deployment',priority:'high',desc:'Can you actually ship a model? Docker, MLflow, and basic cloud deployment separate senior candidates.'},
-  {icon:'🗄️',title:'Advanced SQL',priority:'high',desc:'Window functions, CTEs, and query optimization are tested at FAANG-level interviews.'},
-  {icon:'🎯',title:'Project Portfolio',priority:'med',desc:'No portfolio = no interviews at good companies. You need 3-4 end-to-end projects.'},
-  {icon:'📐',title:'ML System Design',priority:'med',desc:'Mid-senior DS roles include a system design round. Study recommendation systems, fraud detection, and search ranking.'},
-  {icon:'📊',title:'A/B Testing Depth',priority:'low',desc:'Every company runs experiments. Know power analysis, multiple testing, novelty effects, and network effects deeply.'},
+  {icon:'🤖',title:'Agentic AI & LangGraph',priority:'high',desc:'Modules 21-24 are the 2026 differentiator. Multi-agent systems, LangGraph, and AgentOps are rarely covered in older DS courses. Build the Module 24 project.'},
+  {icon:'📦',title:'MLOps & LLMOps',priority:'high',desc:'Modules 17 & 23 are tested at senior DS/MLE interviews. Docker, MLflow, DVC, CI/CD, and drift detection separate senior candidates from juniors.'},
+  {icon:'🔗',title:'Model Context Protocol (MCP)',priority:'high',desc:'Module 22 is brand new in 2025/2026. MCP is becoming the standard for LLM-tool integration. Getting hands-on with Claude Desktop/Cursor integration now gives you an edge.'},
+  {icon:'🗄️',title:'Advanced SQL & Window Functions',priority:'high',desc:'Module 6 advanced SQL (window functions, CTEs, query optimization) is tested at FAANG-level interviews. Most candidates skip this.'},
+  {icon:'🎯',title:'End-to-End Project Portfolio',priority:'med',desc:'Module 26 requires 4 complete projects: ML with MLOps, RAG system, Multi-agent assistant, Agentic RAG. No portfolio = no interviews at good companies.'},
+  {icon:'📐',title:'ML System Design',priority:'med',desc:'Mid-senior DS roles include a system design round. Study the Module 17+24 capstone patterns: recommendation systems, fraud detection, RAG pipelines.'},
+  {icon:'📊',title:'A/B Testing & Experiment Design',priority:'low',desc:'Module 8 hypothesis testing depth: power analysis, multiple testing, novelty effects. Every company runs experiments and expects this depth at interviews.'},
 ];
 
 // ===================== STATE =====================
-let state = JSON.parse(localStorage.getItem('dsq-state') || 'null') || {
-  completedSkills:[],inProgressSkills:[],projects:[...DEFAULT_PROJECTS],
-  logs:[],streak:0,lastLogDate:null,
+let state = JSON.parse(localStorage.getItem('dsq-state-v2') || 'null') || {
+  completedTopics:{}, // {modId: [topicIdx, ...]}
+  completedSkills:[], inProgressSkills:[],
+  projects:[...DEFAULT_PROJECTS],
+  logs:[], streak:0, lastLogDate:null,
 };
-function saveState(){localStorage.setItem('dsq-state',JSON.stringify(state));}
+function saveState(){ localStorage.setItem('dsq-state-v2', JSON.stringify(state)); }
 
 // ===================== XP =====================
 function calcXP(){
-  let xp=0;
-  ROADMAP.forEach(phase=>phase.skills.forEach(sk=>{
-    if(state.completedSkills.includes(sk.id))xp+=sk.xp;
-    else if(state.inProgressSkills.includes(sk.id))xp+=Math.floor(sk.xp*0.3);
+  let xp = 0;
+  CURRICULUM.forEach(mod => {
+    const done = (state.completedTopics[mod.id] || []).length;
+    xp += done * mod.xpPer;
+  });
+  ROADMAP.forEach(phase => phase.skills.forEach(sk => {
+    if(state.completedSkills.includes(sk.id)) xp += Math.floor(sk.xp * 0.5);
   }));
-  xp+=state.logs.length*30;
-  xp+=state.projects.filter(p=>p.status==='done').length*200;
-  xp+=state.projects.filter(p=>p.status==='building').length*50;
+  xp += state.logs.length * 30;
+  xp += state.projects.filter(p => p.status === 'done').length * 200;
+  xp += state.projects.filter(p => p.status === 'building').length * 50;
   return xp;
 }
+
 function getLevel(xp){
   const levels=[
     {min:0,name:'Curious Beginner',max:500},{min:500,name:'Data Explorer',max:1500},
@@ -1007,26 +1043,41 @@ function getLevel(xp){
     {min:5000,name:'Data Scientist',max:8000},{min:8000,name:'Senior DS',max:12000},
     {min:12000,name:'ML Engineer',max:18000},{min:18000,name:'DS Wizard',max:99999},
   ];
-  for(let i=levels.length-1;i>=0;i--){if(xp>=levels[i].min)return{level:i+1,...levels[i]};}
+  for(let i=levels.length-1;i>=0;i--){ if(xp>=levels[i].min) return{level:i+1,...levels[i]}; }
   return{level:1,...levels[0]};
 }
+
 function updateXPDisplay(){
-  const xp=calcXP();const lv=getLevel(xp);
-  const pct=Math.min(100,((xp-lv.min)/(lv.max-lv.min))*100);
-  document.getElementById('level-num').textContent=lv.level;
-  document.getElementById('level-name').textContent=lv.name;
-  document.getElementById('xp-fill').style.width=pct+'%';
-  document.getElementById('xp-cur').textContent=xp.toLocaleString()+' XP';
-  document.getElementById('xp-max').textContent=lv.max.toLocaleString()+' XP';
-  document.getElementById('topbar-level').textContent='Lv.'+lv.level;
-  document.getElementById('topbar-fill').style.width=pct+'%';
+  const xp = calcXP(); const lv = getLevel(xp);
+  const pct = Math.min(100, ((xp-lv.min)/(lv.max-lv.min))*100);
+  document.getElementById('level-num').textContent = lv.level;
+  document.getElementById('level-name').textContent = lv.name;
+  document.getElementById('xp-fill').style.width = pct+'%';
+  document.getElementById('xp-cur').textContent = xp.toLocaleString()+' XP';
+  document.getElementById('xp-max').textContent = lv.max.toLocaleString()+' XP';
+  document.getElementById('topbar-level').textContent = 'Lv.'+lv.level;
+  document.getElementById('topbar-fill').style.width = pct+'%';
 }
 
-// ===================== MOBILE SIDEBAR =====================
+// ===================== HELPERS =====================
+function totalTopics(){ return CURRICULUM.reduce((a,m)=>a+m.topics.length,0); }
+function doneTopics(){ return CURRICULUM.reduce((a,m)=>a+(state.completedTopics[m.id]||[]).length,0); }
+function doneModules(){ return CURRICULUM.filter(m=>(state.completedTopics[m.id]||[]).length===m.topics.length).length; }
+
+function toggleTopic(modId, topicIdx){
+  if(!state.completedTopics[modId]) state.completedTopics[modId] = [];
+  const arr = state.completedTopics[modId];
+  const i = arr.indexOf(topicIdx);
+  if(i >= 0) arr.splice(i, 1);
+  else arr.push(topicIdx);
+  saveState(); updateXPDisplay(); updateStats();
+}
+
+// ===================== SIDEBAR =====================
 function toggleSidebar(){
   const s=document.getElementById('sidebar'),o=document.getElementById('sidebar-overlay'),h=document.getElementById('hamburger');
   const open=s.classList.contains('open');
-  s.classList.toggle('open',!open);o.classList.toggle('open',!open);h.classList.toggle('open',!open);
+  s.classList.toggle('open',!open); o.classList.toggle('open',!open); h.classList.toggle('open',!open);
 }
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
@@ -1035,95 +1086,213 @@ function closeSidebar(){
 }
 
 // ===================== NAVIGATION =====================
-function showPage(id,el){
+function showPage(id, el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  if(el)el.classList.add('active');
-  renderPage(id);closeSidebar();syncBottomNav(id);
+  if(el) el.classList.add('active');
+  renderPage(id); closeSidebar(); syncBottomNav(id);
 }
 function showPageMobile(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>{
-    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'"))n.classList.add('active');
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active');
   });
   document.getElementById('page-'+id).classList.add('active');
-  renderPage(id);syncBottomNav(id);
+  renderPage(id); syncBottomNav(id);
 }
 function syncBottomNav(id){
   document.querySelectorAll('.bottom-nav-item').forEach(b=>b.classList.remove('active'));
-  const map={dashboard:'bn-dashboard',roadmap:'bn-roadmap',skills:'bn-skills',stats:'bn-stats'};
-  if(map[id])document.getElementById(map[id]).classList.add('active');
+  const map={dashboard:'bn-dashboard',curriculum:'bn-curriculum',roadmap:'bn-roadmap',stats:'bn-stats'};
+  if(map[id]) document.getElementById(map[id]).classList.add('active');
 }
 function renderPage(id){
-  if(id==='dashboard')renderDashboard();
-  else if(id==='roadmap')renderRoadmap(0);
-  else if(id==='skills')renderSkills();
-  else if(id==='projects')renderProjects();
-  else if(id==='gaps')renderGaps();
-  else if(id==='interview')renderInterview(0);
-  else if(id==='resources')renderResources(0);
-  else if(id==='journal')renderJournal();
-  else if(id==='stats')renderStats();
+  if(id==='dashboard') renderDashboard();
+  else if(id==='curriculum') renderCurriculum(0);
+  else if(id==='roadmap') renderRoadmap(0);
+  else if(id==='projects') renderProjects();
+  else if(id==='gaps') renderGaps();
+  else if(id==='interview') renderInterview(0);
+  else if(id==='resources') renderResources(0);
+  else if(id==='journal') renderJournal();
+  else if(id==='stats') renderStats();
 }
 
 // ===================== DASHBOARD =====================
 function renderDashboard(){
-  document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  document.getElementById('streak-count').textContent=state.streak+' day streak';
-  let done=state.completedSkills.length;
-  let total=ROADMAP.reduce((a,p)=>a+p.skills.length,0);
-  document.getElementById('stat-skills-done').textContent=done;
-  document.getElementById('stat-skills-total').textContent=total;
-  document.getElementById('stat-projects').textContent=state.projects.filter(p=>p.status!=='idea').length;
-  document.getElementById('stat-logs').textContent=state.logs.length;
-  const hm=document.getElementById('heatmap');hm.innerHTML='';
-  const today=new Date();
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('streak-count').textContent = state.streak+' day streak';
+  document.getElementById('stat-topics-done').textContent = doneTopics();
+  document.getElementById('stat-topics-total').textContent = totalTopics();
+  document.getElementById('stat-modules-done').textContent = doneModules();
+  document.getElementById('stat-logs').textContent = state.logs.length;
+
+  // Heatmap
+  const hm = document.getElementById('heatmap'); hm.innerHTML = '';
+  const today = new Date();
   for(let i=111;i>=0;i--){
-    const d=new Date(today);d.setDate(d.getDate()-i);
+    const d=new Date(today); d.setDate(d.getDate()-i);
     const key=d.toISOString().slice(0,10);
     const count=state.logs.filter(l=>l.date===key).length;
     const cell=document.createElement('div');
     cell.className='heat-cell'+(count>=3?' h4':count>=2?' h3':count>=1?' h2':count>0?' h1':'');
-    cell.title=key;hm.appendChild(cell);
+    cell.title=key; hm.appendChild(cell);
   }
-  const focus=document.getElementById('todays-focus');
-  const suggestions=[];
-  ROADMAP.forEach(phase=>{phase.skills.forEach(sk=>{if(!state.completedSkills.includes(sk.id)&&suggestions.length<3)suggestions.push({sk,phase});});});
-  focus.innerHTML=suggestions.map(({sk,phase})=>`
-    <div class="check-item" onclick="toggleSkill('${sk.id}')">
-      <div class="check-box ${state.completedSkills.includes(sk.id)?'checked':''}" style="${state.inProgressSkills.includes(sk.id)?'border-color:var(--accent)':''}">
-        ${state.completedSkills.includes(sk.id)?'✓':state.inProgressSkills.includes(sk.id)?'→':''}
+
+  // Today's Focus — next incomplete topics
+  const focus = document.getElementById('todays-focus');
+  const suggestions = [];
+  for(const mod of CURRICULUM){
+    for(let i=0;i<mod.topics.length && suggestions.length<4;i++){
+      if(!(state.completedTopics[mod.id]||[]).includes(i)){
+        suggestions.push({mod, topicIdx:i, topic:mod.topics[i]});
+      }
+    }
+    if(suggestions.length>=4) break;
+  }
+  focus.innerHTML = suggestions.map(({mod,topicIdx,topic})=>`
+    <div class="check-item" onclick="toggleTopic('${mod.id}',${topicIdx});renderDashboard()">
+      <div class="check-box ${(state.completedTopics[mod.id]||[]).includes(topicIdx)?'checked':''}">
+        ${(state.completedTopics[mod.id]||[]).includes(topicIdx)?'✓':''}
       </div>
       <div>
-        <div class="check-text ${state.completedSkills.includes(sk.id)?'done':''}">${sk.name}</div>
-        <div class="check-meta">${phase.name} · ${sk.xp} XP</div>
+        <div class="check-text ${(state.completedTopics[mod.id]||[]).includes(topicIdx)?'done':''}">${topic}</div>
+        <div class="check-meta">Module ${mod.num}: ${mod.name} · +${mod.xpPer} XP</div>
       </div>
     </div>`).join('');
-  const ppo=document.getElementById('phase-progress-overview');
-  ppo.innerHTML=ROADMAP.map(phase=>{
-    const done=phase.skills.filter(sk=>state.completedSkills.includes(sk.id)).length;
-    const pct=Math.round((done/phase.skills.length)*100);
-    return`<div class="progress-item"><div class="progress-label"><span>${phase.name}</span><span class="progress-pct">${pct}%</span></div><div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${phase.color}"></div></div></div>`;
+
+  // Phase Progress Overview (by curriculum group)
+  const groupNames = {1:'Python & Data', 2:'Stats & ML', 3:'Deep Learning', 4:'GenAI & MLOps'};
+  const groupColors = {1:'#4bc9a0',2:'#7c6ef7',3:'#e8a54b',4:'#f5c842'};
+  const ppo = document.getElementById('phase-progress-overview');
+  const groups = [1,2,3,4];
+  ppo.innerHTML = groups.map(g=>{
+    const mods = CURRICULUM.filter(m=>m.group===g);
+    const total = mods.reduce((a,m)=>a+m.topics.length,0);
+    const done = mods.reduce((a,m)=>a+(state.completedTopics[m.id]||[]).length,0);
+    const pct = total?Math.round((done/total)*100):0;
+    return`<div class="progress-item">
+      <div class="progress-label"><span>${groupNames[g]}</span><span class="progress-pct">${pct}%</span></div>
+      <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${groupColors[g]}"></div></div>
+    </div>`;
   }).join('');
-  const ach=document.getElementById('achievements-list');
-  const achievements=[];
-  if(state.completedSkills.length>=1)achievements.push({icon:'⚡',text:'First skill completed!'});
-  if(state.completedSkills.length>=10)achievements.push({icon:'🔥',text:'10 skills mastered'});
-  if(state.logs.length>=1)achievements.push({icon:'📓',text:'First study log!'});
-  if(state.logs.length>=7)achievements.push({icon:'📅',text:'7 study sessions logged'});
-  if(state.projects.filter(p=>p.status==='done').length>=1)achievements.push({icon:'🚀',text:'First project shipped!'});
-  if(achievements.length===0)achievements.push({icon:'🎯',text:'Start your journey — complete your first skill!'});
-  ach.innerHTML=achievements.map(a=>`<div class="flex-center gap-8" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="font-size:16px">${a.icon}</span> ${a.text}</div>`).join('');
+
+  // Achievements
+  const ach = document.getElementById('achievements-list');
+  const achievements = [];
+  if(doneTopics()>=1) achievements.push({icon:'⚡',text:'First topic completed!'});
+  if(doneTopics()>=25) achievements.push({icon:'🔥',text:'25 topics mastered'});
+  if(doneTopics()>=50) achievements.push({icon:'💫',text:'50 topics done — halfway!'});
+  if(doneModules()>=1) achievements.push({icon:'📦',text:'First module completed!'});
+  if(state.logs.length>=1) achievements.push({icon:'📓',text:'First study log!'});
+  if(state.logs.length>=7) achievements.push({icon:'📅',text:'7 study sessions logged'});
+  if(state.projects.filter(p=>p.status==='done').length>=1) achievements.push({icon:'🚀',text:'First project shipped!'});
+  if(achievements.length===0) achievements.push({icon:'🎯',text:'Start your journey — complete your first topic in Curriculum!'});
+  ach.innerHTML = achievements.slice(-5).map(a=>`
+    <div class="flex-center gap-8" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+      <span style="font-size:16px">${a.icon}</span> ${a.text}
+    </div>`).join('');
+}
+
+// ===================== CURRICULUM =====================
+let curriculumTabIdx = 0;
+function switchCurriculumTab(idx, el){
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  curriculumTabIdx = idx;
+  renderCurriculum(idx);
+}
+
+function renderCurriculum(groupFilter){
+  const mods = groupFilter === 0 ? CURRICULUM : CURRICULUM.filter(m=>m.group===groupFilter);
+  const el = document.getElementById('curriculum-content');
+  el.innerHTML = mods.map(mod=>{
+    const done = (state.completedTopics[mod.id]||[]).length;
+    const total = mod.topics.length;
+    const pct = Math.round((done/total)*100);
+    const isComplete = done === total;
+    const isStarted = done > 0;
+    return`<div class="curriculum-module ${isComplete?'completed':isStarted?'in-progress':''}" id="cm-${mod.id}">
+      <div class="module-header" onclick="toggleModule('${mod.id}')">
+        <div class="module-num ${isComplete?'done':isStarted?'active':''}">${mod.num}</div>
+        <div style="flex:1;min-width:0">
+          <div class="module-title">${mod.name}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">
+            ${done}/${total} topics · +${done * mod.xpPer} XP earned
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+          <div style="text-align:right">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:${mod.color}">${pct}%</div>
+            <div style="width:60px;height:3px;background:var(--surface);border-radius:2px;margin-top:3px">
+              <div style="width:${pct}%;height:100%;background:${mod.color};border-radius:2px"></div>
+            </div>
+          </div>
+          <span style="color:var(--muted);font-size:12px" class="toggle-arrow">▾</span>
+        </div>
+      </div>
+      <div class="module-topics">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px">
+          ${mod.topics.map((topic,i)=>{
+            const isDone = (state.completedTopics[mod.id]||[]).includes(i);
+            return`<div class="topic-item ${isDone?'done':''}" onclick="toggleTopic('${mod.id}',${i});rerenderModule('${mod.id}')">
+              <div class="topic-check">${isDone?'✓':''}</div>
+              <span>${topic}</span>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn btn-ghost btn-sm" onclick="markAllModule('${mod.id}',true)">✓ Mark All Done</button>
+          <button class="btn btn-ghost btn-sm" onclick="markAllModule('${mod.id}',false)">↺ Reset Module</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleModule(modId){
+  const el = document.getElementById('cm-'+modId);
+  el.classList.toggle('open');
+}
+
+function rerenderModule(modId){
+  updateXPDisplay(); updateStats();
+  // Re-render just this module's state
+  const mod = CURRICULUM.find(m=>m.id===modId);
+  const el = document.getElementById('cm-'+modId);
+  if(!el || !mod) return;
+  const done = (state.completedTopics[modId]||[]).length;
+  const total = mod.topics.length;
+  const pct = Math.round((done/total)*100);
+  const isComplete = done === total;
+  const isStarted = done > 0;
+  el.className = `curriculum-module ${isComplete?'completed':isStarted?'in-progress':''} ${el.classList.contains('open')?'open':''}`;
+  el.querySelector('.module-num').className = `module-num ${isComplete?'done':isStarted?'active':''}`;
+  el.querySelector('.module-title').parentElement.querySelector('div[style*="color:var(--muted)"]').textContent = `${done}/${total} topics · +${done * mod.xpPer} XP earned`;
+  el.querySelector('[style*="font-weight:700"][style*="font-size:14px"]').textContent = pct+'%';
+  el.querySelector('[style*="height:100%"]').style.width = pct+'%';
+  // Update topic items
+  el.querySelectorAll('.topic-item').forEach((ti,i)=>{
+    const isDone = (state.completedTopics[modId]||[]).includes(i);
+    ti.className = `topic-item ${isDone?'done':''}`;
+    ti.querySelector('.topic-check').textContent = isDone?'✓':'';
+  });
+}
+
+function markAllModule(modId, done){
+  const mod = CURRICULUM.find(m=>m.id===modId);
+  if(!mod) return;
+  state.completedTopics[modId] = done ? mod.topics.map((_,i)=>i) : [];
+  saveState(); updateXPDisplay(); updateStats(); rerenderModule(modId);
 }
 
 // ===================== ROADMAP =====================
 function renderRoadmap(tabIdx){
-  const phases=tabIdx===0?ROADMAP:[ROADMAP[tabIdx-1]];
-  document.getElementById('roadmap-content').innerHTML=phases.map(phase=>{
-    const done=phase.skills.filter(sk=>state.completedSkills.includes(sk.id)).length;
-    const pct=Math.round((done/phase.skills.length)*100);
-    const status=pct===100?'done':pct>0?'active':'locked';
+  const phases = tabIdx === 0 ? ROADMAP : [ROADMAP[tabIdx-1]];
+  document.getElementById('roadmap-content').innerHTML = phases.map(phase=>{
+    const done = phase.skills.filter(sk=>state.completedSkills.includes(sk.id)).length;
+    const pct = Math.round((done/phase.skills.length)*100);
+    const status = pct===100?'done':pct>0?'active':'locked';
     return`<div class="skill-phase">
       <div class="phase-header">
         <div class="phase-dot ${status}">${phase.phase}</div>
@@ -1133,12 +1302,14 @@ function renderRoadmap(tabIdx){
         </div>
         <div class="phase-prog">${done}/${phase.skills.length}</div>
       </div>
-      <div style="margin-left:44px;margin-bottom:6px"><div class="phase-bar"><div class="phase-bar-fill" style="width:${pct}%;background:${phase.color}"></div></div></div>
+      <div style="margin-left:44px;margin-bottom:6px">
+        <div class="phase-bar"><div class="phase-bar-fill" style="width:${pct}%;background:${phase.color}"></div></div>
+      </div>
       <div class="skills-grid">
         ${phase.skills.map(sk=>{
           const isDone=state.completedSkills.includes(sk.id);
           const isIP=state.inProgressSkills.includes(sk.id);
-          return`<div class="skill-chip ${isDone?'completed':isIP?'in-progress':''}" onclick="toggleSkill('${sk.id}')">
+          return`<div class="skill-chip ${isDone?'completed':isIP?'in-progress':''}" onclick="toggleSkill('${sk.id}');renderRoadmap(${tabIdx})">
             <div class="skill-status">${isDone?'✅':isIP?'🔄':''}</div>
             <div class="skill-chip-name">${sk.name}</div>
             <div class="skill-chip-tag">${sk.tag} · +${sk.xp} XP</div>
@@ -1149,50 +1320,30 @@ function renderRoadmap(tabIdx){
   }).join('');
 }
 
-function switchTab(page,idx,el){
+function switchTab(page, idx, el){
   el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  if(page==='roadmap')renderRoadmap(idx);
-  else if(page==='interview')renderInterview(idx);
-  else if(page==='resources')renderResources(idx);
+  if(page==='roadmap') renderRoadmap(idx);
+  else if(page==='interview') renderInterview(idx);
+  else if(page==='resources') renderResources(idx);
 }
 
-// ===================== SKILLS =====================
 function toggleSkill(id){
-  if(state.completedSkills.includes(id)){state.completedSkills=state.completedSkills.filter(s=>s!==id);if(!state.inProgressSkills.includes(id))state.inProgressSkills.push(id);}
-  else if(state.inProgressSkills.includes(id)){state.inProgressSkills=state.inProgressSkills.filter(s=>s!==id);state.completedSkills.push(id);}
-  else{state.inProgressSkills.push(id);}
-  saveState();updateXPDisplay();updateStats();
-}
-
-function renderSkills(){
-  document.getElementById('skills-by-domain').innerHTML=ROADMAP.map(phase=>{
-    const done=phase.skills.filter(sk=>state.completedSkills.includes(sk.id)).length;
-    const pct=Math.round((done/phase.skills.length)*100);
-    return`<div class="progress-item"><div class="progress-label"><span>${phase.name}</span><span class="progress-pct">${pct}%</span></div><div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${phase.color}"></div></div></div>`;
-  }).join('');
-  document.getElementById('skills-full-list').innerHTML=ROADMAP.map(phase=>{
-    const done=phase.skills.filter(sk=>state.completedSkills.includes(sk.id)).length;
-    return`<div class="card" style="margin-bottom:16px">
-      <div class="card-title" style="color:${phase.color}">${phase.phase}. ${phase.name}</div>
-      <div class="card-sub">${done}/${phase.skills.length} completed</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">
-        ${phase.skills.map(sk=>{
-          const isDone=state.completedSkills.includes(sk.id);
-          const isIP=state.inProgressSkills.includes(sk.id);
-          return`<div class="check-item" onclick="toggleSkill('${sk.id}')" style="padding:10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
-            <div class="check-box ${isDone?'checked':''}" style="${isIP?'border-color:var(--accent);background:rgba(124,110,247,0.1)':''}">${isDone?'✓':isIP?'→':''}</div>
-            <div><div class="check-text ${isDone?'done':''}">${sk.name}</div><div class="check-meta">+${sk.xp} XP</div></div>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
-  }).join('');
+  if(state.completedSkills.includes(id)){
+    state.completedSkills = state.completedSkills.filter(s=>s!==id);
+    if(!state.inProgressSkills.includes(id)) state.inProgressSkills.push(id);
+  } else if(state.inProgressSkills.includes(id)){
+    state.inProgressSkills = state.inProgressSkills.filter(s=>s!==id);
+    state.completedSkills.push(id);
+  } else {
+    state.inProgressSkills.push(id);
+  }
+  saveState(); updateXPDisplay(); updateStats();
 }
 
 // ===================== PROJECTS =====================
 function renderProjects(){
-  document.getElementById('projects-grid').innerHTML=state.projects.map(p=>`
+  document.getElementById('projects-grid').innerHTML = state.projects.map(p=>`
     <div class="project-card">
       <div class="project-header">
         <div class="project-title">${p.name}</div>
@@ -1206,73 +1357,103 @@ function renderProjects(){
       </div>
     </div>`).join('');
 }
+
 function advanceProject(id){
-  const p=state.projects.find(p=>p.id===id);if(!p)return;
-  p.status=p.status==='idea'?'building':'done';
-  saveState();updateXPDisplay();renderProjects();updateStats();
+  const p = state.projects.find(p=>p.id===id); if(!p) return;
+  p.status = p.status==='idea'?'building':'done';
+  saveState(); updateXPDisplay(); renderProjects(); updateStats();
 }
+
 function saveProject(){
-  const name=document.getElementById('proj-name').value.trim();if(!name)return;
-  state.projects.push({id:'p'+Date.now(),name,desc:document.getElementById('proj-desc').value,status:document.getElementById('proj-status').value,tags:document.getElementById('proj-tags').value.split(',').map(t=>t.trim()).filter(Boolean)});
-  saveState();closeModal('project-modal');renderProjects();updateStats();
+  const name = document.getElementById('proj-name').value.trim(); if(!name) return;
+  state.projects.push({
+    id:'p'+Date.now(), name,
+    desc:document.getElementById('proj-desc').value,
+    status:document.getElementById('proj-status').value,
+    tags:document.getElementById('proj-tags').value.split(',').map(t=>t.trim()).filter(Boolean)
+  });
+  saveState(); closeModal('project-modal'); renderProjects(); updateStats();
 }
 
 // ===================== GAPS =====================
 function renderGaps(){
-  document.getElementById('gaps-content').innerHTML=GAPS.map(g=>`
+  document.getElementById('gaps-content').innerHTML = GAPS.map(g=>`
     <div class="gap-item">
-      <div class="gap-header"><span class="gap-icon">${g.icon}</span><span class="gap-title">${g.title}</span><span class="gap-priority ${g.priority}">${g.priority.toUpperCase()}</span></div>
+      <div class="gap-header">
+        <span class="gap-icon">${g.icon}</span>
+        <span class="gap-title">${g.title}</span>
+        <span class="gap-priority ${g.priority}">${g.priority.toUpperCase()}</span>
+      </div>
       <div class="gap-desc">${g.desc}</div>
     </div>`).join('');
 }
 
 // ===================== INTERVIEW =====================
 function renderInterview(idx){
-  const qs=INTERVIEW_QS[idx]||[];
-  document.getElementById('interview-content').innerHTML=qs.map(q=>`
+  const qs = INTERVIEW_QS[idx]||[];
+  document.getElementById('interview-content').innerHTML = qs.map(q=>`
     <div class="interview-card" onclick="this.classList.toggle('open')">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
         <div class="interview-q">${q.q}</div>
         <span style="color:var(--muted);font-size:12px;flex-shrink:0">▾</span>
       </div>
-      <div class="interview-meta"><span class="tag ${idx===4?'project':idx<=1?'ml':'python'}">${q.diff}</span></div>
+      <div class="interview-meta">
+        <span class="tag ${idx>=4?'project':idx<=1?'ml':'python'}">${q.diff}</span>
+      </div>
       <div class="interview-a">${q.a}</div>
     </div>`).join('');
 }
 
 // ===================== RESOURCES =====================
 function renderResources(idx){
-  const items=RESOURCES[idx]||[];
-  document.getElementById('resources-content').innerHTML=`<div class="card">${items.map(r=>`
+  const items = RESOURCES[idx]||[];
+  document.getElementById('resources-content').innerHTML = `<div class="card">${items.map(r=>`
     <div class="resource-item">
       <div class="resource-icon">${r.icon}</div>
-      <div style="min-width:0;flex:1"><div class="resource-name">${r.name}</div><div class="resource-type">${r.type}${r.desc?' · '+r.desc:''}</div></div>
+      <div style="min-width:0;flex:1">
+        <div class="resource-name">${r.name}</div>
+        <div class="resource-type">${r.type}${r.desc?' · '+r.desc:''}</div>
+      </div>
       ${r.url?`<a href="${r.url}" target="_blank" class="btn btn-ghost btn-sm resource-action">Open →</a>`:''}
     </div>`).join('')}</div>`;
 }
 
 // ===================== JOURNAL =====================
 function saveLog(){
-  const topic=document.getElementById('log-topic').value.trim();if(!topic)return;
-  const today=new Date().toISOString().slice(0,10);
-  state.logs.unshift({id:Date.now(),date:today,topic,category:document.getElementById('log-category').value,hours:parseFloat(document.getElementById('log-hours').value),notes:document.getElementById('log-notes').value});
-  if(state.lastLogDate!==today){
-    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
-    const yKey=yesterday.toISOString().slice(0,10);
-    state.streak=state.lastLogDate===yKey?state.streak+1:1;state.lastLogDate=today;
+  const topic = document.getElementById('log-topic').value.trim(); if(!topic) return;
+  const today = new Date().toISOString().slice(0,10);
+  state.logs.unshift({
+    id:Date.now(), date:today, topic,
+    category:document.getElementById('log-category').value,
+    hours:parseFloat(document.getElementById('log-hours').value),
+    notes:document.getElementById('log-notes').value
+  });
+  if(state.lastLogDate !== today){
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    const yKey = yesterday.toISOString().slice(0,10);
+    state.streak = state.lastLogDate===yKey ? state.streak+1 : 1;
+    state.lastLogDate = today;
   }
-  document.getElementById('log-topic').value='';document.getElementById('log-notes').value='';
-  saveState();closeModal('log-modal');updateXPDisplay();updateStats();
-  if(document.getElementById('page-journal').classList.contains('active'))renderJournal();
-  if(document.getElementById('page-dashboard').classList.contains('active'))renderDashboard();
+  document.getElementById('log-topic').value = '';
+  document.getElementById('log-notes').value = '';
+  saveState(); closeModal('log-modal'); updateXPDisplay(); updateStats();
+  if(document.getElementById('page-journal').classList.contains('active')) renderJournal();
+  if(document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
 }
+
 function renderJournal(){
-  const jl=document.getElementById('journal-list');
-  if(state.logs.length===0){jl.innerHTML='<div class="card" style="text-align:center;padding:40px;color:var(--muted)">No study logs yet. Start logging your sessions!</div>';return;}
-  jl.innerHTML=state.logs.map(l=>`
+  const jl = document.getElementById('journal-list');
+  if(state.logs.length===0){
+    jl.innerHTML='<div class="card" style="text-align:center;padding:40px;color:var(--muted)">No study logs yet. Start logging your sessions!</div>';
+    return;
+  }
+  jl.innerHTML = state.logs.map(l=>`
     <div class="card" style="margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:14px">${l.topic}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${l.date} · ${l.hours}h · ${l.category}</div></div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px">${l.topic}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">${l.date} · ${l.hours}h · ${l.category}</div>
+        </div>
         <span class="tag python">+30 XP</span>
       </div>
       ${l.notes?`<div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">${l.notes}</div>`:''}
@@ -1281,64 +1462,80 @@ function renderJournal(){
 
 // ===================== STATS =====================
 function renderStats(){
-  const totalHours=state.logs.reduce((a,l)=>a+(l.hours||0),0);
-  const totalXP=calcXP();
-  const completionPct=Math.round((state.completedSkills.length/ROADMAP.reduce((a,p)=>a+p.skills.length,0))*100);
+  const totalHours = state.logs.reduce((a,l)=>a+(l.hours||0),0);
+  const totalXP = calcXP();
+  const completionPct = Math.round((doneTopics()/totalTopics())*100);
   document.getElementById('stats-cards').innerHTML=`
     <div class="stat-card"><div class="stat-label">TOTAL XP</div><div class="stat-num text-accent">${totalXP.toLocaleString()}</div></div>
     <div class="stat-card"><div class="stat-label">HOURS STUDIED</div><div class="stat-num" style="color:var(--accent2)">${totalHours.toFixed(1)}</div></div>
-    <div class="stat-card"><div class="stat-label">OVERALL</div><div class="stat-num" style="color:var(--accent3)">${completionPct}%</div></div>
+    <div class="stat-card"><div class="stat-label">CURRICULUM</div><div class="stat-num" style="color:var(--accent3)">${completionPct}%</div></div>
     <div class="stat-card"><div class="stat-label">STREAK</div><div class="stat-num" style="color:var(--gold)">${state.streak}🔥</div></div>
   `;
-  document.getElementById('radar-chart').innerHTML=ROADMAP.map(phase=>{
-    const done=phase.skills.filter(sk=>state.completedSkills.includes(sk.id)).length;
-    const pct=Math.round((done/phase.skills.length)*100);
-    return`<div class="progress-item"><div class="progress-label"><span style="font-size:10px">${phase.name}</span><span style="color:${phase.color};font-size:10px">${pct}%</span></div><div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${phase.color}"></div></div></div>`;
+  const groupNames = {1:'Python & Data',2:'Stats & ML',3:'Deep Learning',4:'GenAI & MLOps'};
+  const groupColors = {1:'#4bc9a0',2:'#7c6ef7',3:'#e8a54b',4:'#f5c842'};
+  document.getElementById('radar-chart').innerHTML = [1,2,3,4].map(g=>{
+    const mods = CURRICULUM.filter(m=>m.group===g);
+    const total = mods.reduce((a,m)=>a+m.topics.length,0);
+    const done = mods.reduce((a,m)=>a+(state.completedTopics[m.id]||[]).length,0);
+    const pct = total?Math.round((done/total)*100):0;
+    return`<div class="progress-item">
+      <div class="progress-label"><span>${groupNames[g]}</span><span style="color:${groupColors[g]};font-size:10px">${pct}%</span></div>
+      <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${groupColors[g]}"></div></div>
+    </div>`;
   }).join('');
-  const byCategory={};
-  state.logs.forEach(l=>{byCategory[l.category]=(byCategory[l.category]||0)+l.hours;});
-  document.getElementById('study-log-summary').innerHTML=Object.entries(byCategory).length===0
-    ?'<div style="color:var(--muted);font-size:12px">No logs yet.</div>'
-    :Object.entries(byCategory).map(([cat,hrs])=>`<div class="flex-center justify-between" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><span>${cat}</span><span style="color:var(--accent)">${hrs.toFixed(1)}h</span></div>`).join('');
+  const byCategory = {};
+  state.logs.forEach(l=>{ byCategory[l.category]=(byCategory[l.category]||0)+l.hours; });
+  document.getElementById('study-log-summary').innerHTML = Object.entries(byCategory).length===0
+    ? '<div style="color:var(--muted);font-size:12px">No logs yet.</div>'
+    : Object.entries(byCategory).map(([cat,hrs])=>`
+      <div class="flex-center justify-between" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+        <span>${cat}</span><span style="color:var(--accent)">${hrs.toFixed(1)}h</span>
+      </div>`).join('');
 }
 
 function updateStats(){
-  const done=state.completedSkills.length;
-  const total=ROADMAP.reduce((a,p)=>a+p.skills.length,0);
-  const el1=document.getElementById('stat-skills-done');
-  const el2=document.getElementById('stat-skills-total');
-  const el3=document.getElementById('stat-projects');
+  const el1=document.getElementById('stat-topics-done');
+  const el2=document.getElementById('stat-topics-total');
+  const el3=document.getElementById('stat-modules-done');
   const el4=document.getElementById('stat-logs');
-  if(el1)el1.textContent=done;if(el2)el2.textContent=total;
-  if(el3)el3.textContent=state.projects.filter(p=>p.status!=='idea').length;
-  if(el4)el4.textContent=state.logs.length;
+  if(el1) el1.textContent=doneTopics();
+  if(el2) el2.textContent=totalTopics();
+  if(el3) el3.textContent=doneModules();
+  if(el4) el4.textContent=state.logs.length;
   const sc=document.getElementById('streak-count');
-  if(sc)sc.textContent=state.streak+' day streak';
+  if(sc) sc.textContent=state.streak+' day streak';
 }
 
 // ===================== MODALS =====================
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(m=>{
-  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
+  m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); });
 });
 
 // ===================== RESET =====================
 function confirmReset(){
-  const modal=document.createElement('div');
-  modal.className='modal-overlay open';
-  modal.innerHTML=`<div class="modal" style="max-width:380px"><div class="modal-title" style="color:var(--danger)">⚠️ Reset Everything?</div><div class="modal-sub" style="margin-bottom:16px">This will permanently delete all your progress. This cannot be undone.</div><div class="flex gap-8"><button class="btn btn-danger" onclick="doReset()" style="flex:1;justify-content:center">Yes, Reset All</button><button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()">Cancel</button></div></div>`;
-  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `<div class="modal" style="max-width:380px">
+    <div class="modal-title" style="color:var(--danger)">⚠️ Reset Everything?</div>
+    <div class="modal-sub" style="margin-bottom:16px">This will permanently delete all your progress including topic completions. Cannot be undone.</div>
+    <div class="flex gap-8">
+      <button class="btn btn-danger" onclick="doReset()" style="flex:1;justify-content:center">Yes, Reset All</button>
+      <button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+    </div>
+  </div>`;
+  modal.addEventListener('click',e=>{ if(e.target===modal) modal.remove(); });
   document.body.appendChild(modal);
 }
 function doReset(){
-  localStorage.removeItem('dsq-state');
-  state={completedSkills:[],inProgressSkills:[],projects:[...DEFAULT_PROJECTS],logs:[],streak:0,lastLogDate:null};
+  localStorage.removeItem('dsq-state-v2');
+  state = {completedTopics:{},completedSkills:[],inProgressSkills:[],projects:[...DEFAULT_PROJECTS],logs:[],streak:0,lastLogDate:null};
   saveState();
   document.querySelector('.modal-overlay.open')?.remove();
   updateXPDisplay();
-  const activePage=document.querySelector('.page.active')?.id?.replace('page-','');
-  if(activePage)renderPage(activePage);
+  const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
+  if(activePage) renderPage(activePage);
   updateStats();
 }
 
@@ -1346,284 +1543,301 @@ function doReset(){
 document.addEventListener('DOMContentLoaded',()=>{
   updateXPDisplay();
   renderDashboard();
+  initGeminiKey();
 });
 </script>
 
-<!-- ===================== PWA CORE SCRIPTS ===================== -->
 <script>
-// -------- Inline Web App Manifest (dynamic) --------
+// ===================== GEMINI INTERVIEW PREP =====================
+
+const GEMINI_KEY_STORAGE = 'dsq-gemini-key';
+let geminiKey = '';
+let isGenerating = false;
+
+function initGeminiKey(){
+  const saved = localStorage.getItem(GEMINI_KEY_STORAGE);
+  if(saved){
+    geminiKey = saved;
+    document.getElementById('gemini-api-key').value = saved;
+    updateKeyStatus(true);
+  }
+}
+
+function onApiKeyInput(){
+  const v = document.getElementById('gemini-api-key').value.trim();
+  if(v) {
+    document.getElementById('key-status').textContent = 'Key entered — click Save to store it.';
+    document.getElementById('key-status').style.color = 'var(--accent2)';
+  } else {
+    document.getElementById('key-status').textContent = '';
+  }
+}
+
+function saveApiKey(){
+  const v = document.getElementById('gemini-api-key').value.trim();
+  if(!v){
+    setKeyStatus('Please enter a valid API key.', 'var(--danger)');
+    return;
+  }
+  geminiKey = v;
+  localStorage.setItem(GEMINI_KEY_STORAGE, v);
+  updateKeyStatus(true);
+}
+
+function clearApiKey(){
+  geminiKey = '';
+  localStorage.removeItem(GEMINI_KEY_STORAGE);
+  document.getElementById('gemini-api-key').value = '';
+  updateKeyStatus(false);
+}
+
+function updateKeyStatus(saved){
+  const statusEl = document.getElementById('key-status');
+  const clearBtn = document.getElementById('clear-key-btn');
+  if(saved){
+    statusEl.textContent = '✓ API key saved — ready to generate questions!';
+    statusEl.style.color = 'var(--accent3)';
+    clearBtn.style.display = 'inline-flex';
+  } else {
+    statusEl.textContent = 'Key cleared.';
+    statusEl.style.color = 'var(--muted)';
+    clearBtn.style.display = 'none';
+  }
+}
+
+function setKeyStatus(msg, color){
+  const el = document.getElementById('key-status');
+  el.textContent = msg;
+  el.style.color = color || 'var(--muted)';
+}
+
+// Build the prompt for Gemini
+function buildPrompt(topic, difficulty, count){
+  return `You are a senior Data Science interviewer at a top tech company.
+
+Generate exactly ${count} interview questions about "${topic}" at ${difficulty} difficulty level.
+
+For each question, provide:
+1. The question itself (clear and concise)
+2. A detailed model answer (3-8 sentences, practical and insightful, suitable for a DS interview)
+3. A difficulty tag: one of CORE / ADVANCED / 2026 / SYSTEM / MLOPS
+
+Return ONLY a valid JSON array, no markdown, no explanation. Format:
+[
+  {
+    "q": "question text here",
+    "a": "detailed model answer here",
+    "diff": "CORE"
+  }
+]
+
+Focus on questions that are actually asked at companies like Google, Meta, Uber, Flipkart, and top Indian tech/startup roles in 2025-2026. Include practical examples where relevant.`;
+}
+
+function buildCustomPrompt(customQ){
+  return `You are a senior Data Science interviewer and expert educator.
+
+The user is asking: "${customQ}"
+
+Provide a thorough, interview-ready answer that:
+- Is practical and example-driven
+- Covers the concept clearly for a DS interview context
+- Is 4-10 sentences long
+- Mentions real tools/libraries where relevant
+
+Return ONLY a valid JSON object, no markdown:
+{
+  "q": "${customQ.replace(/"/g,"'")}",
+  "a": "your detailed answer here",
+  "diff": "ADVANCED"
+}`;
+}
+
+async function callGemini(prompt){
+  if(!geminiKey) throw new Error('No API key. Please save your Gemini API key first.');
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
+  const res = await fetch(url, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      contents:[{ parts:[{ text: prompt }] }],
+      generationConfig:{ temperature:0.8, topP:0.95, maxOutputTokens:8192 }
+    })
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err?.error?.message || `API error ${res.status}`);
+  }
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return text;
+}
+
+function parseGeminiJSON(text){
+  // Strip markdown fences if present
+  let clean = text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+  // Handle both array and single object responses
+  if(clean.startsWith('{')){
+    return [JSON.parse(clean)];
+  }
+  return JSON.parse(clean);
+}
+
+function setGeneratingState(loading){
+  isGenerating = loading;
+  const btn = document.getElementById('generate-btn');
+  const icon = document.getElementById('generate-btn-icon');
+  if(loading){
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    icon.innerHTML = '<span class="spin-icon">⟳</span>';
+    btn.childNodes[1].textContent = ' Generating…';
+  } else {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    icon.textContent = '✦';
+    btn.childNodes[1].textContent = ' Generate';
+  }
+}
+
+function showAIError(msg){
+  document.getElementById('ai-interview-content').innerHTML = `
+    <div class="card" style="border-color:rgba(240,112,112,0.4);background:rgba(240,112,112,0.06);padding:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:18px;">⚠️</span>
+        <span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--danger);">Generation Failed</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;">${msg}</div>
+      <div style="margin-top:12px;font-size:11px;color:var(--muted);">
+        Common fixes: Check your API key is correct · Ensure billing is enabled on your Google AI Studio account · Try a different topic or fewer questions.
+      </div>
+    </div>`;
+}
+
+function showAILoading(topic){
+  document.getElementById('ai-interview-content').innerHTML = `
+    <div style="padding:40px 20px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:16px;animation:pulse 1.2s ease-in-out infinite;">✦</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:6px;">Gemini is thinking…</div>
+      <div style="font-size:11px;color:var(--muted);">Generating interview questions for <em>${topic}</em></div>
+    </div>
+    <style>@keyframes pulse{0%,100%{opacity:0.3;transform:scale(0.9)}50%{opacity:1;transform:scale(1.1)}} .spin-icon{display:inline-block;animation:spin 1s linear infinite} @keyframes spin{to{transform:rotate(360deg)}}</style>`;
+}
+
+function renderAIQuestions(questions, topic){
+  if(!questions || questions.length === 0){
+    showAIError('No questions were returned. Try again.');
+    return;
+  }
+  const tagColorMap = {
+    'CORE':'ml','ADVANCED':'tools','2026':'project','SYSTEM':'math','MLOPS':'python'
+  };
+  const html = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent3);">
+        ✦ ${questions.length} AI-Generated Questions — ${topic}
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="generateQuestions()">↺ Regenerate</button>
+    </div>
+    ${questions.map((q,i) => `
+      <div class="interview-card ai-card" onclick="this.classList.toggle('open')" style="border-left:3px solid var(--accent);margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:var(--accent);flex-shrink:0;margin-top:1px;">Q${i+1}</div>
+            <div class="interview-q" style="margin-bottom:0;">${escapeHtml(q.q)}</div>
+          </div>
+          <span style="color:var(--muted);font-size:12px;flex-shrink:0;">▾</span>
+        </div>
+        <div class="interview-meta" style="margin-top:8px;">
+          <span class="tag ${tagColorMap[q.diff]||'ml'}">${q.diff||'AI'}</span>
+          <span class="tag" style="background:rgba(124,110,247,0.12);color:var(--accent);">✦ Gemini</span>
+        </div>
+        <div class="interview-a" style="white-space:pre-wrap;">${escapeHtml(q.a)}</div>
+      </div>`).join('')}`;
+  document.getElementById('ai-interview-content').innerHTML = html;
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+async function generateQuestions(){
+  if(isGenerating) return;
+  if(!geminiKey){
+    setKeyStatus('⚠ Please save your API key first.', 'var(--danger)');
+    document.getElementById('gemini-api-key').focus();
+    return;
+  }
+  const topic = document.getElementById('ai-topic').value;
+  const difficulty = document.getElementById('ai-difficulty').value;
+  const count = parseInt(document.getElementById('ai-count').value);
+
+  setGeneratingState(true);
+  showAILoading(topic);
+
+  try {
+    const prompt = buildPrompt(topic, difficulty, count);
+    const raw = await callGemini(prompt);
+    const questions = parseGeminiJSON(raw);
+    renderAIQuestions(questions, topic);
+  } catch(err) {
+    showAIError(err.message || 'Unknown error occurred.');
+  } finally {
+    setGeneratingState(false);
+  }
+}
+
+async function generateCustom(){
+  const customQ = document.getElementById('ai-custom').value.trim();
+  if(!customQ) return;
+  if(!geminiKey){
+    setKeyStatus('⚠ Please save your API key first.', 'var(--danger)');
+    document.getElementById('gemini-api-key').focus();
+    return;
+  }
+  if(isGenerating) return;
+
+  setGeneratingState(true);
+  showAILoading(customQ.slice(0,50)+'…');
+
+  try {
+    const prompt = buildCustomPrompt(customQ);
+    const raw = await callGemini(prompt);
+    const questions = parseGeminiJSON(raw);
+    renderAIQuestions(questions, 'Custom Question');
+  } catch(err){
+    showAIError(err.message || 'Unknown error occurred.');
+  } finally {
+    setGeneratingState(false);
+  }
+}
+
+// Allow pressing Enter in custom input to trigger generation
+document.addEventListener('DOMContentLoaded', ()=>{
+  const ci = document.getElementById('ai-custom');
+  if(ci) ci.addEventListener('keydown', e=>{ if(e.key==='Enter') generateCustom(); });
+});
+</script>
+
+<!-- PWA Manifest inline -->
+<script>
 (function(){
   const manifest = {
-    name: "DS Quest — Data Science Tracker",
-    short_name: "DS Quest",
-    description: "Your personal Data Science learning tracker — roadmap, skills, projects, and interview prep.",
-    start_url: "./",
-    display: "standalone",
-    background_color: "#0a0a0f",
-    theme_color: "#7c6ef7",
-    orientation: "portrait-primary",
-    categories: ["education", "productivity"],
-    prefer_related_applications: false,
-    icons: [
-      {
-        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E",
-        sizes: "512x512",
-        type: "image/svg+xml",
-        purpose: "any maskable"
-      }
-    ],
-    shortcuts: [
-      { name: "Log Study Session", short_name: "Log", description: "Quickly log what you studied", url: "./#log" },
-      { name: "View Roadmap", short_name: "Roadmap", description: "Check your DS roadmap", url: "./#roadmap" }
-    ],
-    screenshots: [],
-    lang: "en-US"
+    name:"DS Quest — Data Science Tracker",short_name:"DS Quest",
+    description:"26-module Data Science curriculum tracker with roadmap, skills, interview prep and projects.",
+    start_url:"./",display:"standalone",background_color:"#0a0a0f",theme_color:"#7c6ef7",
+    orientation:"portrait-primary",
+    icons:[{src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E",sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]
   };
-  const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
   const link = document.createElement('link');
-  link.rel = 'manifest'; link.href = url;
+  link.rel='manifest'; link.href=URL.createObjectURL(blob);
   document.head.appendChild(link);
 })();
-
-// -------- Service Worker (inline via Blob) --------
-const SW_VERSION = 'dsquest-v3';
-const SW_CODE = `
-const CACHE_NAME = '${SW_VERSION}';
-const ASSETS_TO_CACHE = ['/'];
-
-// On install: skip waiting so new SW activates immediately
-self.addEventListener('install', event => {
-  self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      // Pre-cache what we can
-      return Promise.allSettled(
-        ASSETS_TO_CACHE.map(url =>
-          cache.add(url).catch(() => {/* local file, may fail in file:// context */})
-        )
-      );
-    })
-  );
-});
-
-// On activate: clean up old caches and claim clients
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    Promise.all([
-      caches.keys().then(keys =>
-        Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-      ),
-      clients.claim()
-    ])
-  );
-});
-
-// Fetch: Stale-While-Revalidate for HTML, Cache-First for assets
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
-  const url = new URL(event.request.url);
-  
-  // Skip non-http(s) requests (chrome-extension://, etc.)
-  if (!url.protocol.startsWith('http')) return;
-  
-  // Skip cross-origin requests we don't control (fonts, CDN)
-  // but still serve them from cache if available
-  event.respondWith(
-    caches.open(CACHE_NAME).then(async cache => {
-      const cached = await cache.match(event.request);
-      const fetchPromise = fetch(event.request)
-        .then(response => {
-          // Only cache successful same-origin or CORS-safe responses
-          if (response && response.status === 200) {
-            cache.put(event.request, response.clone());
-          }
-          return response;
-        })
-        .catch(() => null);
-      
-      // If we have a cached version, return it immediately
-      // but also update in background (stale-while-revalidate)
-      if (cached) {
-        event.waitUntil(fetchPromise);
-        return cached;
-      }
-      
-      // No cache: wait for network
-      const response = await fetchPromise;
-      if (response) return response;
-      
-      // Offline fallback for HTML pages
-      if (event.request.headers.get('accept')?.includes('text/html')) {
-        const fallback = await cache.match('./');
-        if (fallback) return fallback;
-      }
-      
-      return new Response('Offline — DS Quest data is stored locally and available without internet.', {
-        status: 503,
-        headers: { 'Content-Type': 'text/plain' }
-      });
-    })
-  );
-});
-
-// Listen for skip-waiting message (for update flow)
-self.addEventListener('message', event => {
-  if (event.data?.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
-`;
-
-let swRegistration = null;
-
-if ('serviceWorker' in navigator) {
-  const swBlob = new Blob([SW_CODE], {type:'application/javascript'});
-  const swURL = URL.createObjectURL(swBlob);
-
-  navigator.serviceWorker.register(swURL, {scope: './'})
-    .then(reg => {
-      swRegistration = reg;
-      console.log('[DS Quest] SW registered, scope:', reg.scope);
-
-      // Check for updates
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New content available — show update banner
-            document.getElementById('update-banner').classList.add('show');
-          }
-        });
-      });
-    })
-    .catch(err => console.log('[DS Quest] SW registration failed:', err));
-
-  // Reload after the new SW has taken over
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (window._reloading) return;
-    window._reloading = true;
-    window.location.reload();
-  });
-}
-
-function applyUpdate() {
-  document.getElementById('update-banner').classList.remove('show');
-  if (swRegistration?.waiting) {
-    swRegistration.waiting.postMessage({type: 'SKIP_WAITING'});
-  }
-}
-
-// -------- Offline Detection --------
-function updateOnlineStatus() {
-  const banner = document.getElementById('offline-banner');
-  if (!navigator.onLine) {
-    banner.classList.add('show');
-    document.body.classList.add('offline-mode');
-  } else {
-    banner.classList.remove('show');
-    document.body.classList.remove('offline-mode');
-  }
-}
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
-// Check initial state after load
-window.addEventListener('load', updateOnlineStatus);
-
-// -------- Install Prompt (Android / Desktop Chrome) --------
-let deferredInstallPrompt = null;
-
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  // Show install banner after 4s if not dismissed before
-  if (!localStorage.getItem('dsq-install-dismissed') && !localStorage.getItem('dsq-installed')) {
-    setTimeout(() => {
-      document.getElementById('install-banner').classList.add('show');
-    }, 4000);
-  }
-});
-
-document.getElementById('install-btn-yes').addEventListener('click', async () => {
-  document.getElementById('install-banner').classList.remove('show');
-  if (deferredInstallPrompt) {
-    deferredInstallPrompt.prompt();
-    const { outcome } = await deferredInstallPrompt.userChoice;
-    console.log('[DS Quest] Install outcome:', outcome);
-    if (outcome === 'accepted') {
-      localStorage.setItem('dsq-installed', '1');
-    }
-    deferredInstallPrompt = null;
-  }
-});
-
-function dismissInstall() {
-  document.getElementById('install-banner').classList.remove('show');
-  localStorage.setItem('dsq-install-dismissed', '1');
-}
-
-window.addEventListener('appinstalled', () => {
-  document.getElementById('install-banner').classList.remove('show');
-  localStorage.setItem('dsq-installed', '1');
-  deferredInstallPrompt = null;
-  console.log('[DS Quest] PWA installed successfully!');
-});
-
-// -------- iOS Install Instructions --------
-function isIOS() {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-}
-function isInStandaloneMode() {
-  return ('standalone' in window.navigator) && window.navigator.standalone;
-}
-
-if (isIOS() && !isInStandaloneMode() && !localStorage.getItem('dsq-ios-install-dismissed')) {
-  setTimeout(() => {
-    document.getElementById('ios-install-banner').classList.add('show');
-  }, 5000);
-}
-
-function dismissIOSInstall() {
-  document.getElementById('ios-install-banner').classList.remove('show');
-  localStorage.setItem('dsq-ios-install-dismissed', '1');
-}
-
-// -------- Handle #hash deep links from shortcuts --------
-window.addEventListener('load', () => {
-  const hash = window.location.hash;
-  if (hash === '#log') {
-    setTimeout(() => openModal('log-modal'), 500);
-  } else if (hash === '#roadmap') {
-    setTimeout(() => showPageMobile('roadmap'), 300);
-  }
-});
-
-// -------- Share API (if supported) --------
-// Expose for potential use in UI
-window.shareProgress = async () => {
-  const xp = calcXP ? calcXP() : 0;
-  const done = (typeof state !== 'undefined') ? state.completedSkills.length : 0;
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: 'DS Quest Progress',
-        text: `I've completed ${done} skills and earned ${xp} XP on my Data Science journey! 🚀`,
-        url: window.location.href
-      });
-    } catch(e) { /* User cancelled */ }
-  }
-};
-
-// -------- Prevent pull-to-refresh on mobile (optional UX improvement) --------
-let startY = 0;
-document.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, {passive:true});
-document.addEventListener('touchmove', e => {
-  const y = e.touches[0].clientY;
-  // Only prevent if scrolled to top of main content
-  if (y > startY && document.documentElement.scrollTop === 0) {
-    // Allow normal scroll, don't prevent — just track
-  }
-}, {passive:true});
 </script>
 </body>
 </html>

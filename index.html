@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="DS Quest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='%237c6ef7'%3E%E2%AC%A1%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
 <style>
   :root {
     --bg: #0a0a0f;
@@ -1824,6 +1825,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </script>
 
 <!-- PWA Manifest inline -->
+  
 <script>
 (function(){
   const manifest = {
@@ -1838,6 +1840,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   link.rel='manifest'; link.href=URL.createObjectURL(blob);
   document.head.appendChild(link);
 })();
+  if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
 </script>
 </body>
 </html>
